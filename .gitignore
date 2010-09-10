@@ -48,3 +48,6 @@ system/datas/*
 sqldumps/*
 config/environments/test_*.rb 
 capybara*.html
+Gemfile.lock
+.bundle/*
+.rspec
