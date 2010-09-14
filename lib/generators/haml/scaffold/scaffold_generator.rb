@@ -1,4 +1,4 @@
-module LRD
+module Lrd
   module Generators
     class Haml < Rails::Generators::Base 
       p "defining the haml scaffold generator"
@@ -23,6 +23,6 @@ module LRD
         end
     end
   
-    p MyHamlScaffoldGenerator.namespace
+    p Haml.namespace
   end
 end
