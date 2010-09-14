@@ -1,8 +1,8 @@
 raise "loading lrd haml generator"
 
-module Lrd
+module Rails
   module Generators
-    class Haml < Rails::Generators::Base 
+    class Haml < Base 
       p "defining the haml scaffold generator"
       
       include Rails::Generators::ResourceHelpers
