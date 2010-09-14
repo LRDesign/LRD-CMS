@@ -55,7 +55,7 @@ describe <%= controller_class_name %>Controller do
     describe "with valid params" do
       before do
         @valid_create_params = {
-        } # TODO: define valid params for <%= controller_singular_name %>
+        } # TODO: define valid params for <%= controller_file_name %>
       end
       
       it "should create a new <%= file_name %> in the database" do
