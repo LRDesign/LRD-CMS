@@ -1,5 +1,7 @@
 require 'generators/rspec'
-require '../rspec-rails.gemspec/../lib/generators/rspec/scaffold/scaffold_generator'
+
+# Try to force it to require the file from the rspec gem
+require 'generators/rspec/mailer/../scaffold/scaffold_generator'
 require 'rails/generators/resource_helpers'
 
 module Rspec           
