@@ -1,0 +1,44 @@
+!!!
+%html{"xmlns"=>"http://www.w3.org/1999/xhtml", "xml:lang"=>"en"}
+
+  %head
+    %meta{"http-equiv" => "content-type", "content" => "text/html;charset=UTF-8" }
+    %title=  @title ? @title : "Logical Reality Design Default CMS Framework"
+
+    = stylesheet_link_tag 'universal', :media=>'all' 
+    = stylesheet_link_tag 'screen', :media=>'screen, projection' 
+    = stylesheet_link_tag 'print', :media=>'print'
+  
+    - if Rails.env.production?
+      = javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" 
+      = javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js" 
+    -else
+      = javascript_include_tag "jquery-1.4.2.min.js"
+      = javascript_include_tag "jquery-ui-1.8.4.min.js"          
+    
+      = javascript_include_tag "jquery.ninja_script.js"      
+                                                       
+    = javascript_include_tag 'application.js'    
+    = javascript_include_tag 'logical_tabs_jquery'       
+
+    = csrf_meta_tag 
+
+    = yield :header   
+                                                    
+  %body
+    #inset                         
+      #wrap
+        #header
+                      
+          -# TODO: enable these once they are written  
+          -# = render :partial => 'layouts/admin_menu'
+          -# = render :partial => 'layouts/nav'
+                
+        #content-wrap         
+          -# = render :partial => 'layouts/aux'        
+                    
+          #content    
+            %h1= yield :headline if yield :headline
+            #content-body
+              = render :partial => 'layouts/flash' , :locals => { :flash => flash }          
+              = yield                 
