@@ -8,7 +8,7 @@ describe "/<%= table_name %>/show" do
   end
 
   it "should succeed" do
-    render "/<%= table_name %>/show"
+    render
     response.should be_success
   end
 end

@@ -8,12 +8,12 @@ describe "/<%= table_name %>/edit" do
   end
   
   it "should succeed" do
-    render "/<%= table_name %>/edit"
+    render
     response.should be_success
   end
 
   it "should render edit form" do
-    render "/<%= table_name %>/edit"
+    render
     
     response.should have_tag("form[action=#{<%= file_name %>_path(@<%= file_name %>)}][method=post]") do
 <% for attribute in attributes -%><% unless attribute.name =~ /_id/ || [:datetime, :timestamp, :time, :date].index(attribute.type) -%>

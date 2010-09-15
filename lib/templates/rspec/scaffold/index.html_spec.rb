@@ -8,7 +8,7 @@ describe "/<%= table_name %>/index" do
   end
 
   it "should succeed" do
-    render "/<%= table_name %>/index"
+    render
     response.should be_success
   end
 end
