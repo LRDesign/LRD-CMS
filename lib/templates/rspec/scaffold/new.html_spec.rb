@@ -8,15 +8,15 @@ describe "/<%= table_name %>/new" do
   end
   
   it "should succeed" do
-    render
-    response.should be_success
+    render "/<%= table_name %>/new"
+    rendered.should be_success
   end
   
 
   it "should render new form" do
-    render
+    render "/<%= table_name %>/new"
     
-    response.should have_tag("form[action=?][method=post]", <%= table_name %>_path) do
+    rendered.should have_tag("form[action=?][method=post]", <%= table_name %>_path) do
 <% for attribute in attributes -%><% unless attribute.name =~ /_id/ || [:datetime, :timestamp, :time, :date].index(attribute.type) -%>
       with_tag("<%= attribute.input_type -%>#<%= file_name %>_<%= attribute.name %>[name=?]", "<%= file_name %>[<%= attribute.name %>]")
 <% end -%><% end -%>

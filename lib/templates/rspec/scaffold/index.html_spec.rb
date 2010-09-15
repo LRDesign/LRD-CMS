@@ -4,7 +4,7 @@ describe "/<%= table_name %>/index" do
   include <%= controller_class_name %>Helper
   
   before(:each) do
-    assigns[:<%= table_name %>] = [ Factory(:<%= singular_name %>), Factory(:<%= singular_name %>) ]
+    assigns[:<%= tarenderedble_name %>] = [ Factory(:<%= singular_name %>), Factory(:<%= singular_name %>) ]
   end
 
   it "should succeed" do

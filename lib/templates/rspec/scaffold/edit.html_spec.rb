@@ -9,13 +9,13 @@ describe "/<%= table_name %>/edit" do
   
   it "should succeed" do
     render
-    response.should be_success
+    rendered.should be_success
   end
 
   it "should render edit form" do
     render
     
-    response.should have_tag("form[action=#{<%= file_name %>_path(@<%= file_name %>)}][method=post]") do
+    rendered.should have_tag("form[action=#{<%= file_name %>_path(@<%= file_name %>)}][method=post]") do
 <% for attribute in attributes -%><% unless attribute.name =~ /_id/ || [:datetime, :timestamp, :time, :date].index(attribute.type) -%>
       with_tag('<%= attribute.input_type -%>#<%= file_name %>_<%= attribute.name %>[name=?]', "<%= file_name %>[<%= attribute.name %>]")
 <% end -%><% end -%>
