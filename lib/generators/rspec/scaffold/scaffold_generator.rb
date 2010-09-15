@@ -5,6 +5,7 @@ module Rspec
   module Generators
     class ScaffoldGenerator
       p "reopening rspec scaffold generator"
+      p "ancestors: " +ScaffoldGenerator.ancestors.join(", ")
       
       # replace copy view with one that explicitly doesn't put the
       # template engine in the file name
@@ -14,6 +15,5 @@ module Rspec
       end      
     end        
     p ScaffoldGenerator.namespace
-    p "ancestors: " +ScaffoldGenerator.ancestors.join(", ")
   end
 end
