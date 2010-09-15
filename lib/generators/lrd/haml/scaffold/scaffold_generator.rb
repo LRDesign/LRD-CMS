@@ -1,4 +1,4 @@
-require 'erb/generators/base'
+require 'rails/generators/erb/generators/base'
 
 module Lrd
   module Generators
