@@ -1,4 +1,4 @@
-
+module Rspec
 module Lrd
   module Generators
     class Factory < Rails::Generators::NamedBase 
@@ -34,4 +34,5 @@ module Lrd
     p Factory.namespace
     
   end
+end
 end
