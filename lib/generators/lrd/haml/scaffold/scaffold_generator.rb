@@ -6,6 +6,7 @@ module Lrd
         p "defining the haml scaffold generator"
       
         include Rails::Generators::ResourceHelpers
+        source_root File.dirname(__FILE__) + '/templates'
         
         argument :attributes, :type => :array, :default => [], :banner => "field:type field:type"        
 
@@ -20,6 +21,8 @@ module Lrd
             template filename, File.join("app/views", controller_file_path, filename)
           end
         end
+        
+        
 
         protected
 
