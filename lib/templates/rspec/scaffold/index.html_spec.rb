@@ -4,8 +4,8 @@ describe "/<%= table_name %>/index" do
   include <%= controller_class_name %>Helper
   
   before(:each) do
-    assigns[:<%= tarenderedble_name %>] = [ Factory(:<%= singular_name %>), Factory(:<%= singular_name %>) ]
-  end
+    assigns[:<%= file_name %>] = [ Factory(:<%= singular_name %>), Factory(:<%= singular_name %>) ]
+  end                   
 
   it "should succeed" do
     render
