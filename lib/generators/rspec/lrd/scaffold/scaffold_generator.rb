@@ -1,12 +1,10 @@
 require 'generators/rspec'
 require 'rails/generators/resource_helpers'
- 
-module Rspec           
-  module Lrd
+
+module Lrd 
+  module Rspec           
     module Generators
-      class ScaffoldGenerator
-        p "reopening rspec scaffold generator"
-        p "ancestors: " +ScaffoldGenerator.ancestors.join(", ")
+      class ScaffoldGenerator < Rspec::Generators::ScaffoldGenerator
       
         # replace copy view with one that explicitly doesn't put the
         # template engine in the file name
