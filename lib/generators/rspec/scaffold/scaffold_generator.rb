@@ -3,7 +3,7 @@ require 'rails/generators/resource_helpers'
  
 module Rspec
   module Generators
-    class Rspec::Generators::ScaffoldGenerator
+    class ScaffoldGenerator
       p "reopening rspec scaffold generator"
       
       # replace copy view with one that explicitly doesn't put the
