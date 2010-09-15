@@ -15,7 +15,7 @@ describe "/<%= table_name %>/new" do
   it "should render new form" do
     render
                                           
-    rendered.should have_selector("form", :action => '<%= table_name %>_path', :method=> 'post') do |form|   
+    rendered.should have_selector("form", :action => <%= table_name %>_path, :method=> 'post') do |form|   
       
 <% for attribute in attributes -%><% unless attribute.name =~ /_id/ || [:datetime, :timestamp, :time, :date].index(attribute.type) -%>
       form.should have_selector('<%= attribute.input_type -%>#<%= file_name %>_<%= attribute.name %>', :name => '<%= file_name %>[<%= attribute.name %>]')
