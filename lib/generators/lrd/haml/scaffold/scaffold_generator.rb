@@ -16,6 +16,7 @@ module Lrd
         def copy_view_files
           available_views.each do |view|
             filename = filename_with_extensions(view)
+            say "templating filename #{filename}"
             template filename, File.join("app/views", controller_file_path, filename)
           end
         end
