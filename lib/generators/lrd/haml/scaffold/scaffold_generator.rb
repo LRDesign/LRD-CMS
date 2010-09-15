@@ -1,9 +1,8 @@
-require 'rails/generators/erb/generators/base'
 
 module Lrd
   module Generators
     module Haml 
-      class Scaffold < Erb::Generators::Base 
+      class Scaffold < Rails::Generators::NamedBase 
         p "defining the haml scaffold generator"
       
         include Rails::Generators::ResourceHelpers
@@ -27,8 +26,8 @@ module Lrd
             %w(index edit show new _form)
           end
           
-          def handler
-            :haml
+          def filename_with_extensions(name)
+            "#{name}.html.haml"
           end
       end
   
