@@ -9,7 +9,6 @@ describe "/<%= table_name %>/edit" do
   
   it "should succeed" do
     render
-    rendered.should be_success
   end
 
   it "should render edit form" do

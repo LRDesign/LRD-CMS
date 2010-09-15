@@ -9,7 +9,6 @@ describe "/<%= table_name %>/index" do
 
   it "should succeed" do
     render
-    response.should be_success
   end
 end
 

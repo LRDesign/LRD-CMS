@@ -9,7 +9,6 @@ describe "/<%= table_name %>/new" do
   
   it "should succeed" do
     render
-    rendered.should be_success
   end
   
 
