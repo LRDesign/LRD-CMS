@@ -3,7 +3,7 @@ require 'rails/generators/resource_helpers'
 
 module Rspec           
   module Generators
-    class ScaffoldGenerator
+    class ScaffoldGenerator < Base
     
       # replace copy view with one that explicitly doesn't put the
       # template engine in the file name
