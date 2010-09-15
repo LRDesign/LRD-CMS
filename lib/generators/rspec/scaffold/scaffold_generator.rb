@@ -4,7 +4,8 @@ require 'rails/generators/resource_helpers'
 module Rspec           
   module Generators
     class ScaffoldGenerator < Base
-    
+                  
+      protected 
       # replace copy view with one that explicitly doesn't put the
       # template engine in the file name
       def copy_view(view)
