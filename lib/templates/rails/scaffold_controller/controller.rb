@@ -2,11 +2,6 @@ class <%= controller_class_name %>Controller < ApplicationController
   # GET <%= route_url %>
   def index
     @<%= plural_table_name %> = <%= orm_class.all(class_name) %>
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @<%= plural_table_name %> }
-    end
   end
 
   # GET <%= route_url %>/1
@@ -39,11 +34,11 @@ class <%= controller_class_name %>Controller < ApplicationController
   def update
     @<%= singular_table_name %> = <%= orm_class.find(class_name, "params[:id]") %>
 
-      if @<%= orm_instance.update_attributes("params[:#{singular_table_name}]") %>
-        redirect_to(@<%= singular_table_name %>, :notice => '<%= human_name %> was successfully updated.')
-      else
-        render :action => "edit" 
-      end
+    if @<%= orm_instance.update_attributes("params[:#{singular_table_name}]") %>
+      redirect_to(@<%= singular_table_name %>, :notice => '<%= human_name %> was successfully updated.')
+    else
+      render :action => "edit" 
+    end
   end
 
   # DELETE <%= route_url %>/1
