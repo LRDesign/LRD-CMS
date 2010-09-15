@@ -1,4 +1,5 @@
 require 'generators/rspec'
+require 'generators/rspec/scaffold/scaffold_generator'
 require 'rails/generators/resource_helpers'
 
 module Rspec           
