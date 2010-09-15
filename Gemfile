@@ -11,7 +11,7 @@ group :development, :test do
   gem "rspec", ">= 2.0.0.beta"
   gem "rspec-rails", ">= 2.0.0.beta"
   gem "factory_girl_rails"
-  gem 'ruby-debug'
+  # gem 'ruby-debug'
 end
 
 # Deploy with Capistrano
