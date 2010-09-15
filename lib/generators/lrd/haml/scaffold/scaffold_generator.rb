@@ -3,7 +3,7 @@ module Lrd
   module Generators
     module Haml 
       class Scaffold < Rails::Generators::NamedBase 
-        p "defining the haml scaffold generator"
+        # p "defining the haml scaffold generator"
       
         include Rails::Generators::ResourceHelpers
         source_root File.dirname(__FILE__) + '/templates'
@@ -33,7 +33,7 @@ module Lrd
           end
       end
   
-      p Scaffold.namespace
+      # p Scaffold.namespace
     end
   end
 end

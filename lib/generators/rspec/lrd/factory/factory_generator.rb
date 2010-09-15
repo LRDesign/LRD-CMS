@@ -4,7 +4,7 @@ module Rspec
   module Lrd
     module Generators
       class Factory < Rails::Generators::NamedBase 
-        p "defining the factory scaffold generator"
+        # p "defining the factory scaffold generator"
     
         include Rails::Generators::ResourceHelpers
         source_root File.dirname(__FILE__) + '/templates'
@@ -16,9 +16,8 @@ module Rspec
         end
 
         def copy_factory_file
-          p "creating factory file with #{controller_file_name}"
           filename = "#{controller_file_name}_factory.rb"        
-          template 'factory.rb', File.join("spec/factories", controller_file_path, filename)
+          template 'factory.rb', File.join("spec/factories", filename)
           say "templating filename #{filename}"          
         end
 
@@ -33,7 +32,7 @@ module Rspec
         end
      
       end
-      p Factory.namespace
+      # p Factory.namespace
     
     end
   end
