@@ -17,8 +17,6 @@ class <%= controller_class_name %>Controller < ApplicationController
   # GET <%= route_url %>/new
   def new
     @<%= singular_table_name %> = <%= orm_class.build(class_name) %>
-
-    format.html # new.html.erb
   end
 
   # GET <%= route_url %>/1/edit
