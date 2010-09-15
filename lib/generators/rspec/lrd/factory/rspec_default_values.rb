@@ -1,6 +1,6 @@
 
 module Rails
-  module Generator
+  module Generators
     class GeneratedAttribute
       def default_value
         @default_value ||= case type

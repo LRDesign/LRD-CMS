@@ -1,4 +1,5 @@
-require File.dirname(__FILE__)+'/rspec_default_values'
+require File.dirname(__FILE__) + '/rspec_default_values'
+
 module Rspec
   module Lrd
     module Generators
