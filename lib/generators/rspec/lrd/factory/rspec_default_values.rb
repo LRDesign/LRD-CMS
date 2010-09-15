@@ -1,4 +1,4 @@
-raise "loading generated attribute file"
+
 module Rails
   module Generator
     class GeneratedAttribute
