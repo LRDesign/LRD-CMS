@@ -3,8 +3,8 @@ require 'spec_helper'
 describe "/<%= table_name %>/new" do
   include <%= controller_class_name %>Helper
   
-  before(:each) do
-    assigns[:<%= file_name %>] = Factory.build(:<%= singular_name %>)
+  before(:each) do    
+    assign(:<%= file_name %>, Factory.build(:<%= singular_name %>))
   end
   
   it "should succeed" do
