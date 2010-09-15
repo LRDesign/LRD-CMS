@@ -7,20 +7,15 @@ gem 'mysql'
 
 gem "haml"
 
-group :test do
+group :development, :test do
   gem "rspec", ">= 2.0.0.beta"
   gem "rspec-rails", ">= 2.0.0.beta"
   gem "factory_girl"
+  gem 'ruby-debug'
 end
-
-# Use unicorn as the web server
-# gem 'unicorn'
 
 # Deploy with Capistrano
 # gem 'capistrano'
-
-# To use debugger
-# gem 'ruby-debug'
 
 # Bundle the extra gems:
 # gem 'bj'
