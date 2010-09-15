@@ -1,5 +1,3 @@
-raise "loading lrd haml generator"
-
 module Lrd
   module Generators
     class Haml < Base 
