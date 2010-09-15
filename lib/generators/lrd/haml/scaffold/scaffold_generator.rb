@@ -1,7 +1,7 @@
 module Lrd
   module Generators
     module Haml 
-      class ScaffoldGenerator < Rails::Generators::Base 
+      class Scaffold < Rails::Generators::Base 
         p "defining the haml scaffold generator"
       
         include Rails::Generators::ResourceHelpers
