@@ -40,7 +40,7 @@ module LrdCms
     config.filter_parameters += [:password]
                                
     config.generators do |g|
-      g.template_engine :haml, :base => 'lrd:haml'
+      g.template_engine 'lrd:haml'
       g.test_framework :rspec, :fixture => true
       g.fixture_replacement 'lrd:factory'
     end
