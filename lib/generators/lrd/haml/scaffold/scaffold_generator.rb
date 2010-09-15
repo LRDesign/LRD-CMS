@@ -1,7 +1,9 @@
+require 'erb/generators/base'
+
 module Lrd
   module Generators
     module Haml 
-      class Scaffold < ::Erb::Generators::Base 
+      class Scaffold < Erb::Generators::Base 
         p "defining the haml scaffold generator"
       
         include Rails::Generators::ResourceHelpers
@@ -21,14 +23,13 @@ module Lrd
 
         protected
 
-        def available_views
-          %w(index edit show new _form)
-        end
-        
-
-        def handler
-          :haml
-        end
+          def available_views
+            %w(index edit show new _form)
+          end
+          
+          def handler
+            :haml
+          end
       end
   
       p Scaffold.namespace
