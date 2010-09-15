@@ -41,7 +41,7 @@ module LrdCms
     
     config.generators do |g|
       g.template_engine 'lrd:haml'
-      g.test_framework :rspec, :fixture => true, :views => false
+      g.test_framework 'lrd:rspec', :fixture => true
       g.fixture_replacement 'lrd:factory'
     end
   end
