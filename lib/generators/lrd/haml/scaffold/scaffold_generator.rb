@@ -21,8 +21,6 @@ module Lrd
             template filename, File.join("app/views", controller_file_path, filename)
           end
         end
-        
-        
 
         protected
 
