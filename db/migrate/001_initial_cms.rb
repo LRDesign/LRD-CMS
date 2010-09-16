@@ -1,13 +1,13 @@
 class InitialCms < ActiveRecord::Migration
   def self.up
     create_table :pages do |t|
-      t.string   :title
-      t.string   :permalink
-      t.text     :content
-      t.boolean  :published
+      t.string   :title       # Page title, generaly passed to set_headline
+      t.string   :permalink   # page URL
+      t.text     :content     # HTML content 
+      t.boolean  :published   # page is currently visible?
       
-      t.text :keywords
-      t.text :description
+      t.text :keywords        # used to create META Keywords in the layout <head>
+      t.text :description     # used to create META Description in the layout <head>
       
       t.datetime :edited_at
       t.timestamps
