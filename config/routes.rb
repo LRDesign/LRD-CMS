@@ -1,4 +1,8 @@
 LrdCms::Application.routes.draw do
+  get "static/home"
+
+  root :to => 'static#index'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
