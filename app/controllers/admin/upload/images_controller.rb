@@ -16,10 +16,10 @@ class Admin::Upload::ImagesController < ApplicationController
 
   # POST /admin/upload/images
   def create
-    @admin_upload_image = Admin::Upload::Image.new(params[:admin_upload_image])
+    @image = Admin::Upload::Image.new(params[:admin_upload_image])
 
-    if @admin_upload_image.save
-      redirect_to(@admin_upload_image, :notice => 'Image was successfully created.') 
+    if @image.save
+      redirect_to(@image, :notice => 'Image was successfully created.') 
     else
       render :action => "new" 
     end
