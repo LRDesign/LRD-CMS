@@ -1,0 +1,14 @@
+- set_headline "Listing documents"
+
+= link_to 'New document', new_admin_upload_document_path
+%br 
+
+%table
+  %tr
+
+  - for document in @documents
+    %tr
+      %td= document.data_file_name
+      %td= link_to 'Show', document
+      %td= link_to 'Destroy', document, :confirm => 'Are you sure?', :method => :delete
+

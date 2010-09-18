@@ -1,5 +1,10 @@
 LrdCms::Application.routes.draw do
-  get "static/home"
+  namespace :admin do  
+    namespace :upload do 
+      resources :images 
+      resources :documents
+    end 
+  end
 
   root :to => 'static#index'
 

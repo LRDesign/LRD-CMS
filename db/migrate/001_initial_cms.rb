@@ -49,7 +49,7 @@ class InitialCms < ActiveRecord::Migration
       t.timestamps
     end
     
-    create_table :documents do |t|
+    create_table :admin_upload_documents do |t|
       t.string :data_file_name
       t.integer :data_file_size
       t.string :data_content_type
@@ -57,6 +57,15 @@ class InitialCms < ActiveRecord::Migration
 
       t.timestamps
     end    
+
+    create_table :admin_upload_images do |t|
+      t.string :image_file_name
+      t.integer :image_file_size
+      t.string :image_content_type
+      t.datetime :image_updated_at
+
+      t.timestamps
+    end
   end
 
   def self.down

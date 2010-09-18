@@ -44,5 +44,7 @@ module LrdCms
       g.test_framework :rspec, :fixture => true
       g.fixture_replacement 'lrd:factory'
     end
+
+    Paperclip::Railtie.insert
   end
 end

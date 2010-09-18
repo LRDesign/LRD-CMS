@@ -1,0 +1,7 @@
+= form_for(@image, :html => {:multipart => true}) do |f|
+  = f.file_field :image
+  = f.error_messages
+
+  = unlabeled_submit f
+  
+      

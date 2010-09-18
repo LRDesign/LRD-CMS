@@ -1,0 +1,6 @@
+- set_headline "Image: #{h @image.image_file_name}"
+
+= image_tag(@image.image.url)
+%br
+
+= link_to 'Back', admin_upload_images_path
