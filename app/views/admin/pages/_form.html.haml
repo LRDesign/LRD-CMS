@@ -1,0 +1,10 @@
+= form_for(@page, :url => url, :format => :html) do |f|
+  = labeled_input f, :title
+  %br
+  = labeled_input f, :permalink
+  %br
+  = labeled_input f, :content
+  %br
+  = f.error_messages
+
+  = unlabeled_submit f
