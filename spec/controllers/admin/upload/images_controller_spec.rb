@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Admin::Upload::ImagesController do
+  include ImageTestHelper
 
   before(:each) do
     @image = Factory(:image)
@@ -44,126 +45,39 @@ describe Admin::Upload::ImagesController do
 
     describe "with valid params" do
       before do
-        pending "need definition of valid_create_params"
-        @valid_create_params = { 
-          # TODO: Once some model validations have been created,
-          # put attributes in here that will PASS validation                    
-        }
+        @img = mock_proper_image(:save => true)
+        Admin::Upload::Image.should_receive(:new).with({'these' => 'params'}).and_return(@img)
+        post :create, :admin_upload_image => {:these => 'params'}
       end
       
-      it "should create a new image in the database" do
-        lambda do 
-          post :create, :image => @valid_create_params
-        end.should change(Admin::Upload::Image, :count).by(1)
-      end
-
-      it "should expose a saved image as @image" do
-        post :create, :image => @valid_create_params
-        assigns[:image].should be_a(Admin::Upload::Image)
-      end
-      
-      it "should save the newly created image as @image" do
-        post :create, :image => @valid_create_params
-        assigns[:image].should_not be_new_record
+      it "should create a new image and expose it" do
+        assigns(:image).should equal(@img)
       end
 
       it "should redirect to the created image" do
-        post :create, :image => @valid_create_params
-        new_image = assigns[:image]
-        response.should redirect_to(admin_upload_image_url(new_image))
+        response.should redirect_to(admin_upload_image_url(@img))
       end      
     end
     
     describe "with invalid params" do
       before do
-        pending "need definition of invalid_create_params"
-        @invalid_create_params = {    
-          # TODO: Once some model validations have been created,
-          # put attributes in here that will FAIL validation          
-        } 
-      end
-      
-      it "should not create a new image in the database" do
-        lambda do 
-          post :create, :image => @invalid_create_params
+        lambda do
+          @img = mock_improper_image(:save => false)
+          Admin::Upload::Image.should_receive(:new).with({'these' => 'params'}).and_return(@img)
+          post :create, :admin_upload_image => {:these => 'params'}
         end.should_not change(Admin::Upload::Image, :count)
-      end      
+      end
       
       it "should expose a newly created image as @image" do
-        post :create, :image => @invalid_create_params
-        assigns(:image).should be_a(Admin::Upload::Image)
+        assigns(:image).should equal(@img) 
       end
       
-      it "should expose an unsaved image as @image" do
-        post :create, :image => @invalid_create_params
-        assigns(:image).should be_new_record
-      end
       
       it "should re-render the 'new' template" do
-        post :create, :image => @invalid_create_params
         response.should render_template('new')
       end      
     end    
   end
-
-  ########################################################################################
-  #                                      PUT UPDATE
-  ########################################################################################
-  describe "responding to PUT update" do
-
-    describe "with valid params" do
-      before do
-        pending "need definition of valid_update_params"
-        @valid_update_params = {        
-          # TODO: Once some model validations have been created,
-          # put attributes in here that will PASS validation          
-        }
-      end
-      
-      it "should update the requested image in the database" do          
-        lambda do
-          put :update, :id => @image.id, :image => @valid_update_params
-        end.should change{ @image.reload.attributes }
-      end
-
-      it "should expose the requested image as @image" do
-        put :update, :id => @image.id, :image => @valid_update_params
-        assigns(:image).should == @image
-      end
-
-      it "should redirect to the image" do
-        put :update, :id => @image.id, :image => @valid_update_params
-        response.should redirect_to(admin_upload_image_url(@image))
-      end
-    end
-    
-    describe "with invalid params" do
-      before do
-        pending "need definition of invalid_update_params"
-        @invalid_update_params = {                        
-          # TODO: Once some model validations have been created,
-          # put attributes in here that will FAIL validation
-        } 
-      end
-      
-      it "should not change the image in the database" do
-        lambda do 
-          put :update, :id => @image.id, :image => @invalid_update_params
-        end.should_not change{ @image.reload }
-      end
-
-      it "should expose the image as @image" do
-        put :update, :id => @image.id, :image => @invalid_update_params
-        assigns(:image).should == @image
-      end
-
-      it "should re-render the 'edit' template" do
-        put :update, :id => @image.id, :image => @invalid_update_params
-        response.should render_template('edit')
-      end
-    end
-  end
-
 
   ########################################################################################
   #                                      DELETE DESTROY

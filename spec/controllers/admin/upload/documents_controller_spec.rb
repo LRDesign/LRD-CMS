@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Admin::Upload::DocumentsController do
+  include DocumentTestHelper
 
   before(:each) do
     @document = Factory(:document)
@@ -43,128 +44,22 @@ describe Admin::Upload::DocumentsController do
   describe "responding to POST create" do
 
     describe "with valid params" do
-      before do
-        pending "need definition of valid_create_params"
-        @valid_create_params = { 
-          # TODO: Once some model validations have been created,
-          # put attributes in here that will PASS validation                    
-        }
+      before(:each) do
+        @doc = mock_document(:save => true)
+        Admin::Upload::Document.should_receive(:new).with({'these' => 'params'}).and_return(@doc)
+        post :create, :admin_upload_document => {:these => 'params'}
       end
       
-      it "should create a new document in the database" do
-        lambda do 
-          post :create, :document => @valid_create_params
-        end.should change(Admin::Upload::Document, :count).by(1)
-      end
-
-      it "should expose a saved document as @document" do
-        post :create, :document => @valid_create_params
-        assigns[:document].should be_a(Admin::Upload::Document)
-      end
-      
-      it "should save the newly created document as @document" do
-        post :create, :document => @valid_create_params
-        assigns[:document].should_not be_new_record
+      it "should create a new document and expose it" do
+        assigns(:admin_upload_document).should equal(@doc)
       end
 
       it "should redirect to the created document" do
-        post :create, :document => @valid_create_params
-        new_document = assigns[:document]
-        response.should redirect_to(admin_upload_document_url(new_document))
+        response.should redirect_to(admin_upload_document_url(@doc))
       end      
     end
-    
-    describe "with invalid params" do
-      before do
-        pending "need definition of invalid_create_params"
-        @invalid_create_params = {    
-          # TODO: Once some model validations have been created,
-          # put attributes in here that will FAIL validation          
-        } 
-      end
-      
-      it "should not create a new document in the database" do
-        lambda do 
-          post :create, :document => @invalid_create_params
-        end.should_not change(Admin::Upload::Document, :count)
-      end      
-      
-      it "should expose a newly created document as @document" do
-        post :create, :document => @invalid_create_params
-        assigns(:document).should be_a(Admin::Upload::Document)
-      end
-      
-      it "should expose an unsaved document as @document" do
-        post :create, :document => @invalid_create_params
-        assigns(:document).should be_new_record
-      end
-      
-      it "should re-render the 'new' template" do
-        post :create, :document => @invalid_create_params
-        response.should render_template('new')
-      end      
-    end    
+
   end
-
-  ########################################################################################
-  #                                      PUT UPDATE
-  ########################################################################################
-  describe "responding to PUT update" do
-
-    describe "with valid params" do
-      before do
-        pending "need definition of valid_update_params"
-        @valid_update_params = {        
-          # TODO: Once some model validations have been created,
-          # put attributes in here that will PASS validation          
-        }
-      end
-      
-      it "should update the requested document in the database" do          
-        lambda do
-          put :update, :id => @document.id, :document => @valid_update_params
-        end.should change{ @document.reload.attributes }
-      end
-
-      it "should expose the requested document as @document" do
-        put :update, :id => @document.id, :document => @valid_update_params
-        assigns(:document).should == @document
-      end
-
-      it "should redirect to the document" do
-        put :update, :id => @document.id, :document => @valid_update_params
-        response.should redirect_to(admin_upload_document_url(@document))
-      end
-    end
-    
-    describe "with invalid params" do
-      before do
-        pending "need definition of invalid_update_params"
-        @invalid_update_params = {                        
-          # TODO: Once some model validations have been created,
-          # put attributes in here that will FAIL validation
-        } 
-      end
-      
-      it "should not change the document in the database" do
-        lambda do 
-          put :update, :id => @document.id, :document => @invalid_update_params
-        end.should_not change{ @document.reload }
-      end
-
-      it "should expose the document as @document" do
-        put :update, :id => @document.id, :document => @invalid_update_params
-        assigns(:document).should == @document
-      end
-
-      it "should re-render the 'edit' template" do
-        put :update, :id => @document.id, :document => @invalid_update_params
-        response.should render_template('edit')
-      end
-    end
-  end
-
-
   ########################################################################################
   #                                      DELETE DESTROY
   ########################################################################################
