@@ -10,12 +10,8 @@ class Admin::Upload::Document < ActiveRecord::Base
   # attributes that should be assignable from a web form.  Things like a 
   # User#admin boolean probably should not be accessible. :-)
                                                
-  # TODO:  create a validation or two
-  # 
-  # The model needs a validation for the controller specs to be completed.
-  # you can use that then to set @valid_create_params and similar in
-  # the generated controller specs, and make
   attr_accessible :data
 
   has_attached_file :data
+  validates_attachment_presence :data
 end

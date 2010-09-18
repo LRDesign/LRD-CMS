@@ -9,13 +9,9 @@ class Admin::Upload::Image < ActiveRecord::Base
   # which can be a PITA to debug.  Please do this intelligently, and only for 
   # attributes that should be assignable from a web form.  Things like a 
   # User#admin boolean probably should not be accessible. :-)
-                                               
-  # TODO:  create a validation or two
-  # 
-  # The model needs a validation for the controller specs to be completed.
-  # you can use that then to set @valid_create_params and similar in
-  # the generated controller specs, and make
   attr_accessible :image
 
   has_attached_file :image, :styles => LRD::ImageStyles
+  validates_attachment_presence :image
+  validates_attachment_content_type :image, :content_type => /image.*/
 end
