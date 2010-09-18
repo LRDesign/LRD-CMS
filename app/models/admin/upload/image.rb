@@ -17,5 +17,5 @@ class Admin::Upload::Image < ActiveRecord::Base
   # the generated controller specs, and make
   attr_accessible :image
 
-  has_attached_file :image
+  has_attached_file :image, :styles => LRD::ImageStyles
 end
