@@ -10,9 +10,9 @@ describe Admin::Upload::DocumentsController do
   #                                      GET INDEX
   ########################################################################################
   describe "GET index" do
-    it "should expose all admin_upload_documents as @admin_upload_documents" do
+    it "should expose all admin_upload_documents as @documents" do
       get :index
-      assigns[:admin_upload_documents].should == [@document]
+      assigns[:documents].should == [@document]
     end
   end
 
@@ -37,17 +37,7 @@ describe Admin::Upload::DocumentsController do
     end
   end
 
-  ########################################################################################
-  #                                      GET EDIT
-  ########################################################################################
-  describe "responding to GET edit" do  
-    it "should expose the requested document as @document" do
-      get :edit, :id => @document.id
-      assigns[:document].should == @document
-    end
-  end
-
-  ########################################################################################
+  #######################################################################################
   #                                      POST CREATE
   ########################################################################################
   describe "responding to POST create" do

@@ -1,2 +1,2 @@
-Factory.define :document do |document|
+Factory.define :document, :class => Admin::Upload::Document do |document|
 end

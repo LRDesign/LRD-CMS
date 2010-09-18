@@ -1,2 +1,2 @@
-Factory.define :image do |image|
+Factory.define :image, :class => Admin::Upload::Image do |image|
 end

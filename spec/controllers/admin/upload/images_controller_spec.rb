@@ -10,9 +10,9 @@ describe Admin::Upload::ImagesController do
   #                                      GET INDEX
   ########################################################################################
   describe "GET index" do
-    it "should expose all admin_upload_images as @admin_upload_images" do
+    it "should expose all admin_upload_images as @images" do
       get :index
-      assigns[:admin_upload_images].should == [@image]
+      assigns[:images].should == [@image]
     end
   end
 
@@ -34,16 +34,6 @@ describe Admin::Upload::ImagesController do
       get :new
       assigns[:image].should be_a(Admin::Upload::Image)
       assigns[:image].should be_new_record
-    end
-  end
-
-  ########################################################################################
-  #                                      GET EDIT
-  ########################################################################################
-  describe "responding to GET edit" do  
-    it "should expose the requested image as @image" do
-      get :edit, :id => @image.id
-      assigns[:image].should == @image
     end
   end
 

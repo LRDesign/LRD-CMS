@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "/admin_upload_documents/new" do
+describe "/admin/upload/documents/new" do
   include Admin::Upload::DocumentsHelper
   
   before(:each) do    
