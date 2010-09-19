@@ -1,7 +1,7 @@
 class PagesController < ApplicationController
   # GET /:prefix/*permalink
   def show
-    path = params[:permalink].unshift(params[:prefix]).join("/")
+    path = params[:prefix] + "/" + params[:permalink]
     @page = Page.find_by_permalink(path)
     if @page.nil? || !@page.published?
       # If the page is unpublished, we don't want to expose it

@@ -15,13 +15,13 @@ describe PagesController do
   ########################################################################################
   describe "responding to GET show" do
     it "should expose the requested published page as @page" do
-      get :show, :prefix => 'test', :permalink => [@page_permalink_without_prefix]
+      get :show, :prefix => 'test', :permalink => @page_permalink_without_prefix
       assigns[:page].should == @page
     end  
 
     describe "for a non-existent page" do
       it "should return status 404" do
-        get :show, :prefix => 'test', :permalink => ["how_do_we_know_that_we_truly_exist"]
+        get :show, :prefix => 'test', :permalink => "how_do_we_know_that_we_truly_exist"
         response.status.should == 404
       end
     end
@@ -29,7 +29,7 @@ describe PagesController do
     describe "for an unpublished page" do
       before(:each) do
         get :show, :prefix => 'test', 
-            :permalink => [@unpub_page_permalink_without_prefix] 
+            :permalink => @unpub_page_permalink_without_prefix 
       end
       it "should not expose the page as @page" do
         assigns[:page].should == nil
