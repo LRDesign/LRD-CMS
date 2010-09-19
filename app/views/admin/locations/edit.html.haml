@@ -1,0 +1,8 @@
+- set_headline "Editing location"
+
+= link_to 'Show', admin_location_path(@location)
+|
+= link_to 'Back to List', admin_locations_path
+
+= render :partial => "form", :locals => {:url => admin_location_path(@location) }
+

@@ -5,6 +5,7 @@ LrdCms::Application.routes.draw do
       resources :documents
     end 
     resources :pages
+    resources :locations
   end
 
   root :to => 'static#index'
