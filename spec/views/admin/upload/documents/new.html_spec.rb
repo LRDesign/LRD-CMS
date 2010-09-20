@@ -15,9 +15,7 @@ describe "/admin/upload/documents/new" do
   it "should render new form" do
     render
                                           
-    rendered.should have_selector("form", :action => admin_upload_documents_path, :method=> 'post') do |form|   
-      
-    end
+    rendered.should have_selector("form", :action => admin_upload_documents_path, :method=> 'post')
   end
 end
 
