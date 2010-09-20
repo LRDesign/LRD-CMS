@@ -25,13 +25,12 @@
 
     = yield :header   
                                                     
-  %body
-    #inset                         
+  %body{ :class => admin? ? 'with_admin' : nil } 
+    = render :partial => 'layouts/admin_nav' if admin?   
+    #inset      
       #wrap
-        #header
-                      
-          -# TODO: enable these once they are written  
-          = render :partial => 'layouts/admin_nav'
+        #header                      
+          -# TODO: enable this once it is  written  
           -# = render :partial => 'layouts/nav'
                 
         #content-wrap         
