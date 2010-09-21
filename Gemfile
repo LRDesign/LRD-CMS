@@ -16,6 +16,11 @@ group :development, :test do
   # gem 'ruby-debug'
 end
 
+group :development do
+  gem "populator"
+  gem "faker"
+end
+
 # Deploy with Capistrano
 # gem 'capistrano'
 
