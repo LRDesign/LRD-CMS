@@ -15,11 +15,8 @@ module AuthlogicTestHelper
 
   def login_as(user)
     user = case user
-           when :admin #This is a hack to save and hour right now
-             #TODO: change all login_as(:admin) to login_as("admin")
-             User.find_by_login("admin") 
            when Symbol
-             Factory.create(user)
+             User.find_by_login(user.to_s) || Factory.create(user)
            when String
              User.find_by_login(user)
            else
