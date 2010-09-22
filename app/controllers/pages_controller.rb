@@ -10,5 +10,6 @@ class PagesController < ApplicationController
       Rails.logger.info{"Returning 404 for #{path}"}
       render "public/404.html", :status => 404
     end
+    @title = @page.title if @page
   end
 end
