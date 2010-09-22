@@ -3,6 +3,12 @@
   %br
   = labeled_input f, :permalink
   %br
+  = labeled_input f, :published, :input => f.check_box(:published)
+  %br
+  = labeled_input f, :keywords
+  %br
+  = labeled_input f, :description
+  %br
   - input = f.text_area(:content, :size => "80x40", :class => 'mceEditor')
   = labeled_input f, :content, :input => input
   %br
