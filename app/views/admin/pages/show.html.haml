@@ -1,5 +1,9 @@
 - set_headline "Pages: #{h @page.title}"
 
+#page_content
+  != @page.content
+
+%br
 
 = link_to 'Edit', edit_admin_page_path(@page)
 |
