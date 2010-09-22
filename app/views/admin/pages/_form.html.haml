@@ -1,6 +1,8 @@
 = form_for(@page, :url => url, :format => :html) do |f|
   = labeled_input f, :title
   %br
+  = labeled_input f, :headline
+  %br
   = labeled_input f, :permalink
   %br
   = labeled_input f, :published, :input => f.check_box(:published)

@@ -1,7 +1,8 @@
 class InitialCms < ActiveRecord::Migration
   def self.up
     create_table :pages do |t|
-      t.string   :title       # Page title, generaly passed to set_headline
+      t.string   :title       # Page title, used in <title>
+      t.string   :headline    # Page headline, passed to set_headline
       t.string   :permalink   # page URL
       t.text     :content     # HTML content 
       t.boolean  :published, :null => false   # page is currently visible?

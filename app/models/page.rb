@@ -9,7 +9,8 @@ class Page < ActiveRecord::Base
   # which can be a PITA to debug.  Please do this intelligently, and only for 
   # attributes that should be assignable from a web form.  Things like a 
   # User#admin boolean probably should not be accessible. :-)
-  attr_accessible :title, :permalink, :content, :edited_at
+  attr_accessible :title, :permalink, :content, :edited_at, :description,
+    :headline, :keywords, :published
                                                
   # TODO:  create a validation or two
   # 
