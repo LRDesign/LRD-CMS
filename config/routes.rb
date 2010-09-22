@@ -8,6 +8,8 @@ LrdCms::Application.routes.draw do
     resources :locations
   end
 
+  resource :user_session
+
   root :to => 'static#index'
 
   match '/:prefix/*permalink', :controller => :pages, :action => 'show'

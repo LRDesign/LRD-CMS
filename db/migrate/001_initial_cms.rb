@@ -27,7 +27,7 @@ class InitialCms < ActiveRecord::Migration
     
     create_table :users do |t|              
       t.string    :login,               :null => false,  :limit => 20
-      t.string    :email,               :null => false  
+      t.string    :email
       t.string    :first_name,          :limit => 60
       t.string    :last_name,           :limit => 60
 
