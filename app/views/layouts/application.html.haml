@@ -3,6 +3,11 @@
 
   %head
     %meta{"http-equiv" => "content-type", "content" => "text/html;charset=UTF-8" }
+    - if yield(:keywords)
+      %meta{"name" => "keywords", "content" => yield(:keywords)}
+    - if yield(:description)
+      %meta{"name" => "description", "content" => yield(:description)}
+
     %title=  @title ? @title : "Logical Reality Design Default CMS Framework"
 
     = stylesheet_link_tag 'universal', :media=>'all' 
