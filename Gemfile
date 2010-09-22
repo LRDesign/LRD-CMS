@@ -21,6 +21,7 @@ end
 group :development do
   gem "populator"
   gem "faker"
+  gem "mongrel"
 end
 
 # Deploy with Capistrano
