@@ -1,4 +1,4 @@
-class Admin::PagesController < ApplicationController
+class Admin::PagesController < Admin::AdminController
   uses_tiny_mce :options => {
     :theme => 'advanced',
     :theme_advanced_resizing => true,
