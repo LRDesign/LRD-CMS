@@ -12,7 +12,7 @@ LrdCms::Application.routes.draw do
 
   root :to => 'static#index'
 
-  match '/:prefix/*permalink', :controller => :pages, :action => 'show'
+  match '/*permalink', :controller => :pages, :action => 'show'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
