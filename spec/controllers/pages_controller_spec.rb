@@ -4,10 +4,7 @@ describe PagesController do
 
   before(:each) do
     @page = Factory(:page)
-    @page_permalink_without_prefix = @page.permalink.sub(/test\//,'')
-
     @unpublished_page = Factory(:unpublished_page)
-    @unpub_page_permalink_without_prefix = @unpublished_page.permalink.sub(/test\//,'')
   end
 
   ########################################################################################
@@ -15,7 +12,7 @@ describe PagesController do
   ########################################################################################
   describe "responding to GET show" do
     it "should expose the requested published page as @page" do
-      get :show, :prefix => 'test', :permalink => @page_permalink_without_prefix
+      get :show, :permalink => @page.permalink
       assigns[:page].should == @page
     end  
 
@@ -28,8 +25,8 @@ describe PagesController do
 
     describe "for an unpublished page" do
       before(:each) do
-        get :show, :prefix => 'test', 
-            :permalink => @unpub_page_permalink_without_prefix 
+        get :show, 
+            :permalink => @unpublished_page.permalink 
       end
       it "should not expose the page as @page" do
         assigns[:page].should == nil
