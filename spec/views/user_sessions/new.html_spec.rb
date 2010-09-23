@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe "/user_sessions/new" do
-  include UserSessionsHelper
   
   before(:each) do    
     assign(:user_session, Factory.build(:user_session))
