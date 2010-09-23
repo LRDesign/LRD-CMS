@@ -15,7 +15,7 @@ describe "/user_sessions/new" do
   it "should render new form" do
     render
                                           
-    rendered.should have_selector("form", :action => user_sessions_path, :method=> 'post') do |form|   
+    rendered.should have_selector("form", :action => user_session_path, :method=> 'post') do |form|   
       
     end
   end

@@ -5,6 +5,7 @@ describe Admin::Upload::ImagesController do
 
   before(:each) do
     @image = Factory(:image)
+    authenticate('admin')
   end
 
   ########################################################################################

@@ -4,6 +4,7 @@ describe Admin::LocationsController do
 
   before(:each) do
     @location = Factory(:location)
+    authenticate('admin')
   end
 
   ########################################################################################

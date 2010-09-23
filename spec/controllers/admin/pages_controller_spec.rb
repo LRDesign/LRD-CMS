@@ -4,6 +4,7 @@ describe Admin::PagesController do
 
   before(:each) do
     @page = Factory(:page)
+    authenticate('admin')
   end
 
   ########################################################################################
