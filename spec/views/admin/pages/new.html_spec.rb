@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe "/admin/pages/new" do
-  include Admin::PagesHelper
   
   before(:each) do    
     assign(:page, Factory.build(:page))

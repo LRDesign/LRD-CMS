@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe "/admin/pages/show" do
-  include Admin::PagesHelper
   
   before(:each) do    
     assign(:page, @page = Factory(:page))
