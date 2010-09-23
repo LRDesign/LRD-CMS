@@ -11,6 +11,20 @@
 # Once the client has real data ... i.e. an initial set of pages and/or
 # a menu/location tree, those should replace the lorem data.                                                                     
 
+class Array
+  # If +number+ is greater than the size of the array, the method
+  # will simply return the array itself sorted randomly
+  # defaults to picking one item
+  def pick(number = 1)
+    if (number == 1)
+      sort_by{ rand }[0]
+    else
+      sort_by{ rand }.slice(0...number)
+    end
+  end  
+end
+
+
 namespace :db do
   namespace :sample_data do
     
