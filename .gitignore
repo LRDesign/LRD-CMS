@@ -20,6 +20,7 @@ db/schema.rb
 db/*.sqlite3*
 database.yml
 public/stylesheets/*.css
+!public/stylesheets/reset.css
 public/javascripts/all.js
 public/system
 uuid.state

@@ -1,4 +1,4 @@
-class Admin::Upload::DocumentsController < ApplicationController
+class Admin::Upload::DocumentsController < Admin::AdminController
   # GET /admin/upload/documents
   def index
     @documents = Admin::Upload::Document.all

@@ -1,0 +1,8 @@
+- set_headline "Editing page #{@page.title}"
+
+= link_to 'Show', admin_page_path(@page)
+|
+= link_to 'Back to List', admin_pages_path
+
+= render :partial => "form", :locals => {:url => admin_page_path(@page)}
+

@@ -1,10 +1,11 @@
 class InitialCms < ActiveRecord::Migration
   def self.up
     create_table :pages do |t|
-      t.string   :title       # Page title, generaly passed to set_headline
+      t.string   :title       # Page title, used in <title>
+      t.string   :headline    # Page headline, passed to set_headline
       t.string   :permalink   # page URL
       t.text     :content     # HTML content 
-      t.boolean  :published   # page is currently visible?
+      t.boolean  :published, :null => false   # page is currently visible?
       
       t.text :keywords        # used to create META Keywords in the layout <head>
       t.text :description     # used to create META Description in the layout <head>
@@ -26,7 +27,7 @@ class InitialCms < ActiveRecord::Migration
     
     create_table :users do |t|              
       t.string    :login,               :null => false,  :limit => 20
-      t.string    :email,               :null => false  
+      t.string    :email
       t.string    :first_name,          :limit => 60
       t.string    :last_name,           :limit => 60
 

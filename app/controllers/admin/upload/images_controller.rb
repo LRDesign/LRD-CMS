@@ -1,4 +1,4 @@
-class Admin::Upload::ImagesController < ApplicationController
+class Admin::Upload::ImagesController < Admin::AdminController
   # GET /admin/upload/images
   def index
     @images = Admin::Upload::Image.all

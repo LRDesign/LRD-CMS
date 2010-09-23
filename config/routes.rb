@@ -4,9 +4,15 @@ LrdCms::Application.routes.draw do
       resources :images 
       resources :documents
     end 
+    resources :pages
+    resources :locations
   end
 
+  resource :user_session
+
   root :to => 'static#index'
+
+  match '/:prefix/*permalink', :controller => :pages, :action => 'show'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

@@ -7,6 +7,8 @@ gem 'mysql'
 gem 'paperclip'
 gem "haml"
 gem "will_paginate", "~> 3.0.pre2"
+gem 'tiny_mce'
+gem 'authlogic'
 
 group :development, :test do
   gem "rspec", ">= 2.0.0.beta"
@@ -19,6 +21,7 @@ end
 group :development do
   gem "populator"
   gem "faker"
+  gem "mongrel"
 end
 
 # Deploy with Capistrano

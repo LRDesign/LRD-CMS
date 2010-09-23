@@ -1,3 +1,5 @@
+!admin_menu_height = 20px
+
 body.with_admin #inset
   :margin-top !admin_menu_height
 
@@ -25,6 +27,7 @@ body.with_admin #inset
   ul 
     :list-style none 
     :margin 0    
+    :padding-bottom 5px
   
   li 
     :list-style none
@@ -37,5 +40,9 @@ body.with_admin #inset
       
     a:hover
       :color #ff6
-      
-      
+
+    form
+      :margin 0 0 0 0
+
+    form div input[type='submit']
+      :font-size 10px  

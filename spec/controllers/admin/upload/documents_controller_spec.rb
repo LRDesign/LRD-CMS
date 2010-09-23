@@ -5,6 +5,7 @@ describe Admin::Upload::DocumentsController do
 
   before(:each) do
     @document = Factory(:document)
+    authenticate('admin')
   end
 
   ########################################################################################

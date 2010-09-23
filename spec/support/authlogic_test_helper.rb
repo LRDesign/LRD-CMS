@@ -1,4 +1,5 @@
 module AuthlogicTestHelper
+  include Authlogic::TestCase
   def current_user(stubs = {})
     return nil if current_user_session.nil?
     current_user_session.user 
@@ -37,14 +38,14 @@ module AuthlogicTestHelper
   end
 end
 
-class Spec::Rails::Example::ControllerExampleGroup
+module RSpec::Rails::ControllerExampleGroup
   include AuthlogicTestHelper
 end
 
-class Spec::Rails::Example::ViewExampleGroup
+module RSpec::Rails::ViewExampleGroup
   include AuthlogicTestHelper
 end
 
-class Spec::Rails::Example::HelperExampleGroup
+module RSpec::Rails::HelperExampleGroup
   include AuthlogicTestHelper
 end

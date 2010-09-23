@@ -1,0 +1,15 @@
+- set_headline "Listing locations"
+
+= link_to 'New location', new_admin_location_path
+%br 
+
+%table
+  %tr
+
+  - for location in @locations
+    %tr
+
+      %td= link_to 'Show', admin_location_path(location)
+      %td= link_to 'Edit', edit_admin_location_path(location)
+      %td= link_to 'Destroy', admin_location_path(location), :confirm => 'Are you sure?', :method => :delete
+
