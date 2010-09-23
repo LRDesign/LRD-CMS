@@ -1,6 +1,7 @@
-module ApplicationHelper
-
+module ApplicationHelper    
+  include AuthenticatedSystem
+  
   def admin?
-    true   # TODO
+    logged_in?
   end
 end

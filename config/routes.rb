@@ -9,6 +9,7 @@ LrdCms::Application.routes.draw do
   end
 
   resource :user_session
+  match '/login', :controller => :user_sessions, :action => "new"
 
   root :to => 'static#index'
 

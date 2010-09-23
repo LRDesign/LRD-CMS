@@ -11,7 +11,7 @@
 
   - @pages.each do |page|
     %tr
-      %td= page.published
+      %td= bool_checked page.published
       %td= link_to page.title, admin_page_path(page)
       %td= page.permalink
       %td= link_to 'Edit', edit_admin_page_path(page)
