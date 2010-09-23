@@ -8,7 +8,7 @@ gem 'paperclip'
 gem "haml"
 gem "will_paginate", "~> 3.0.pre2"
 gem 'tiny_mce'
-gem 'authlogic'
+gem 'authlogic', :git => 'git://github.com/odorcicd/authlogic.git', :branch => 'rails3'
 
 group :development, :test do
   gem "rspec", ">= 2.0.0.beta"

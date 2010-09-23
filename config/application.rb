@@ -37,7 +37,7 @@ module LrdCms
     config.encoding = "utf-8"
 
     # Configure sensitive parameters which will be filtered from the log file.
-    config.filter_parameters += [:password]
+    config.filter_parameters += [:password, :pasword_confirmation]
                                
     config.generators do |g|
       g.template_engine 'lrd:haml'
