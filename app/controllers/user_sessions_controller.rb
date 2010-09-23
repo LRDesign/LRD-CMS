@@ -15,11 +15,15 @@ class UserSessionsController < ApplicationController
     end
   end
 
-  # DELETE /user_sessions/1
+  # DELETE /user_sessions
   def destroy
     @user_session = UserSession.find
-    @user_session.destroy
+    if @user_session
+      @user_session.destroy
 
-    redirect_to(:root, :notice => 'Logout successful.')
+      redirect_to(:root, :notice => 'Logout successful.')
+    else
+      redirect_to(:root)
+    end
   end
 end
