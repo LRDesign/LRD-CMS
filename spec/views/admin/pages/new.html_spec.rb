@@ -14,9 +14,7 @@ describe "/admin/pages/new" do
   it "should render new form" do
     render
                                           
-    rendered.should have_selector("form", :action => admin_pages_path, :method=> 'post') do |form|   
-      
-    end
+    rendered.should have_selector("form", :action => admin_pages_path, :method=> 'post') 
   end
 end
 

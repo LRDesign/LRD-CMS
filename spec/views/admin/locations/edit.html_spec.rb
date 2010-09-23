@@ -14,8 +14,7 @@ describe "/admin/locations/edit" do
   it "should render edit form" do
     render
     
-    rendered.should have_selector("form", :action => admin_location_path(@location), :method=> 'post') do |form|
-    end
+    rendered.should have_selector("form", :action => admin_location_path(@location), :method=> 'post')
   end
 end
 
