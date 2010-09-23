@@ -55,10 +55,10 @@ describe Admin::PagesController do
 
     describe "with valid params" do
       before do
-        pending "need definition of valid_create_params"
         @valid_create_params = { 
-          # TODO: Once some model validations have been created,
-          # put attributes in here that will PASS validation                    
+          :title => 'test',
+          :permalink => 'test/123',
+          :published => false
         }
       end
       
@@ -87,10 +87,8 @@ describe Admin::PagesController do
     
     describe "with invalid params" do
       before do
-        pending "need definition of invalid_create_params"
         @invalid_create_params = {    
-          # TODO: Once some model validations have been created,
-          # put attributes in here that will FAIL validation          
+          :title => @page.title
         } 
       end
       
@@ -124,10 +122,9 @@ describe Admin::PagesController do
 
     describe "with valid params" do
       before do
-        pending "need definition of valid_update_params"
         @valid_update_params = {        
-          # TODO: Once some model validations have been created,
-          # put attributes in here that will PASS validation          
+          :title => 'test2',
+          :permalink => 'test/12345'
         }
       end
       
@@ -150,10 +147,8 @@ describe Admin::PagesController do
     
     describe "with invalid params" do
       before do
-        pending "need definition of invalid_update_params"
         @invalid_update_params = {                        
-          # TODO: Once some model validations have been created,
-          # put attributes in here that will FAIL validation
+          :title => nil
         } 
       end
       
