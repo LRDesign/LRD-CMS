@@ -1,19 +1,13 @@
 = form_for(@page, :url => url, :format => :html) do |f|
+  = f.error_messages  
   = labeled_input f, :title
-  %br
   = labeled_input f, :headline
-  %br
   = labeled_input f, :permalink
-  %br
   = labeled_input f, :published, :input => f.check_box(:published)
-  %br
   = labeled_input f, :keywords
-  %br
   = labeled_input f, :description
-  %br
+
   - input = f.text_area(:content, :size => "80x40", :class => 'mceEditor')
   = labeled_input f, :content, :input => input
-  %br
-  = f.error_messages
 
   = unlabeled_submit f
