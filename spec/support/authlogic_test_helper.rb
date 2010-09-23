@@ -36,6 +36,10 @@ module AuthlogicTestHelper
     activate_authlogic
     login_as(user)
   end
+
+  def enable_authlogic_without_login
+    activate_authlogic
+  end
 end
 
 module RSpec::Rails::ControllerExampleGroup

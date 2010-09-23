@@ -3,6 +3,7 @@ require 'spec_helper'
 describe "/user_sessions/new" do
   
   before(:each) do    
+    enable_authlogic_without_login
     assign(:user_session, Factory.build(:user_session))
   end
   
