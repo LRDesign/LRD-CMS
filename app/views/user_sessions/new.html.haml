@@ -1,6 +1,6 @@
 - set_headline "Log in"
 
-= form_for(:user_session, @user_session, :url => {:action => 'create'}) do |f|
+= form_for(@user_session, :url => {:action => 'create'}) do |f|
   = labeled_input f, :login
   = labeled_input f, :password
   = f.error_messages
