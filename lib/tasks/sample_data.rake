@@ -79,4 +79,10 @@ namespace :db do
     end
     
   end
+end            
+
+# Do something sometimes (with probability p).
+def sometimes(p, &block)
+  yield(block) if rand <= p
 end
+
