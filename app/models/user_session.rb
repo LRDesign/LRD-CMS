@@ -15,14 +15,4 @@ class UserSession < Authlogic::Session::Base
   # The model needs a validation for the controller specs to be completed.
   # you can use that then to set @valid_create_params and similar in
   # the generated controller specs, and make
-  
-  # TODO This should be deleted as soon as Authlogic's new version
-  # defines this in Authlogic::Session::Base (it's in master at the 
-  # time of writing on Github).
-  #
-  # Taken from
-  # http://github.com/binarylogic/authlogic/commit/66ed79515919fe13016911b10ebe734cf8718dc7
-  def persisted?
-    !new_record? 
-  end
 end
