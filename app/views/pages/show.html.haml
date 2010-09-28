@@ -4,3 +4,7 @@
 - content_for :description, @page.description
 
 = raw @page.content
+
+%p
+  - if admin?
+    = link_to "ADMIN: Edit this page", edit_admin_page_path(@page), :class => 'admin_tool'
