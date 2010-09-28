@@ -26,7 +26,6 @@ module ApplicationHelper
       next unless max_depth.nil? or depth <= max_depth
 
       if depth <= stack.length and not stack.last.empty?
-        Rails.logger.info("stack.last = #{stack.last}")
         stack.last.push(render :partial => partial, :locals => { :location => stack.last.pop, :children => [] })
       end
 
