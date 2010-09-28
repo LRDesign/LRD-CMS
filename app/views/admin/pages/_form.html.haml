@@ -1,13 +1,22 @@
 = form_for(@page, :url => url, :format => :html) do |f|
   = f.error_messages  
-  = labeled_input f, :title
-  = labeled_input f, :headline
-  = labeled_input f, :permalink
-  = labeled_input f, :published, :input => f.check_box(:published)
-  = labeled_input f, :keywords
-  = labeled_input f, :description
+  
+  .form_section
+    %h3 Visible Attributes
+  
+    = labeled_input f, :title, :comment => "Browser titlebar (optional)"
+    = labeled_input f, :headline, :comment => "On-page headline (optional) "
+    = labeled_input f, :permalink, :comment => "Url for this page (required)"
+    = labeled_input f, :published, :input => f.check_box(:published), :comment => "Uncheck to disable this page"
 
-  - input = f.text_area(:content, :size => "80x40", :class => 'mceEditor')
-  = labeled_input f, :content, :input => input
+  .form_section
+    %h3 Invisible Attributes for Search Engines
+    = labeled_input f, :keywords
+    = labeled_input f, :description
+                                             
+  .form_section
+    %h3 Page Content
+    - input = f.text_area(:content, :size => "80x40", :class => 'mceEditor')
+    = labeled_input f, :content, :input => input
 
   = unlabeled_submit f
