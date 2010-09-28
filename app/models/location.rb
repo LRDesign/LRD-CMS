@@ -1,4 +1,5 @@
 class Location < ActiveRecord::Base
+  acts_as_nested_set
   # REMEMBER:  attr_accessible :attr1, :attr2 
   #
   # Logical Reality Projects set attr_accessible :nil by default for all 
@@ -7,7 +8,7 @@ class Location < ActiveRecord::Base
   # which can be a PITA to debug.  Please do this intelligently, and only for 
   # attributes that should be assignable from a web form.  Things like a 
   # User#admin boolean probably should not be accessible. :-)
-  attr_accessible :name, :path, :parent_id, :page_id                                               
+  attr_accessible :name, :path, :parent_id, :page_id, :parent, :page
   belongs_to :page
   belongs_to :parent, :class_name => 'Location'
 

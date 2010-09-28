@@ -62,14 +62,20 @@ namespace :db do
         :about_us   => { :page => :about_us ,   :parent => :home  },
         :contact_us => { :page => :contact_us , :parent => :home  }
       }    
-      # locations.each do |name, hash|
-      #   loc = Location.new(
-      #     :name => name
-      #   )              
-      #   loc.parent = Location.find_by_name(hash[:parent].to_s) if hash[:parent]
-      #   loc.page = Page.find_by_title(hash[:page].to_s.titleize) if hash[:page]
-      #   loc.path = hash[:path] if hash[:path]
-      # end
+      locations.each do |name, hash|
+        loc = Location.new(
+          :name => name
+        )              
+        loc.page = Page.find_by_title(hash[:page].to_s.titleize) if hash[:page]
+        loc.path = hash[:path] if hash[:path]
+        loc.save!
+      end
+
+      locations.each do |name, hash|
+        pp "Moving #{name} to child of #{hash[:parent]} if exists"
+        loc = Location.find_by_name(name)
+        loc.move_to_child_of(Location.find_by_name(hash[:parent].to_s)) if hash[:parent]
+      end
     end
     
     task :populate_images => :environment do

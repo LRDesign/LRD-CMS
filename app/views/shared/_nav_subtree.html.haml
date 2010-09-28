@@ -1,0 +1,6 @@
+%li
+  = link_to(location.name.upcase, loc_path(location))
+  - unless children.empty?
+    %ul
+      - children.each do |child|
+        =child
