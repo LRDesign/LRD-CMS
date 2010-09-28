@@ -1,3 +1,20 @@
+:javascript
+  $(function() {
+      $("select#location_page_id ").change(function () {
+          $("select#location_page_id option:selected").each(function() {
+            if(!$(this).val()) {
+                $("input#location_path").parent().show();
+            } else {
+                $("input#location_path").parent().hide();
+            }
+          });
+      });
+
+      if($("select#location_page_id option:selected").first().val()) {
+          $("input#location_path").parent().hide();
+      }
+  });
+
 = form_for([:admin,@location]) do |f|
   = f.error_messages
   = labeled_input f, :name
