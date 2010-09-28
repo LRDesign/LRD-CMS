@@ -1,0 +1,15 @@
+%tr
+  %td
+    = depth_indicator(depth)
+    = location.name
+  %td= location.parent.name if location.parent
+  %td
+    - if location.page 
+      = "Page: #{location.page.title}"
+    - else
+      = "URL: #{location.path}"
+  %td
+    = link_to 'Show', admin_location_path(location)
+    = link_to 'Edit', edit_admin_location_path(location)
+    = link_to 'Delete', admin_location_path(location), :confirm => 'Are you sure?', :method => :delete
+ 

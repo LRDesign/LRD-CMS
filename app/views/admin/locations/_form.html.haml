@@ -1,4 +1,9 @@
-= form_for(@location, :url => url) do |f|
+= form_for([:admin,@location]) do |f|
   = f.error_messages
+  = labeled_input f, :name
+  = labeled_input f, :path
+  = labeled_input f, :page_id,   :input => page_selector(f)   
+  = labeled_input f, :parent_id, :input => location_parent_selector(f)
+  = labeled_input f, :move_to,   :input => sibling_selector(f)
 
   = unlabeled_submit f

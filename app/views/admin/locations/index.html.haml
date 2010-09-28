@@ -5,11 +5,14 @@
 
 %table.listing
   %tr
+    %th Name
+    %th Parent
+    %th Path or Page
+    %th Tools
+  = list_tree(@locations)
 
   - for location in @locations
     %tr
 
-      %td= link_to 'Show', admin_location_path(location)
-      %td= link_to 'Edit', edit_admin_location_path(location)
       %td= link_to 'Destroy', admin_location_path(location), :confirm => 'Are you sure?', :method => :delete
 

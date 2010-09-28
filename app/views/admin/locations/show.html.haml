@@ -1,5 +1,18 @@
 - set_headline ""
 
+#location_display
+  %h3 Name:
+  = @location.name
+
+  %h3 Parent:
+  = @location.parent.name if @location.parent
+
+  - if @location.page
+    %h3 Page:
+    = @location.page.title
+  - else
+    %h3 Path:
+    = @location.path
 
 = link_to 'Edit', edit_admin_location_path(@location)
 |

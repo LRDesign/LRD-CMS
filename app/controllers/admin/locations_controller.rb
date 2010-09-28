@@ -1,7 +1,7 @@
 class Admin::LocationsController < Admin::AdminController
   # GET /locations
   def index
-    @locations = Location.all
+    @locations = Location.roots.all
   end
 
   # GET /locations/1
@@ -24,6 +24,7 @@ class Admin::LocationsController < Admin::AdminController
     @location = Location.new(params[:location])
 
     if @location.save
+      flash[:notice] = 'Location was successfully created.'
       redirect_to(admin_location_path(@location), :notice => 'Location was successfully created.') 
     else
       render :action => "new" 
@@ -33,6 +34,16 @@ class Admin::LocationsController < Admin::AdminController
   # PUT /locations/1
   def update
     @location = Location.find(params[:id])
+
+    if move_to = params[:location].delete("move_to")
+      Rails.logger.debug{"Moving [#{move_to}]: #{@location.to_text}"}
+      if move_to == "last"
+        @location.move_to_right_of(@location.siblings.last)
+      else
+        @location.move_to_left_of(move_to.to_i)
+      end
+      Rails.logger.debug{"Moved to #{@location.to_text}"}
+    end
 
     if @location.update_attributes(params[:location])
       redirect_to(admin_location_path(@location), :notice => 'Location was successfully updated.')
