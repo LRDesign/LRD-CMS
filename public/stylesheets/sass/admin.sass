@@ -1,3 +1,5 @@
+@import constants.sass
+
 !admin_menu_height = 20px
 
 body.with_admin #inset
@@ -7,7 +9,7 @@ body.with_admin #inset
 #admin_tools
   :width 100%
   :font-size 11px
-  :background #775
+  :background !admin_background_color
   :color white
   :z-index 2
   :position absolute
@@ -46,3 +48,12 @@ body.with_admin #inset
 
     form div input[type='submit']
       :font-size 10px  
+
+.admin_tool, .admin_tool a
+  :background !admin_background_color
+  :color white
+  :padding 5px 
+  
+.admin_tool:hover, admin_tool a:hover
+  :color #ff6
+    
