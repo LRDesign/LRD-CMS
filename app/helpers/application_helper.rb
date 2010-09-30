@@ -16,10 +16,10 @@ module ApplicationHelper
   end
 
   def link_tree(location, options=nil)
+    return "" unless location
+
     options ||= {}
     max_depth = options[:max_depth]
-    nesting_tag = options[:nesting_tag] || :ul
-    item_tag = options[:item_tag] || :li
     partial = options[:partial] || "shared/location_subtree"
     stack = [[]]
     Location.each_with_level(location.descendants.all(:include => :page)) do |location, depth|
