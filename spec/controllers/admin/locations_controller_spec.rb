@@ -121,12 +121,43 @@ describe Admin::LocationsController do
     ########################################################################################
     describe "responding to PUT update" do
 
+      describe "when moving a location" do
+        before do
+          @parent = Factory(:location)
+          @l1 = Factory(:location, :name => "Location 1")
+          @l2 = Factory(:location, :name => "Location 2")
+          @l3 = Factory(:location, :name => "Location 3")
+          @l1.move_to_child_of(@parent)
+          @l2.move_to_child_of(@parent)
+          @l3.move_to_child_of(@parent)
+        end
+
+        it "should start out configured correctly" do
+          @l1.left_sibling.should be_nil
+          @l1.right_sibling.should == @l2
+          @l2.right_sibling.should == @l3
+          @l3.right_sibling.should be_nil
+        end
+
+        it "should move second location to the beginning of the list" do
+          put :update, :id => @l2, :location => {:move_to => @l1.id}
+          @l2.reload
+          @l2.left_sibling.should be_nil
+          @l2.right_sibling.should == @l1
+        end
+
+        it "should move first location to the end of the list" do
+          put :update, :id => @l1, :location => {:move_to => "last"}
+          @l2.reload.left_sibling.should be_nil
+          @l3.reload.right_sibling.should == @l1
+        end
+      end
+
       describe "with valid params" do
         before do
-          pending "need definition of valid_update_params"
           @valid_update_params = {        
-            # TODO: Once some model validations have been created,
-            # put attributes in here that will PASS validation          
+            :name => 'location 1',
+            :path => 'location/1'
           }
         end
         
@@ -149,10 +180,9 @@ describe Admin::LocationsController do
       
       describe "with invalid params" do
         before do
-          pending "need definition of invalid_update_params"
           @invalid_update_params = {                        
-            # TODO: Once some model validations have been created,
-            # put attributes in here that will FAIL validation
+            :name => nil,
+            :path => 'fine'
           } 
         end
         
