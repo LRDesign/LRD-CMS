@@ -39,11 +39,64 @@ describe ApplicationHelper do
       end
 
       it "renders the partial once for a single location" do
+        # Test is in the message expectation
         helper.link_tree(@loc, :partial => 'test')
       end
 
       it "returns nothing more than what the partial rendered" do
         helper.link_tree(@loc, :partial => 'test').should == 'test value'
+      end
+    end
+
+    describe "with 1 < depth < max_depth" do
+      describe "peerless direct children of root node" do
+        before(:each) do
+          pending "Handling the case of peerless direct children of parent node"
+          @loc = Factory(:location_with_children_2_deep)
+          @loc.reload
+          @child = @loc.children.first
+          @sub_child = @child.children.first
+          @options = { :max_depth => 3, :partial => 'test' }
+        end
+
+        it "renders the partial for the child and subchild" do
+          helper.view_context.should_receive(:render).with( 
+              {:partial => 'test',
+              :locals => {:location => @child, 
+                          :children => []}}, {}).and_return('foo')
+          helper.view_context.should_receive(:render).with( 
+              {:partial => 'test',
+              :locals => {:location => @sub_child, 
+                          :children => []}}, {}).and_return('foo')
+
+          link_tree(@loc, @options)
+        end
+
+        it "returns the concatenation of the renderings" do
+          helper.view_context.should_receive(:render).with( 
+              {:partial => 'test',
+              :locals => {:location => @child, 
+                          :children => []}}, {}).and_return('1')
+          helper.view_context.should_receive(:render).with( 
+              {:partial => 'test',
+              :locals => {:location => @sub_child, 
+                          :children => []}}, {}).and_return('2')
+
+          link_tree(@loc, @options).should == '12'
+        end
+      end
+    end
+  
+    describe "children of root node with peers and sub-children" do
+      before(:each) do
+        @root = Factory(:location_with_2_children_each_with_2_children)
+        @root.reload
+        @options = { :max_depth => 3, :partial => 'test' }
+      end
+
+      it "renders the partial 6 times (2 for children, 4 for sub-children)" do
+        helper.view_context.should_receive(:render).exactly(6).times.and_return('foo')
+        link_tree(@root, @options)
       end
     end
   end

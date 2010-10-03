@@ -15,37 +15,54 @@ module ApplicationHelper
     end    
   end
 
+  # Never Again.
   def link_tree(location, options=nil)
     return "" unless location
 
     options ||= {}
-    max_depth = options[:max_depth]
+    max_depth = options[:max_depth] || 5
     partial = options[:partial] || "shared/location_subtree"
-    stack = [[]]
-    Location.each_with_level(location.descendants.all(:include => :page)) do |location, depth|
-      next unless max_depth.nil? or depth <= max_depth
+    loc_tree = []
+    max_depth.times do
+      loc_tree << {}
+    end
+    render_tree = {}
 
-      if depth <= stack.length and not stack.last.empty?
-        stack.last.push(render :partial => partial, :locals => { :location => stack.last.pop, :children => [] })
+    Location.each_with_level(location.descendants.all(:include => :page)) do |loc, depth|
+      next if depth >= max_depth
+
+      if loc_tree[depth][loc.parent_id]
+        loc_tree[depth][loc.parent_id] << loc
+      else
+        loc_tree[depth][loc.parent_id] = [loc]
       end
-
-      while depth > stack.length
-        stack.push []
-      end
-
-      while depth < stack.length
-        group = stack.pop
-        stack.last.push(render :partial => partial, :locals => { :location => stack.last.pop, :children => group })
-      end
-
-      stack.last << location
+    end
+    
+    # Find the highest depth leaves
+    current_depth_leaves = loc_tree.last
+    while loc_tree.last.empty?
+      current_depth_leaves = loc_tree.pop
     end
 
-    unless stack.last.empty?
-      stack.last.push(render :partial => partial, :locals => { :location => stack.last.pop, :children => [] })
+    current_depth_leaves = loc_tree.pop
+
+    while !current_depth_leaves.empty? && !loc_tree.empty?
+      current_depth_leaves.each do |parent_id, leaves|
+        leaves.each do |leaf|
+          children = render_tree[leaf.id] || []
+          if render_tree[parent_id]
+            render_tree[parent_id] << render(:partial => partial, :locals => {:location => leaf, :children => children})
+          else
+            render_tree[parent_id] = [ render(:partial => partial, :locals => {:location => leaf, :children => children}) ]
+          end
+        end
+      end
+      current_depth_leaves = loc_tree.pop
     end
-    stack.last.join
-  end 
+
+    render_tree_root_node = render_tree[location.id]
+    render_tree_root_node.join
+  end
 
   def admin?
     logged_in?
