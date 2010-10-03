@@ -51,7 +51,6 @@ describe ApplicationHelper do
     describe "with 1 < depth < max_depth" do
       describe "peerless direct children of root node" do
         before(:each) do
-          pending "Handling the case of peerless direct children of parent node"
           @loc = Factory(:location_with_children_2_deep)
           @loc.reload
           @child = @loc.children.first
@@ -63,7 +62,7 @@ describe ApplicationHelper do
           helper.view_context.should_receive(:render).with( 
               {:partial => 'test',
               :locals => {:location => @child, 
-                          :children => []}}, {}).and_return('foo')
+                          :children => ["foo"]}}, {}).and_return('foo')
           helper.view_context.should_receive(:render).with( 
               {:partial => 'test',
               :locals => {:location => @sub_child, 
@@ -76,13 +75,13 @@ describe ApplicationHelper do
           helper.view_context.should_receive(:render).with( 
               {:partial => 'test',
               :locals => {:location => @child, 
-                          :children => []}}, {}).and_return('1')
+                          :children => ["2"]}}, {}).and_return('1')
           helper.view_context.should_receive(:render).with( 
               {:partial => 'test',
               :locals => {:location => @sub_child, 
                           :children => []}}, {}).and_return('2')
 
-          link_tree(@loc, @options).should == '12'
+          link_tree(@loc, @options).should == '1'
         end
       end
     end
