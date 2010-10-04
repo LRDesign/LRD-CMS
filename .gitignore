@@ -52,3 +52,4 @@ capybara*.html
 Gemfile.lock
 .bundle/*
 .rspec
+public/sitemap.xml

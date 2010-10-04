@@ -1,3 +1,5 @@
+require 'sitemap'
+
 class Page < ActiveRecord::Base
         
 
@@ -19,4 +21,10 @@ class Page < ActiveRecord::Base
   # the generated controller specs, and make
   validates_presence_of :title, :permalink
   validates_uniqueness_of :title, :permalink
+
+  after_create :regenerate_sitemap
+
+  def regenerate_sitemap
+    Sitemap.create!('http://localhost:3000/')
+  end
 end
