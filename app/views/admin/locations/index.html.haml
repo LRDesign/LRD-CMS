@@ -11,8 +11,3 @@
     %th Tools
   = list_tree(@locations)
 
-  - for location in @locations
-    %tr
-
-      %td= link_to 'Destroy', admin_location_path(location), :confirm => 'Are you sure?', :method => :delete
-

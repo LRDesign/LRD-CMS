@@ -56,7 +56,8 @@ namespace :db do
     # TODO: finish implementation once the models are created
     #
     # This can be customized on a per-client basis
-    task :populate_locations => :environment do
+    task :populate_locations => :environment do  
+      Location.delete_all
       locations = {
         :home => { :path => '/' },
         :about_us   => { :page => :about_us ,   :parent => :home  },
