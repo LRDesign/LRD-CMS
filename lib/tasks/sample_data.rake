@@ -58,12 +58,7 @@ namespace :db do
     # This can be customized on a per-client basis
     task :populate_locations => :environment do  
       Location.delete_all
-      locations = {
-        :home => { :path => '/' },
-        :about_us   => { :page => :about_us ,   :parent => :home  },
-        :contact_us => { :page => :contact_us , :parent => :home  }
-      }    
-      locations.each do |name, hash|
+      LOCATIONS.each do |name, hash|
         loc = Location.new(
           :name => name
         )              
@@ -92,4 +87,9 @@ end
 def sometimes(p, &block)
   yield(block) if rand <= p
 end
-
+       
+LOCATIONS = {
+  :home => { :path => '/' },  
+  :about   => { :page => :about_us ,   :parent => :home },
+  :contact => { :page => :contact_us , :parent => :home }  
+}
