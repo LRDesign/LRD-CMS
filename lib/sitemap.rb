@@ -17,7 +17,7 @@ class Sitemap
       @pages_to_visit = Page.published.collect { |p| p.permalink } 
  
       generate_sitemap
-      update_search_engines unless Rails.env.development?
+      update_search_engines unless (Rails.env.development? || Rails.env.test?)
     end
  
     private
