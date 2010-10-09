@@ -29,6 +29,6 @@ class Page < ActiveRecord::Base
   scope :unpublished, where(:published => false) 
 
   def regenerate_sitemap
-    Sitemap.create!('http://localhost:3000/') unless Rails.env == 'test'
+    Sitemap.create!('http://localhost:3000/') unless Rails.env.test?
   end
 end
