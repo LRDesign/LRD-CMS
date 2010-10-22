@@ -13,8 +13,8 @@ gem 'be9-awesome_nested_set', :require => 'awesome_nested_set'
 gem 'jquery-rails'
 
 group :development, :test do
-  gem "rspec", ">= 2.0.0.beta"
-  gem "rspec-rails", ">= 2.0.0.beta"
+  gem "rspec", ">= 2.0.0"
+  gem "rspec-rails", ">= 2.0.0"
   gem "factory_girl_rails"  
   gem "webrat"
   # gem 'ruby-debug'
