@@ -23,8 +23,12 @@ class Page < ActiveRecord::Base
   validates_uniqueness_of :title, :permalink
 
   after_create :regenerate_sitemap
+  before_destroy :regenerate_sitemap
+
+  scope :published, where(:published => true) 
+  scope :unpublished, where(:published => false) 
 
   def regenerate_sitemap
-    Sitemap.create!('http://localhost:3000/')
+    Sitemap.create!('http://localhost:3000/') unless Rails.env.test?
   end
 end
