@@ -157,7 +157,10 @@ describe Admin::LocationsController do
         before do
           @valid_update_params = {        
             :name => 'location 1',
-            :path => 'location/1'
+            :path => 'location/1',
+            # Testing for empty move_to important for Rails 3 which
+            # includes parameters
+            :move_to => ''
           }
         end
         

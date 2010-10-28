@@ -34,8 +34,9 @@ class Admin::LocationsController < Admin::AdminController
   # PUT /locations/1
   def update
     @location = Location.find(params[:id])
+    move_to = params[:location].delete("move_to")
 
-    if move_to = params[:location].delete("move_to")
+    if !move_to.to_s.empty?
       Rails.logger.debug{"Moving [#{move_to}]: #{@location.to_text}"}
       if move_to == "last"
         @location.move_to_right_of(@location.siblings.last)
