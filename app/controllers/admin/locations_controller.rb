@@ -4,11 +4,6 @@ class Admin::LocationsController < Admin::AdminController
     @locations = Location.roots.all
   end
 
-  # GET /locations/1
-  def show
-    @location = Location.find(params[:id])
-  end
-
   # GET /locations/new
   def new
     @location = Location.new
@@ -25,9 +20,9 @@ class Admin::LocationsController < Admin::AdminController
 
     if @location.save
       flash[:notice] = 'Location was successfully created.'
-      redirect_to(admin_location_path(@location), :notice => 'Location was successfully created.') 
+      redirect_to(admin_location_path(@location), :notice => 'Location was successfully created.')
     else
-      render :action => "new" 
+      render :action => "new"
     end
   end
 
@@ -49,7 +44,7 @@ class Admin::LocationsController < Admin::AdminController
     if @location.update_attributes(params[:location])
       redirect_to(admin_location_path(@location), :notice => 'Location was successfully updated.')
     else
-      render :action => "edit" 
+      render :action => "edit"
     end
   end
 

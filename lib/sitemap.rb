@@ -1,51 +1,57 @@
 require 'builder'
- 
+
 class Sitemap
- 
+
   STATIC_URLS = ['/',
                  '/about_us',
                  '/contact_us'
                   ]
- 
+
   class << self
     def create!(url)
       @bad_pages = []
       @pages_to_visit = []
       @url = url
       @url_domain = url[/([a-z0-9-]+)\.([a-z.]+)/i]
-      
-      @pages_to_visit = Page.published.collect { |p| p.permalink } 
- 
+
+      @pages_to_visit = Page.published
+
       generate_sitemap
-      update_search_engines unless (Rails.env.development? || Rails.env.test?)
+      update_search_engines if Rails.env.production?
     end
- 
+
     private
     def generate_sitemap
       xml_str = ""
       xml = Builder::XmlMarkup.new(:target => xml_str, :indent => 2)
- 
+
       xml.instruct!
       xml.urlset(:xmlns=>'http://www.sitemaps.org/schemas/sitemap/0.9') {
-        @pages_to_visit.each do |url|
-          unless @url == url
+        @pages_to_visit.each do |page|
+          unless @url == page.permalink
             xml.url {
               xml.loc(@url + url)
-              xml.lastmod(Time.now.utc.strftime("%Y-%m-%dT%H:%M:%S+00:00"))
+              xml.lastmod(page.updated_at.iso8601)
              }
           end
         end
+        STATIC_PAGES.each do |url|
+          xml.url {
+            xml.loc(@url + url)
+            xml.lastmod(Time.now.utc.iso8601)
+          }
+        end
       }
- 
+
       save_file(xml_str)
     end
- 
+
     def save_file(xml)
       File.open("#{ Rails.root }/public/sitemap.xml", "w+") do |f|
         f.write(xml)
       end
     end
- 
+
     # Notify popular search engines of the updated sitemap.xml
     def update_search_engines
       sitemap_uri = @url + 'sitemap.xml'
