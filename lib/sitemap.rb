@@ -8,11 +8,11 @@ class Sitemap
                   ]
 
   class << self
-    def create!(url)
+    def create!(domain)
       @bad_pages = []
       @pages_to_visit = []
-      @url = url
-      @url_domain = url[/([a-z0-9-]+)\.([a-z.]+)/i]
+      @domain = domain
+      @url_domain = domain[/([a-z0-9-]+)\.([a-z.]+)/i]
 
       @pages_to_visit = Page.published
 
@@ -27,19 +27,20 @@ class Sitemap
 
       xml.instruct!
       xml.urlset(:xmlns=>'http://www.sitemaps.org/schemas/sitemap/0.9') {
+        STATIC_PATHS_FOR_SITEMAP.each do |path|
+          xml.url {
+            xml.loc(@domain + path)
+            xml.lastmod(Time.now.utc.iso8601)
+          }
+        end
         @pages_to_visit.each do |page|
-          unless @url == page.permalink
+          unless @domain == page.permalink
+            path = page.permalink.gsub(/\A\//,'') # strip leading /, if it exists
             xml.url {
-              xml.loc(@url + url)
+              xml.loc(@domain + '/' + path)
               xml.lastmod(page.updated_at.iso8601)
              }
           end
-        end
-        STATIC_PAGES.each do |url|
-          xml.url {
-            xml.loc(@url + url)
-            xml.lastmod(Time.now.utc.iso8601)
-          }
         end
       }
 
