@@ -2,13 +2,8 @@ require 'builder'
 
 class Sitemap
 
-  STATIC_URLS = ['/',
-                 '/about_us',
-                 '/contact_us'
-                  ]
-
   class << self
-    def create!(domain)
+    def create!(domain = SITE_DOMAIN)
       @bad_pages = []
       @pages_to_visit = []
       @domain = domain
@@ -55,7 +50,8 @@ class Sitemap
 
     # Notify popular search engines of the updated sitemap.xml
     def update_search_engines
-      sitemap_uri = @url + 'sitemap.xml'
+      sitemap_uri = @domain + '/sitemap.xml'
+      # puts "sitemap uri is #{sitemap_uri}"
       escaped_sitemap_uri = CGI.escape(sitemap_uri)
       Rails.logger.info "Notifying Google"
       res = Net::HTTP.get_response('www.google.com', '/webmasters/tools/ping?sitemap=' + escaped_sitemap_uri)
