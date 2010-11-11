@@ -3,7 +3,7 @@ require 'sitemap'
 describe Sitemap do
   describe "with no pages" do 
     it "should not crash" do
-      Sitemap.create!('foobar')
+      Sitemap.create!
     end
   end
  
@@ -14,7 +14,7 @@ describe Sitemap do
     end
 
     it "should not crash" do
-      Sitemap.create!('foobar')
+      Sitemap.create!
     end
   end
 end
