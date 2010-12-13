@@ -30,6 +30,6 @@ class Page < ActiveRecord::Base
   scope :unpublished, where(:published => false)
 
   def regenerate_sitemap
-    Sitemap.create!(SITE_DOMAIN) unless Rails.env.test?
+    Sitemap.create! unless Rails.env.test?
   end
 end
