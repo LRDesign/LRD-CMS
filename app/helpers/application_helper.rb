@@ -1,3 +1,5 @@
+require 'authenticated_system'
+
 module ApplicationHelper    
   include AuthenticatedSystem
  
