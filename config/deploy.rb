@@ -5,6 +5,8 @@ default_run_options[:pty] = true
 require 'config/deploy/passenger'                                            
 require 'capistrano/ext/multistage'
 require 'bundler'
+require 'bundler/capistrano'
+set :bundle_without,  [:development, :test]
 
 set :repository,  "git@github.com:LRDesign/test-r3.git" 
 # set :deploy_via, :remote_cache
