@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Page do
-
   describe "mass assignment" do
     it "should mass assign title and permalink" do
       page = Page.new(:title => 'foo', :permalink => 'bar' )
