@@ -1,11 +1,9 @@
 require 'spec_helper'
 
 describe "/admin/upload/images/index" do
-  include Admin::Upload::ImagesHelper
-  
-  before(:each) do 
+  before(:each) do
     assign(:images, [ Factory(:image), Factory(:image) ])
-  end                   
+  end
 
   it "should succeed" do
     render

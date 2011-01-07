@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe "/admin/upload/images/show" do
-  include Admin::Upload::ImagesHelper
-  
-  before(:each) do    
+  before(:each) do
     assign(:image, @image = Factory(:image))
   end
 
