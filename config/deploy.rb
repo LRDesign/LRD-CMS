@@ -52,19 +52,5 @@ namespace :sample_data do
   end
 end
 
-namespace :bundler do
-  task :create_symlink, :roles => :app do
-    shared_dir = File.join(shared_path, 'bundle')
-    release_dir = File.join(current_release, '.bundle')
-    run("mkdir -p #{shared_dir} && ln -s #{shared_dir} #{release_dir}")
-  end
-
-  task :bundle_new_release, :roles => :app do
-    bundler.create_symlink
-    run "cd #{release_path} && bundle install --disable-shared-gems --without_test"
-  end
-end
-
-
 after 'deploy:update_code', 'deploy:submodules_and_links'
-after 'deploy:update_code', 'bundler:bundle_new_release'
+
