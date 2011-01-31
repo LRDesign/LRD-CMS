@@ -1,9 +1,9 @@
 = form_for(@page, :url => url, :format => :html) do |f|
-  = f.error_messages  
-  
+  = f.error_messages
+
   .form_section
     %h3 Visible Attributes
-  
+
     = labeled_input f, :title, :comment => "Browser titlebar (optional)"
     = labeled_input f, :headline, :comment => "On-page headline (optional) "
     = labeled_input f, :permalink, :comment => "Url for this page (required)"
@@ -13,7 +13,12 @@
     %h3 Invisible Attributes for Search Engines
     = labeled_input f, :keywords
     = labeled_input f, :description
-                                             
+
+  .form_section
+    %h3 Advanced Options
+    .collapsed
+      = labeled_input f, :css, :input => f.text_area(:css), :comment => 'CSS / Styling overrides'
+
   .form_section
     %h3 Page Content
     - input = f.text_area(:content, :size => "80x40", :class => 'mceEditor')
