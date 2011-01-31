@@ -26,3 +26,7 @@ RSpec.configure do |config|
   # instead of true.
   config.use_transactional_fixtures = true
 end
+
+def content_for(name)
+  view.instance_variable_get("@content_for_#{name}")
+end

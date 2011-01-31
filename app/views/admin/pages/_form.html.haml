@@ -15,13 +15,12 @@
     = labeled_input f, :description
 
   .form_section
-    %h3 Advanced Options
-    .collapsed
-      = labeled_input f, :css, :input => f.text_area(:css), :comment => 'CSS / Styling overrides'
-
-  .form_section
     %h3 Page Content
     - input = f.text_area(:content, :size => "80x40", :class => 'mceEditor')
     = labeled_input f, :content, :input => input
 
+  .form_section
+    %h3 Advanced Options
+    .collapsed
+      = labeled_input f, :css, :input => f.text_area(:css, :size => '80x8'), :text => 'CSS Styles'
   = unlabeled_submit f

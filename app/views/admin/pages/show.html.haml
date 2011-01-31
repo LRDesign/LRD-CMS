@@ -1,5 +1,8 @@
 - set_headline "Pages: #{h @page.headline}"
 
+- content_for :page_css do
+  = @page.css
+
 #page_content
   != @page.content
 

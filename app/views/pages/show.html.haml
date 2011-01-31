@@ -3,6 +3,9 @@
 - content_for :keywords, @page.keywords
 - content_for :description, @page.description
 
+- content_for :page_css do
+  = raw @page.css
+
 = raw @page.content
 
 %p
