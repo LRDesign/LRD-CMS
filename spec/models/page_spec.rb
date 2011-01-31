@@ -7,6 +7,11 @@ describe Page do
       page.title.should == 'foo'
       page.permalink.should == 'bar'
     end
+
+    it "should mass assign css" do
+      page = Page.new(:css => 'body { color :black }')
+      page.css.should == 'body { color :black }'
+    end
   end
 
   describe "validations" do
