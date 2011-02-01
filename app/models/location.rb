@@ -6,4 +6,9 @@ class Location < ActiveRecord::Base
   belongs_to :parent, :class_name => 'Location'
 
   validates_presence_of :name#, :path
+
+  def resolved_path
+    page ? page.permalink : path
+  end
+
 end
