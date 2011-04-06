@@ -1,26 +1,40 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id                  :integer(4)      not null, primary key
+#  login               :string(20)      not null
+#  email               :string(255)
+#  first_name          :string(60)
+#  last_name           :string(60)
+#  crypted_password    :string(255)     not null
+#  password_salt       :string(255)     not null
+#  persistence_token   :string(255)     not null
+#  single_access_token :string(255)     not null
+#  perishable_token    :string(255)     not null
+#  login_count         :integer(4)      default(0), not null
+#  failed_login_count  :integer(4)      default(0), not null
+#  last_request_at     :datetime
+#  current_login_at    :datetime
+#  last_login_at       :datetime
+#  current_login_ip    :string(255)
+#  last_login_ip       :string(255)
+#  created_at          :datetime
+#  updated_at          :datetime
+#
+
 class User < ActiveRecord::Base
   acts_as_authentic do |c|
     c.validate_email_field = false
   end
 
-  # REMEMBER:  attr_accessible :attr1, :attr2 
-  #
-  # Logical Reality Projects set attr_accessible :nil by default for all 
-  # models. (see config/initializers/security_defaults.rb)  So if you don't 
-  # make your attributes accessible you won't be able to mass-assign them, 
-  # which can be a PITA to debug.  Please do this intelligently, and only for 
-  # attributes that should be assignable from a web form.  Things like a 
-  # User#admin boolean probably should not be accessible. :-)
   attr_accessible :login, :password, :password_confirmation,
-                  :crypted_password, :password_salt, 
+                  :crypted_password, :password_salt,
                   :perishable_token, :persistence_token, :login_count,
                   :failed_login_count, :last_request_at, :current_login_at,
                   :last_login_at, :current_login_ip, :last_login_ip
-                                               
-  # TODO:  create a validation or two
-  # 
-  # The model needs a validation for the controller specs to be completed.
-  # you can use that then to set @valid_create_params and similar in
-  # the generated controller specs, and make
-  
+
+
+  validates_presence_of :login
+
 end
