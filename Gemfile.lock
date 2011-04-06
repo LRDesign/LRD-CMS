@@ -36,6 +36,7 @@ GEM
       activemodel (= 3.0.6)
       activesupport (= 3.0.6)
     activesupport (3.0.6)
+    annotate (2.4.0)
     arel (2.0.9)
     be9-awesome_nested_set (1.4.3)
       activerecord (>= 3.0.0.rc)
@@ -123,6 +124,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  annotate
   authlogic!
   be9-awesome_nested_set
   factory_girl_rails
