@@ -26,5 +26,17 @@
 require 'spec_helper'
 
 describe User do
-  pending "add some examples to (or delete) #{__FILE__}"
+
+  describe "validations" do
+    describe "on login" do
+
+      it "should reject a user with no login" do
+        Factory.build(:user, :login => nil).should_not be_valid
+      end
+
+      it "should allow auser with a login" do
+        Factory.build(:user, :login => 'foo').should be_valid
+      end
+    end
+  end
 end

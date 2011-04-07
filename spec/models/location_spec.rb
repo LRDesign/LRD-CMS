@@ -16,5 +16,16 @@
 require 'spec_helper'
 
 describe Location do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "validations" do
+    describe "on name" do
+
+      it "should reject a location with no name" do
+        Factory.build(:location, :name => nil).should_not be_valid
+      end
+
+      it "should allow alocation with a name" do
+        Factory.build(:location, :name => 'foo').should be_valid
+      end
+    end
+  end
 end

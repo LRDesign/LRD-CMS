@@ -2,8 +2,9 @@ require 'spec_helper'
 
 describe PagesController do
   describe "routing" do
-    it "recognizes and generates #show" do
-      pending "Factory for pages"
+    it "routes permalink to the page show" do
+      @page = Factory(:page, :permalink => 'foo')
+      { :get => "/foo" }.should route_to(:controller => "pages", :action => "show", :permalink => 'foo')
     end
   end
 end

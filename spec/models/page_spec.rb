@@ -18,5 +18,21 @@
 require 'spec_helper'
 
 describe Page do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "validations" do
+    describe "on title" do
+      it "should reject a page with no title" do
+        Factory.build(:page, :title => nil).should_not be_valid
+      end
+
+      it "should allow a page with a title" do
+        Factory.build(:page, :title => 'Foo').should be_valid
+      end
+
+      it "should reject a page with a non-unique title" do
+        Factory(:page, :title => "Foo").
+        Factory.build(:page, :title => 'Foo').should_not be_valid
+      end
+
+    end
+  end
 end

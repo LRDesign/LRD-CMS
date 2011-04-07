@@ -1,15 +1,6 @@
 require 'spec_helper'
 
-# Specs in this file have access to a helper object that includes
-# the ApplicationHelper. For example:
-#
-# describe ApplicationHelper do
-#   describe "string concat" do
-#     it "concats two strings with spaces" do
-#       helper.concat_strings("this","that").should == "this that"
-#     end
-#   end
-# end
+
 describe ApplicationHelper do
   describe "link tree generation" do
     describe "with nil base location" do
@@ -18,8 +9,8 @@ describe ApplicationHelper do
       end
     end
 
-    describe "with no base location children" do 
-      before(:each) do 
+    describe "with no base location children" do
+      before(:each) do
         @loc = Factory(:location)
       end
 
@@ -32,9 +23,9 @@ describe ApplicationHelper do
       before(:each) do
         @loc = Factory(:location_with_single_child)
         @child = @loc.children.first
-        helper.view_context.should_receive(:render).with( 
-            :partial => 'test', 
-            :locals => {:location => @child, 
+        helper.view_context.should_receive(:render).with(
+            :partial => 'test',
+            :locals => {:location => @child,
                         :children => []}).and_return('test value')
       end
 
@@ -59,33 +50,33 @@ describe ApplicationHelper do
         end
 
         it "renders the partial for the child and subchild" do
-          helper.view_context.should_receive(:render).with( 
+          helper.view_context.should_receive(:render).with(
               {:partial => 'test',
-              :locals => {:location => @child, 
+              :locals => {:location => @child,
                           :children => ["foo"]}}, {}).and_return('foo')
-          helper.view_context.should_receive(:render).with( 
+          helper.view_context.should_receive(:render).with(
               {:partial => 'test',
-              :locals => {:location => @sub_child, 
+              :locals => {:location => @sub_child,
                           :children => []}}, {}).and_return('foo')
 
           link_tree(@loc, @options)
         end
 
         it "returns the concatenation of the renderings" do
-          helper.view_context.should_receive(:render).with( 
+          helper.view_context.should_receive(:render).with(
               {:partial => 'test',
-              :locals => {:location => @child, 
+              :locals => {:location => @child,
                           :children => ["2"]}}, {}).and_return('1')
-          helper.view_context.should_receive(:render).with( 
+          helper.view_context.should_receive(:render).with(
               {:partial => 'test',
-              :locals => {:location => @sub_child, 
+              :locals => {:location => @sub_child,
                           :children => []}}, {}).and_return('2')
 
           link_tree(@loc, @options).should == '1'
         end
       end
     end
-  
+
     describe "children of root node with peers and sub-children" do
       before(:each) do
         @root = Factory(:location_with_2_children_each_with_2_children)
@@ -102,7 +93,7 @@ describe ApplicationHelper do
 
   describe "location path" do
     describe "when attached to page" do
-      before(:each) do 
+      before(:each) do
         @loc = Factory(:location_with_page)
       end
 
@@ -117,7 +108,7 @@ describe ApplicationHelper do
       end
 
       it "uses loc.path" do
-        helper.loc_path(@loc).should == @loc.path 
+        helper.loc_path(@loc).should == @loc.path
       end
     end
   end
