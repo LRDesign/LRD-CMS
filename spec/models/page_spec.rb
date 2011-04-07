@@ -29,7 +29,7 @@ describe Page do
       end
 
       it "should reject a page with a non-unique title" do
-        Factory(:page, :title => "Foo").
+        Factory(:page, :title => "Foo")
         Factory.build(:page, :title => 'Foo').should_not be_valid
       end
 
