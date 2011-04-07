@@ -18,8 +18,12 @@ group :development, :test do
   gem "rspec-rails", ">= 2.1.0"
   gem "factory_girl_rails"
   gem "webrat"
+<<<<<<< HEAD
   gem 'annotate'
   # gem 'ruby-debug'
+=======
+  gem 'ruby-debug'
+>>>>>>> 012b3a15bd8d640b6bb2240e1b454403ef7ff4f6
 end
 
 group :development do

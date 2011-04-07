@@ -26,8 +26,23 @@
 require 'spec_helper'
 
 describe User do
+<<<<<<< HEAD
+
+  describe "validations" do
+    describe "on login" do
+
+      it "should reject a user with no login" do
+        Factory.build(:user, :login => nil).should_not be_valid
+      end
+
+      it "should allow auser with a login" do
+        Factory.build(:user, :login => 'foo').should be_valid
+      end
+    end
+  end
+=======
   describe "mass assignment" do
-    it "should mass assign login" do
+    it "should mass assign login and password" do
       user = User.new(:login => 'foo')
       user.login.should == 'foo'
     end
@@ -47,4 +62,5 @@ describe User do
     end
   end
 
+>>>>>>> 012b3a15bd8d640b6bb2240e1b454403ef7ff4f6
 end

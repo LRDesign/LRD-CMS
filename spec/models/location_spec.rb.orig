@@ -16,6 +16,20 @@
 require 'spec_helper'
 
 describe Location do
+<<<<<<< HEAD
+  describe "validations" do
+    describe "on name" do
+
+      it "should reject a location with no name" do
+        Factory.build(:location, :name => nil).should_not be_valid
+      end
+
+      it "should allow alocation with a name" do
+        Factory.build(:location, :name => 'foo').should be_valid
+      end
+    end
+  end
+=======
   describe "mass assignment" do
      it "should mass assign name and path" do
        location = Location.new(:name => 'foo', :path => 'bar' )
@@ -29,9 +43,6 @@ describe Location do
        it "should not create a location with blank name" do
          Factory.build(:location, :name => nil).should_not be_valid
        end
-      it "should allow alocation with a name" do
-        Factory.build(:location, :name => 'foo').should be_valid
-      end
      end
    end
 
@@ -49,4 +60,5 @@ describe Location do
        loc.resolved_path.should == 'foobar'
      end
    end
+>>>>>>> 012b3a15bd8d640b6bb2240e1b454403ef7ff4f6
 end

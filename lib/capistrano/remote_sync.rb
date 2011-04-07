@@ -3,20 +3,20 @@ require 'pathname'
 require 'ruby-debug'
 
 LOCAL_SQL_PATH = 'sqldumps/'
- 
+
 #
 # Capistrano sync.rb task for syncing databases and directories between the
 # local development environment and different multi_stage environments. You
 # cannot sync directly between two multi_stage environments, always use your
 # local machine as loop way.
 #
-# This version pulls credentials for the remote database from 
+# This version pulls credentials for the remote database from
 # {shared_path}/config/database.yml on the remote server, thus eliminating
 # the requirement to have your production database credentials on your local
 # machine or in your repository.
 #
 # Author: Michael Kessler aka netzpirat
-# Gist: 111597             
+# Gist: 111597
 #
 # Edits By: Evan Dorn, Logical Reality Design, March 2010
 # Gist: 339471
@@ -26,10 +26,10 @@ LOCAL_SQL_PATH = 'sqldumps/'
 #
 
 Capistrano::Configuration.instance.load do
-  namespace :sync do
- 
+  namespace :remote_sync do
+
     after "deploy:setup", "sync:setup"
- 
+
     desc <<-DESC
   Creates the sync dir in shared path. The sync directory is used to keep
   backups of database dumps and archives from synced directories. This task will
@@ -38,9 +38,9 @@ Capistrano::Configuration.instance.load do
     task :setup do
       run "cd #{shared_path}; mkdir sync"
     end
- 
+
     namespace :down do
- 
+
       desc <<-DESC
   Syncs the database and declared directories from the selected multi_stage environment
   to the local development environment. This task simply calls both the 'sync:down:db' and
@@ -49,7 +49,7 @@ Capistrano::Configuration.instance.load do
       task :default do
         db and fs
       end
- 
+
       desc <<-DESC
   Syncs database from the selected mutli_stage environement to the local develoment environment.
   The database credentials will be read from your local config/database.yml file and a copy of the
@@ -57,44 +57,41 @@ Capistrano::Configuration.instance.load do
   declared in the sync_backups variable and defaults to 5.
   DESC
       task :db, :roles => :db, :only => { :primary => true } do
- 
+
         filename = "database.#{stage}.#{Time.now.strftime '%Y-%m-%d_%H:%M:%S'}.sql.bz2"
         local_filename = LOCAL_SQL_PATH + filename
         on_rollback { delete "#{shared_path}/sync/#{filename}" }
-                          
-    
-        # Remote DB dump       
-        
+
         username, password, database, host = remote_database_config(rails_env)
-        hostcmd = host.nil? ? '' : "-h #{host}" 
+        hostcmd = host.nil? ? '' : "-h #{host}"
         puts "hostname was #{host}"
         puts "database was #{database}"
         run "mysqldump -u #{username} --password='#{password}' #{hostcmd} #{database} | bzip2 -9 > #{shared_path}/sync/#{filename}" do |channel, stream, data|
           puts data
         end
         purge_old_backups "database"
-                                   
- 
+
+
         # Download dump
-        system "mkdir -p #{LOCAL_SQL_PATH}"        
+        system "mkdir -p #{LOCAL_SQL_PATH}"
         download "#{shared_path}/sync/#{filename}", local_filename
- 
+
         # Local DB import
         username, password, database = database_config('development')
         system "bzip2 -d -c #{local_filename} | mysql -u #{username} --password='#{password}' #{database}"#{}"; rm -f #{filename}"
- 
+
         logger.important "sync database from the stage '#{stage}' to local finished"
       end
- 
+
       desc <<-DESC
   Sync declared directories from the selected multi_stage environment to the local development
   environment. The synced directories must be declared as an array of Strings with the sync_directories
   variable. The path is relative to the rails root.
   DESC
       task :fs, :roles => :web, :once => true do
- 
+
         server, port = host_and_port
- 
+
         Array(fetch(:sync_directories, [])).each do |syncdir|
           unless File.directory? "#{syncdir}"
             logger.info "create local '#{syncdir}' folder"
@@ -104,14 +101,14 @@ Capistrano::Configuration.instance.load do
           destination, base = Pathname.new(syncdir).split
           system "rsync --verbose --archive --compress --copy-links --delete --stats --rsh='ssh -p #{port}' #{user}@#{server}:#{current_path}/#{syncdir} #{destination.to_s}"
         end
- 
+
         logger.important "sync filesystem from the stage '#{stage}' to local finished"
       end
- 
+
     end
- 
+
     namespace :up do
- 
+
       desc <<-DESC
   Syncs the database and declared directories from the local development environment
   to the selected multi_stage environment. This task simply calls both the 'sync:up:db' and
@@ -120,7 +117,7 @@ Capistrano::Configuration.instance.load do
       task :default do
         db and fs
       end
- 
+
       desc <<-DESC
   Syncs database from the local develoment environment to the selected mutli_stage environement.
   The database credentials will be read from your local config/database.yml file and a copy of the
@@ -128,23 +125,23 @@ Capistrano::Configuration.instance.load do
   declared in the sync_backups variable and defaults to 5.
   DESC
       task :db, :roles => :db, :only => { :primary => true } do
- 
-        filename = "database.#{stage}.#{Time.now.strftime '%Y-%m-%d_%H:%M:%S'}.sql.bz2"     
-        local_filename = LOCAL_SQL_PATH + filename   
- 
+
+        filename = "database.#{stage}.#{Time.now.strftime '%Y-%m-%d_%H:%M:%S'}.sql.bz2"
+        local_filename = LOCAL_SQL_PATH + filename
+
         on_rollback do
           delete "#{shared_path}/sync/#{filename}"
           system "rm -f #{filename}"
         end
- 
+
         # Make a backup before importing
         username, password, database, host = remote_database_config(rails_env)
         p "hostname was #{host}"
-        hostcmd = host.nil? ? '' : "-h #{host}" 
+        hostcmd = host.nil? ? '' : "-h #{host}"
         run "mysqldump -u #{username} --password='#{password}' #{hostcmd} #{database} | bzip2 -9 > #{shared_path}/sync/#{filename}" do |channel, stream, data|
           puts data
         end
- 
+
         # Local DB export
         filename = "dump.local.#{Time.now.strftime '%Y-%m-%d_%H:%M:%S'}.sql.bz2"
         username, password, database = database_config('development')
@@ -152,23 +149,23 @@ Capistrano::Configuration.instance.load do
         system "mysqldump -u #{username} --password='#{password}' #{database} | bzip2 -9 > #{local_filename}"
         upload local_filename, "#{shared_path}/sync/#{filename}"
         system "rm -f #{local_filename}"
- 
+
         # Remote DB import
         username, password, database, host = remote_database_config(rails-env)
-        hostcmd = host.nil? ? '' : "-h #{host}" 
+        hostcmd = host.nil? ? '' : "-h #{host}"
         run "bzip2 -d -c #{shared_path}/sync/#{filename} | mysql -u #{username} --password='#{password}' #{hostcmd} #{database}; rm -f #{shared_path}/sync/#{filename}"
         purge_old_backups "database"
- 
+
         logger.important "sync database from local to the stage '#{stage}' finished"
       end
- 
+
       desc <<-DESC
   Sync declared directories from the local development environement to the selected multi_stage
   environment. The synced directories must be declared as an array of Strings with the sync_directories
   variable. The path is relative to the rails root.
   DESC
       task :fs, :roles => :web, :once => true do
- 
+
         server, port = host_and_port
         Array(fetch(:sync_directories, [])).each do |syncdir|
           destination, base = Pathname.new(syncdir).split
@@ -181,16 +178,16 @@ Capistrano::Configuration.instance.load do
             logger.info "Create '#{syncdir}' directory"
             run "mkdir #{current_path}/#{syncdir}"
           end
- 
+
           # Sync directory up
           logger.info "sync #{syncdir} to #{server}:#{port} from local"
           system "rsync --verbose --archive --compress --keep-dirlinks --delete --stats --rsh='ssh -p #{port}' #{syncdir} #{user}@#{server}:#{current_path}/#{destination.to_s}"
         end
         logger.important "sync filesystem from local to the stage '#{stage}' finished"
       end
- 
+
     end
- 
+
     #
     # Reads the database credentials from the local config/database.yml file
     # +db+ the name of the environment to get the credentials for
@@ -198,28 +195,29 @@ Capistrano::Configuration.instance.load do
     #
     def database_config(db)
       database = YAML::load_file('config/database.yml')
-      return database["#{db}"]['username'], database["#{db}"]['password'], database["#{db}"]['database'], database["#{db}"]['host']
-    end           
+      db = database["#{db}"]
+      return (db['username']  || db['user']), db['password'], db['database'], db['host']
+    end
 
-    
+
     #
     # Reads the database credentials from the remote config/database.yml file
     # +db+ the name of the environment to get the credentials for
     # Returns username, password, database
     #
-    def remote_database_config(db)            
+    def remote_database_config(db)
       remote_config = capture("cat #{shared_path}/config/database.yml")
       database = YAML::load(remote_config)
-      return database["#{db}"]['username'], database["#{db}"]['password'], database["#{db}"]['database'], database["#{db}"]['host']      
+      return database["#{db}"]['username'], database["#{db}"]['password'], database["#{db}"]['database'], database["#{db}"]['host']
     end
- 
+
     #
     # Returns the actual host name to sync and port
     #
     def host_and_port
       return roles[:web].servers.first.host, ssh_options[:port] || roles[:web].servers.first.port || 22
     end
- 
+
     #
     # Purge old backups within the shared sync directory
     #
@@ -234,6 +232,6 @@ Capistrano::Configuration.instance.load do
         try_sudo "rm -rf #{delete_backups}"
       end
     end
- 
+
   end
 end

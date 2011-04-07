@@ -18,6 +18,23 @@
 require 'spec_helper'
 
 describe Page do
+<<<<<<< HEAD
+  describe "validations" do
+    describe "on title" do
+      it "should reject a page with no title" do
+        Factory.build(:page, :title => nil).should_not be_valid
+      end
+
+      it "should allow a page with a title" do
+        Factory.build(:page, :title => 'Foo').should be_valid
+      end
+
+      it "should reject a page with a non-unique title" do
+        Factory(:page, :title => "Foo")
+        Factory.build(:page, :title => 'Foo').should_not be_valid
+      end
+
+=======
   describe "mass assignment" do
     it "should mass assign title and permalink" do
       page = Page.new(:title => 'foo', :permalink => 'bar' )
@@ -56,6 +73,7 @@ describe Page do
     end
     it "should not include an unpublished page" do
       Page.published.should_not include @page_2
+>>>>>>> 012b3a15bd8d640b6bb2240e1b454403ef7ff4f6
     end
   end
 end

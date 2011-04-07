@@ -1,20 +1,19 @@
 require 'authenticated_system'
 
-module ApplicationHelper    
+module ApplicationHelper
   include AuthenticatedSystem
- 
+
   def nav_menu(root_name)
-    Rails.logger.info "******************* Nav menu for #{root_name}"
     location_tree(root_name, :html => {:id => 'nav_menu'}, :partial => 'shared/nav_subtree')
   end
 
-  def location_tree(root_name, options)             
-    home_location = Location.roots.first(:conditions => {:name => root_name})      
+  def location_tree(root_name, options)
+    home_location = Location.roots.first(:conditions => {:name => root_name})
     html_attributes = options[:html] || {}
-      
+
     content_tag(:ul, html_attributes) do
       link_tree(home_location, options)
-    end    
+    end
   end
 
   # Never Again.
@@ -39,7 +38,7 @@ module ApplicationHelper
         loc_tree[depth][loc.parent_id] = [loc]
       end
     end
-    
+
     # Find the highest depth leaves
     current_depth_leaves = loc_tree.last
     while loc_tree.last.empty?
@@ -69,7 +68,7 @@ module ApplicationHelper
   def admin?
     logged_in?
   end
-  
+
   def loc_path(loc)
     loc.page ? "/#{loc.page.permalink}" : loc.path
   end

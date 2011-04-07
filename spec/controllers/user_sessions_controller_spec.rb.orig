@@ -4,7 +4,10 @@ describe UserSessionsController do
 
   before(:each) do
     activate_authlogic
+<<<<<<< HEAD
+=======
     @user = Factory(:user)
+>>>>>>> 012b3a15bd8d640b6bb2240e1b454403ef7ff4f6
     @user_session = Factory(:user_session)
     @user = Factory(:user,
       :password => 'password',
@@ -31,6 +34,7 @@ describe UserSessionsController do
     describe "with valid params" do
       before do
         @valid_create_params = {
+<<<<<<< HEAD
           :login    => @user.login,
           :password => 'password'
         }
@@ -40,12 +44,23 @@ describe UserSessionsController do
         post :create, :user_session => @valid_create_params
         assigns[:user_session].should be_a(UserSession)
         controller.current_user.should == @user
+=======
+          :login => "john",
+          :password => 'foobar'
+        }
+      end
+
+      it "should log in the correct user" do
+        post :create, :user_session => @valid_create_params
+        assigns(:user_session).user.should == @user
+>>>>>>> 012b3a15bd8d640b6bb2240e1b454403ef7ff4f6
       end
     end
 
     describe "with invalid params" do
       before do
         @invalid_create_params = {
+<<<<<<< HEAD
           :login    => @user.login,
           :password => 'password1'
         }
@@ -54,6 +69,16 @@ describe UserSessionsController do
       it "should not log in the user" do
         post :create, :user_session => @valid_create_params
         controller.current_user.should be_nil
+=======
+          :login => "john",
+          :password => nil
+        }
+      end
+
+      it "should not log in anyone" do
+        post :create, :user_session => @valid_create_params
+        assigns(:user_session).user.should be_nil
+>>>>>>> 012b3a15bd8d640b6bb2240e1b454403ef7ff4f6
       end
     end
   end
@@ -65,13 +90,20 @@ describe UserSessionsController do
     before do
       login_as @user
     end
+<<<<<<< HEAD
 
     it "should log the user out" do
       delete :destroy
       controller.current_user.should be_nil
     end
 
+=======
+>>>>>>> 012b3a15bd8d640b6bb2240e1b454403ef7ff4f6
 
+    it "should log the user out" do
+      delete :destroy
+      assigns(:user_session).user.should be_nil
+    end
   end
 
 end

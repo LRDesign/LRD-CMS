@@ -1,11 +1,9 @@
 require 'spec_helper'
 
 describe "/admin/upload/documents/index" do
-  include Admin::Upload::DocumentsHelper
-  
-  before(:each) do 
+  before(:each) do
     assign(:documents, [ Factory(:document), Factory(:document) ])
-  end                   
+  end
 
   it "should succeed" do
     render

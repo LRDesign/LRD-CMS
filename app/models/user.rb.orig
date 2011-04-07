@@ -28,6 +28,18 @@ class User < ActiveRecord::Base
     c.validate_email_field = false
   end
 
-  attr_accessible :login, :password, :password_confirmation
+  attr_accessible :login, :password, :password_confirmation,
+<<<<<<< HEAD
+                  :crypted_password, :password_salt,
+                  :perishable_token, :persistence_token, :login_count,
+                  :failed_login_count, :last_request_at, :current_login_at,
+                  :last_login_at, :current_login_ip, :last_login_ip
+
+
   validates_presence_of :login
+
+=======
+                  :login_count, :failed_login_count, :last_request_at, :current_login_at,
+                  :last_login_at, :current_login_ip, :last_login_ip
+>>>>>>> 012b3a15bd8d640b6bb2240e1b454403ef7ff4f6
 end

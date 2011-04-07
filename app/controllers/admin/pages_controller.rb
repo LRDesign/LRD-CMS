@@ -10,11 +10,6 @@ class Admin::PagesController < Admin::AdminController
     @pages = Page.all
   end
 
-  # GET /admin/pages/1
-  def show
-    @page = Page.find(params[:id])
-  end
-
   # GET /admin/pages/new
   def new
     @page = Page.new
@@ -30,9 +25,9 @@ class Admin::PagesController < Admin::AdminController
     @page = Page.new(params[:page])
 
     if @page.save
-      redirect_to(admin_page_path(@page), :notice => 'Page was successfully created.') 
+      redirect_to(page_path(@page), :notice => 'Page was successfully created.')
     else
-      render :action => "new" 
+      render :action => "new"
     end
   end
 
@@ -41,9 +36,9 @@ class Admin::PagesController < Admin::AdminController
     @page = Page.find(params[:id])
 
     if @page.update_attributes(params[:page])
-      redirect_to(admin_page_path(@page), :notice => 'Page was successfully updated.')
+      redirect_to(page_path(@page), :notice => 'Page was successfully updated.')
     else
-      render :action => "edit" 
+      render :action => "edit"
     end
   end
 
@@ -54,4 +49,8 @@ class Admin::PagesController < Admin::AdminController
 
     redirect_to(admin_pages_url)
   end
+
+  # def page_path(page)
+  #   "/#{page.permalink}"
+  # end
 end
