@@ -11,8 +11,11 @@
 #  updated_at         :datetime
 #
 
-require 'spec_helper'
+class Image < ActiveRecord::Base
 
-describe Admin::Upload::Image do
-  pending "add some examples to (or delete) #{__FILE__}"
+  attr_accessible :image
+
+  has_attached_file :image, :styles => LRD::ImageStyles
+  validates_attachment_presence :image
+  validates_attachment_content_type :image, :content_type => /image.*/
 end

@@ -1,7 +1,7 @@
-= form_for(@document, :html => { :multipart => true } ) do |f|
+= form_for([:admin, :upload, @document], :html => { :multipart => true } ) do |f|
   = f.file_field :data
   = f.error_messages
 
   = unlabeled_submit f
-  
-      
+
+

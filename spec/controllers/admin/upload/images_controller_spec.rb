@@ -28,16 +28,16 @@ describe Admin::Upload::ImagesController do
       it "should expose the requested image as @image" do
         get :show, :id => @image.id
         assigns[:image].should == @image
-      end  
+      end
     end
 
     ########################################################################################
     #                                      GET NEW
     ########################################################################################
-    describe "responding to GET new" do  
+    describe "responding to GET new" do
       it "should expose a new image as @image" do
         get :new
-        assigns[:image].should be_a(Admin::Upload::Image)
+        assigns[:image].should be_a(Image)
         assigns[:image].should be_new_record
       end
     end
@@ -50,37 +50,37 @@ describe Admin::Upload::ImagesController do
       describe "with valid params" do
         before do
           @img = mock_proper_image(:save => true)
-          Admin::Upload::Image.should_receive(:new).with({'these' => 'params'}).and_return(@img)
-          post :create, :admin_upload_image => {:these => 'params'}
+          Image.should_receive(:new).with({'these' => 'params'}).and_return(@img)
+          post :create, :image => {:these => 'params'}
         end
-        
+
         it "should create a new image and expose it" do
           assigns(:image).should equal(@img)
         end
 
         it "should redirect to the created image" do
           response.should redirect_to(admin_upload_image_url(@img))
-        end      
+        end
       end
-      
+
       describe "with invalid params" do
         before do
           lambda do
             @img = mock_improper_image(:save => false)
-            Admin::Upload::Image.should_receive(:new).with({'these' => 'params'}).and_return(@img)
-            post :create, :admin_upload_image => {:these => 'params'}
-          end.should_not change(Admin::Upload::Image, :count)
+            Image.should_receive(:new).with({'these' => 'params'}).and_return(@img)
+            post :create, :image => {:these => 'params'}
+          end.should_not change(Image, :count)
         end
-        
+
         it "should expose a newly created image as @image" do
-          assigns(:image).should equal(@img) 
+          assigns(:image).should equal(@img)
         end
-        
-        
+
+
         it "should re-render the 'new' template" do
           response.should render_template('new')
-        end      
-      end    
+        end
+      end
     end
 
     ########################################################################################
@@ -91,14 +91,14 @@ describe Admin::Upload::ImagesController do
       it "should reduce image count by one" do
         lambda do
           delete :destroy, :id => @image.id
-        end.should change(Admin::Upload::Image, :count).by(-1)
+        end.should change(Image, :count).by(-1)
       end
-      
-      it "should make the admin_upload_images unfindable in the database" do    
+
+      it "should make the admin_upload_images unfindable in the database" do
         delete :destroy, :id => @image.id
-        lambda{ Admin::Upload::Image.find(@image.id)}.should raise_error(ActiveRecord::RecordNotFound)      
+        lambda{ Image.find(@image.id)}.should raise_error(ActiveRecord::RecordNotFound)
       end
-    
+
       it "should redirect to the admin_upload_images list" do
         delete :destroy, :id => @image.id
         response.should redirect_to(admin_upload_images_url)
@@ -107,7 +107,7 @@ describe Admin::Upload::ImagesController do
   end
 
   describe "while not logged in" do
-    before(:each) do 
+    before(:each) do
       logout
     end
 

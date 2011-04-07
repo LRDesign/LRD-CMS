@@ -4,16 +4,16 @@ class InitialCms < ActiveRecord::Migration
       t.string   :title       # Page title, used in <title>
       t.string   :headline    # Page headline, passed to set_headline
       t.string   :permalink   # page URL
-      t.text     :content     # HTML content 
+      t.text     :content     # HTML content
       t.boolean  :published, :null => false, :default => true   # page is currently visible?
-      
+
       t.text :keywords        # used to create META Keywords in the layout <head>
       t.text :description     # used to create META Description in the layout <head>
-      
+
       t.datetime :edited_at
       t.timestamps
     end
-    
+
     create_table :locations do |t|
       t.string :name
       t.string :path
@@ -24,8 +24,8 @@ class InitialCms < ActiveRecord::Migration
 
       t.timestamps
     end
-    
-    create_table :users do |t|              
+
+    create_table :users do |t|
       t.string    :login,               :null => false,  :limit => 20
       t.string    :email
       t.string    :first_name,          :limit => 60
@@ -49,17 +49,17 @@ class InitialCms < ActiveRecord::Migration
 
       t.timestamps
     end
-    
-    create_table :admin_upload_documents do |t|
+
+    create_table :documents do |t|
       t.string :data_file_name
       t.integer :data_file_size
       t.string :data_content_type
       t.datetime :data_updated_at
 
       t.timestamps
-    end    
+    end
 
-    create_table :admin_upload_images do |t|
+    create_table :images do |t|
       t.string :image_file_name
       t.integer :image_file_size
       t.string :image_content_type

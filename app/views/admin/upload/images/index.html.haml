@@ -1,7 +1,7 @@
 - set_headline "Listing images"
 
 = link_to 'New image', new_admin_upload_image_path
-%br 
+%br
 
 %table.listing
   %tr
@@ -9,6 +9,6 @@
   - for image in @images
     %tr
       %td= image.image_file_name
-      %td= link_to 'Show', image
-      %td= link_to 'Destroy', image, :confirm => 'Are you sure?', :method => :delete
+      %td= link_to 'Show', admin_upload_image_path(image)
+      %td= link_to 'Destroy', admin_upload_image_path(image), :confirm => 'Are you sure?', :method => :delete
 

@@ -28,16 +28,16 @@ describe Admin::Upload::DocumentsController do
       it "should expose the requested document as @document" do
         get :show, :id => @document.id
         assigns[:document].should == @document
-      end  
+      end
     end
 
     ########################################################################################
     #                                      GET NEW
     ########################################################################################
-    describe "responding to GET new" do  
+    describe "responding to GET new" do
       it "should expose a new document as @document" do
         get :new
-        assigns[:document].should be_a(Admin::Upload::Document)
+        assigns[:document].should be_a(Document)
         assigns[:document].should be_new_record
       end
     end
@@ -50,17 +50,17 @@ describe Admin::Upload::DocumentsController do
       describe "with valid params" do
         before(:each) do
           @doc = mock_document(:save => true)
-          Admin::Upload::Document.should_receive(:new).with({'these' => 'params'}).and_return(@doc)
-          post :create, :admin_upload_document => {:these => 'params'}
+          Document.should_receive(:new).with({'these' => 'params'}).and_return(@doc)
+          post :create, :document => {:these => 'params'}
         end
-        
+
         it "should create a new document and expose it" do
-          assigns(:admin_upload_document).should equal(@doc)
+          assigns(:document).should equal(@doc)
         end
 
         it "should redirect to the created document" do
           response.should redirect_to(admin_upload_document_url(@doc))
-        end      
+        end
       end
 
     end
@@ -72,14 +72,14 @@ describe Admin::Upload::DocumentsController do
       it "should reduce document count by one" do
         lambda do
           delete :destroy, :id => @document.id
-        end.should change(Admin::Upload::Document, :count).by(-1)
+        end.should change(Document, :count).by(-1)
       end
-      
-      it "should make the admin_upload_documents unfindable in the database" do    
+
+      it "should make the admin_upload_documents unfindable in the database" do
         delete :destroy, :id => @document.id
-        lambda{ Admin::Upload::Document.find(@document.id)}.should raise_error(ActiveRecord::RecordNotFound)      
+        lambda{ Document.find(@document.id)}.should raise_error(ActiveRecord::RecordNotFound)
       end
-    
+
       it "should redirect to the admin_upload_documents list" do
         delete :destroy, :id => @document.id
         response.should redirect_to(admin_upload_documents_url)
@@ -88,7 +88,7 @@ describe Admin::Upload::DocumentsController do
   end
 
   describe "while not logged in" do
-    before(:each) do 
+    before(:each) do
       logout
     end
 

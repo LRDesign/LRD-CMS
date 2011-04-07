@@ -1,12 +1,15 @@
 LrdCms::Application.routes.draw do
-  namespace :admin do  
-    namespace :upload do 
-      resources :images 
+  namespace :admin do
+    namespace :upload do
+      resources :images
       resources :documents
-    end 
+    end
     resources :pages
     resources :locations
   end
+
+  # resources :images, :controller => 'admin/upload/images'
+  # resources :documents, :controller => 'admin/upload/documents'
 
   resource :user_session
   match '/login', :controller => :user_sessions, :action => "new"
