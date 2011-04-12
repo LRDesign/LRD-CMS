@@ -3,7 +3,7 @@ source 'http://rubygems.org'
 gem 'rails', '3.0.6'
 
 # gem 'sqlite3-ruby', :require => 'sqlite3'
-gem 'mysql'
+gem 'mysql2'
 gem 'paperclip'
 gem "haml"
 gem "will_paginate", "~> 3.0.beta"
