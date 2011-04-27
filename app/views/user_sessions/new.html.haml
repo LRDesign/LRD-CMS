@@ -1,8 +1,8 @@
 - set_headline "Log in"
 
 = form_for(@user_session, :url => {:action => 'create'}) do |f|
-  = labeled_input f, :login
-  = labeled_input f, :password, :input => f.password_field(:password)
+  = f.labeled_input :login
+  = f.labeled_input :password, :type => 'password'
   = f.error_messages
 
-  = unlabeled_submit f, "Login"
+  = f.unlabeled_submit "Login"

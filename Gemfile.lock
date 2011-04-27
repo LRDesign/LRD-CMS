@@ -6,6 +6,11 @@ GIT
     authlogic (2.1.3)
       activesupport
 
+PATH
+  remote: ../lrd_view_tools
+  specs:
+    lrd_view_tools (0.1.1)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -132,6 +137,7 @@ DEPENDENCIES
   faker
   haml
   jquery-rails
+  lrd_view_tools!
   mizugumo (= 0.1.0)
   mongrel
   mysql2

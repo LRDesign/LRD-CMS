@@ -4,23 +4,25 @@
   .form_section
     %h3 Visible Attributes
 
-    = labeled_input f, :title, :comment => "Browser titlebar (optional)"
-    = labeled_input f, :headline, :comment => "On-page headline (optional) "
-    = labeled_input f, :permalink, :comment => "Url for this page (required)"
-    = labeled_input f, :published, :input => f.check_box(:published), :comment => "Uncheck to disable this page"
+    = f.labeled_input :title, :comment => "Browser titlebar (optional)"
+    = f.labeled_input :headline, :comment => "On-page headline (optional) "
+    = f.labeled_input :permalink, :comment => "Url for this page (required)"
+    = f.labeled_input :published, :comment => "Uncheck to disable this page" do
+      = f.check_box(:published)
 
   .form_section
     %h3 Invisible Attributes for Search Engines
-    = labeled_input f, :keywords
-    = labeled_input f, :description
+    = f.labeled_input :keywords
+    = f.labeled_input :description
 
   .form_section
     %h3 Page Content
-    - input = f.text_area(:content, :size => "80x40", :class => 'mceEditor')
-    = labeled_input f, :content, :input => input
+    = f.labeled_input :content do
+      = f.text_area(:content, :size => "80x40", :class => 'mceEditor')
 
   .form_section
     %h3 Advanced Options
     .collapsed
-      = labeled_input f, :css, :input => f.text_area(:css, :size => '80x8'), :text => 'CSS Styles'
-  = unlabeled_submit f
+      = f.labeled_input :css, :text => 'CSS Styles' do
+        = f.text_area(:css, :size => '80x8')
+  = f.unlabeled_submit "Save Page"
