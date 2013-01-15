@@ -52,3 +52,5 @@ capybara*.html
 .bundle/*
 .rspec
 public/sitemap.xml
+*.sublime-project
+*.sublime-workspace
