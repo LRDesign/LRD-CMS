@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.7'
+gem 'rails'
 
 # gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'pg'
@@ -8,11 +8,12 @@ gem 'paperclip'
 gem "haml"
 gem "will_paginate", "~> 3.0.beta"
 gem 'tiny_mce'
-gem 'authlogic', :git => 'git://github.com/odorcicd/authlogic.git', :branch => 'rails3'
-gem 'be9-awesome_nested_set', :require => 'awesome_nested_set'
+gem 'authlogic'
+gem 'awesome_nested_set'
 gem 'jquery-rails'
 gem 'mizugumo', "0.1.0"
 gem 'lrd_view_tools'
+gem 'dynamic_form'
 
 group :development, :test do
   gem "rspec", ">= 2.1.0"
@@ -20,6 +21,7 @@ group :development, :test do
   gem "factory_girl_rails"
   gem "webrat"
   gem 'annotate'
+  gem 'simplecov'
   # gem 'ruby-debug'
 end
 

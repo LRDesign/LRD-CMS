@@ -54,3 +54,4 @@ capybara*.html
 public/sitemap.xml
 *.sublime-project
 *.sublime-workspace
+.sass-cache/

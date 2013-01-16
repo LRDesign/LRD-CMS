@@ -23,7 +23,7 @@ module Admin::LocationsHelper
     str = ''
     [*locations].each do |location|
       Location.each_with_level(location.self_and_descendants) do |location, depth|
-        str << (render :partial => "location", :locals => { :location => location, :depth => depth + add_depth })
+        str << (render :partial => "admin/locations/location", :locals => { :location => location, :depth => depth + add_depth })
       end
     end
     str.html_safe

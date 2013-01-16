@@ -11,8 +11,8 @@ namespace :db do
 
   namespace :test do 
     task :prepare do
-      old_env = RAILS_ENV
-      RAILS_ENV = "test"
+      old_env = Rails.env
+      Rails.env = "test"
       ENV['RAILS_ENV'] = "test"
       Rake::Task['db:load_config'].reenable
       Rake::Task['db:seed'].reenable
