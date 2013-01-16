@@ -1,0 +1,62 @@
+#debug {
+  clear: both;
+  margin-top: 4em;
+  border-top: 2px solid black;
+  padding: 1em;
+  background: #cccccc; }
+  #debug h2 {
+    color: black; }
+  #debug .tabbed_panel {
+    padding: 0px;
+    clear: both;
+    width: 100%;
+    margin-top: 1em; }
+  #debug .panel_panel {
+    padding: 0.5em 0; }
+  #debug .panel_selected {
+    display: block; }
+  #debug .panel_unselected {
+    display: none; }
+  #debug .tab_container {
+    margin: 0px;
+    padding: 0px; }
+  #debug ul.panel_panels {
+    clear: both;
+    border-left: solid 1px #cccccc;
+    border-bottom: solid 1px #cccccc;
+    border-top: solid 1px #999999;
+    border-right: solid 1px #999999;
+    background-color: white;
+    padding: 10px;
+    margin: 0;
+    overflow: scroll; }
+  #debug li.panel_tab {
+    position: relative;
+    top: 1px;
+    float: left;
+    padding: 0;
+    margin: 0px 3px 0px 0px;
+    font: bold 1.2em sans-serif;
+    list-style: none;
+    border-left: solid 1px #cccccc;
+    border-bottom: solid 1px #999999;
+    border-top: solid 1px #999999;
+    border-right: solid 1px #999999;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    cursor: pointer; }
+  #debug li.tab_selected {
+    background-color: white;
+    border-bottom: 1px solid white; }
+  #debug li.tab_unselected {
+    background-color: #aaaacc; }
+  #debug li.tab_unselected:hover {
+    background-color: #aa7777; }
+  #debug li.panel_tab a {
+    display: block;
+    float: left;
+    padding: 4px 10px;
+    color: black;
+    text-decoration: none; }
+  #debug li.panel_tab ahover {
+    color: #000099; }
