@@ -13,6 +13,7 @@ gem 'awesome_nested_set'
 gem 'jquery-rails'
 gem 'mizugumo', "0.1.0"
 gem 'lrd_view_tools'
+gem 'dynamic_form'
 
 group :development, :test do
   gem "rspec", ">= 2.1.0"
@@ -20,6 +21,7 @@ group :development, :test do
   gem "factory_girl_rails"
   gem "webrat"
   gem 'annotate'
+  gem 'simplecov'
   # gem 'ruby-debug'
 end
 
