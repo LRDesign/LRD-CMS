@@ -45,6 +45,12 @@ module LrdCms
       g.fixture_replacement 'lrd:factory'
     end
 
+    # Enable the asset pipeline
+    config.assets.enabled = true
+
+    # Version of your assets, change this if you want to expire all your assets
+    config.assets.version = '1.0'
+
     Paperclip::Railtie.insert
   end
 end
