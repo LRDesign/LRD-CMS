@@ -1,7 +1,4 @@
-- set_headline "Listing locations"
-
-= link_to 'New location', new_admin_location_path
-%br 
+- set_headline "Listing Locations"
 
 %table.listing
   %tr
@@ -9,5 +6,6 @@
     %th Parent
     %th Path or Page
     %th Tools
-  = list_tree(@locations)
+  = list_tree('location', 'shared/concat_items', @locations)
 
+= link_to 'New Location', new_admin_location_path

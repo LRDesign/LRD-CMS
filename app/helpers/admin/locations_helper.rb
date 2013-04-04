@@ -19,15 +19,17 @@ module Admin::LocationsHelper
     )    
   end
 
-  def list_tree(locations, add_depth = 0)
+  def list_tree(locations, add_depth = 0, selected_location_id = nil)
     str = ''
     [*locations].each do |location|
       Location.each_with_level(location.self_and_descendants) do |location, depth|
-        str << (render :partial => "admin/locations/location", :locals => { :location => location, :depth => depth + add_depth })
+        str << (render :partial => "location", :locals => { :location => location, 
+                                                            :depth => (depth + add_depth), 
+                                                            :selected_location_id => selected_location_id})
       end
     end
     str.html_safe
-  end
+  end       
 
   def depth_indicator(depth)
     str = ''

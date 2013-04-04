@@ -55,3 +55,5 @@ public/sitemap.xml
 *.sublime-project
 *.sublime-workspace
 .sass-cache/
+.simplecov
+coverage/
