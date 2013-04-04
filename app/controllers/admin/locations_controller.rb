@@ -4,9 +4,14 @@ class Admin::LocationsController < Admin::AdminController
     @locations = Location.roots.all
   end
 
+  # GET /locations/1
+  def show
+    @location = Location.find(params[:id])
+  end
+
   # GET /locations/new
   def new
-    @location = Location.new
+    @location = Location.new(params[:location])
   end
 
   # GET /locations/1/edit
@@ -20,18 +25,22 @@ class Admin::LocationsController < Admin::AdminController
 
     if @location.save
       flash[:notice] = 'Location was successfully created.'
-      redirect_to(admin_location_path(@location), :notice => 'Location was successfully created.')
+      if params[:from_page]
+        redirect_to(edit_admin_page_path(:id => @location.page_id))
+      else
+        redirect_to(admin_location_path(@location.id))
+      end
     else
       render :action => "new"
     end
   end
 
+
   # PUT /locations/1
   def update
     @location = Location.find(params[:id])
-    move_to = params[:location].delete("move_to")
 
-    if !move_to.to_s.empty?
+    unless (move_to = params[:location].delete("move_to")).blank?
       Rails.logger.debug{"Moving [#{move_to}]: #{@location.to_text}"}
       if move_to == "last"
         @location.move_to_right_of(@location.siblings.last)
@@ -42,9 +51,10 @@ class Admin::LocationsController < Admin::AdminController
     end
 
     if @location.update_attributes(params[:location])
-      redirect_to(admin_location_path(@location), :notice => 'Location was successfully updated.')
+      flash[:notice] = 'Location was successfully updated.'
+      redirect_to(admin_location_path(@location))
     else
-      render :action => "edit"
+      render :action => 'edit'
     end
   end
 
