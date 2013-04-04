@@ -1,15 +1,19 @@
-%tr
+%tr{:class => ('highlight' if defined?(selected_location_id) && selected_location_id.to_s == node.id.to_s)}
   %td
     = depth_indicator(depth)
-    = location.name
-  %td= location.parent.name if location.parent
+    = node.name
+  %td= node.parent.name if node.parent
   %td
-    - if location.page 
-      = "Page: #{location.page.title}"
+    - if node.page
+      = link_to("Page: #{node.page.title}", '/'+node.page.permalink)
     - else
-      = "URL: #{location.path}"
+      - if node.path.blank?
+        = link_to("Create Page", new_admin_page_path(:page => {:location_id => node.id}))
+      -else
+        = link_to("URL: #{node.path}", node.path)
   %td
-    = link_to 'Show', admin_location_path(location)
-    = link_to 'Edit', edit_admin_location_path(location)
-    = link_to 'Delete', admin_location_path(location), :confirm => 'Are you sure?', :method => :delete
- 
+    = link_to 'Create Child', new_admin_location_path(:node => {:parent_id => node.id})
+    = link_to 'Show', admin_location_path(node)
+    = link_to 'Edit', edit_admin_location_path(node)
+    = link_to 'Delete', admin_location_path(node), :confirm => 'Are you sure?', :method => :delete
+
