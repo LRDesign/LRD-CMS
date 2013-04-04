@@ -56,6 +56,7 @@ module TreeHelper
   def location_tree(root_name, options=nil)
     home_location = Location.first(:conditions => {:name => root_name})
 
+    return "" unless home_location
     Rails.logger.debug{ "Location tree being build from #{home_location.inspect}" }
 
     list_tree("shared/nav_node", "shared/nav_list", home_location.descendants.all(:include => :page))
