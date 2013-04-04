@@ -28,7 +28,7 @@ class Admin::LocationsController < Admin::AdminController
       if params[:from_page]
         redirect_to(edit_admin_page_path(:id => @location.page_id))
       else
-        redirect_to(admin_locations_path(:location_id => @location.id))
+        redirect_to(admin_location_path(@location.id))
       end
     else
       render :action => "new"
