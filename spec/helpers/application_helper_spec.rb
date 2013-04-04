@@ -23,7 +23,7 @@ describe ApplicationHelper do
       before(:each) do
         @loc = Factory(:location_with_single_child)
         @child = @loc.children.first
-        helper.view_context.should_receive(:render).with(
+        helper.should_receive(:render).with(
             :partial => 'test',
             :locals => {:location => @child,
                         :children => []}).and_return('test value')
@@ -50,11 +50,11 @@ describe ApplicationHelper do
         end
 
         it "renders the partial for the child and subchild" do
-          helper.view_context.should_receive(:render).with(
+          helper.should_receive(:render).with(
               {:partial => 'test',
               :locals => {:location => @child,
                           :children => ["foo"]}}, {}).and_return('foo')
-          helper.view_context.should_receive(:render).with(
+          helper.should_receive(:render).with(
               {:partial => 'test',
               :locals => {:location => @sub_child,
                           :children => []}}, {}).and_return('foo')
@@ -63,11 +63,11 @@ describe ApplicationHelper do
         end
 
         it "returns the concatenation of the renderings" do
-          helper.view_context.should_receive(:render).with(
+          helper.should_receive(:render).with(
               {:partial => 'test',
               :locals => {:location => @child,
                           :children => ["2"]}}, {}).and_return('1')
-          helper.view_context.should_receive(:render).with(
+          helper.should_receive(:render).with(
               {:partial => 'test',
               :locals => {:location => @sub_child,
                           :children => []}}, {}).and_return('2')
@@ -85,7 +85,7 @@ describe ApplicationHelper do
       end
 
       it "renders the partial 6 times (2 for children, 4 for sub-children)" do
-        helper.view_context.should_receive(:render).exactly(6).times.and_return('foo')
+        helper.should_receive(:render).exactly(6).times.and_return('foo')
         link_tree(@root, @options)
       end
     end
