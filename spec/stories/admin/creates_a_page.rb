@@ -25,7 +25,7 @@ steps "Admin creates a page", :type => :feature do
     birthday = Time.new.years_ago(30).months_since(6).strftime("%m/%d/%Y")
     fill_in "Title",        :with => "The Cool Page"
     fill_in "Permalink",        :with => "cool_page"
-    fill_in "Content", :with => "Judson is {{ age: #{birthday} }}  Evan is {{ age: not telling }}"
+    fill_in_tinymce "page_content", :with => "Judson is {{ age: #{birthday} }}  Evan is {{ age: not telling }}"
     click_button "Save Page"
   end
 
