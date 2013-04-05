@@ -24,7 +24,33 @@ RSpec.configure do |config|
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
-  config.use_transactional_fixtures = true
+  config.use_transactional_fixtures = false
+
+  DatabaseCleaner.strategy = :transaction
+
+  config.before :all, :type => :feature do
+    Rails.application.config.action_dispatch.show_exceptions = true
+    DatabaseCleaner.clean_with :truncation
+    load 'db/seeds.rb'
+  end
+
+  config.after :all, :type => :feature do
+    DatabaseCleaner.clean_with :truncation
+    load 'db/seeds.rb'
+  end
+
+  config.before :each, :type => proc{ |value| value != :request } do
+    DatabaseCleaner.start
+  end
+  config.after :each, :type => proc{ |value| value != :request } do
+    DatabaseCleaner.clean
+  end
+
+  config.before :suite do
+    DatabaseCleaner.clean_with :truncation
+    load 'db/seeds.rb'
+  end
+
 end
 
 def content_for(name)

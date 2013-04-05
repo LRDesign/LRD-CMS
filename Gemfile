@@ -22,6 +22,9 @@ group :development, :test do
   gem "webrat"
   gem 'annotate'
   gem 'simplecov'
+  gem 'capybara'
+  gem 'database_cleaner'
+  gem 'rspec-steps', ">= 0.0.6"
   # gem 'ruby-debug'
 end
 
