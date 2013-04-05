@@ -1,4 +1,5 @@
 require 'spec_helper'
+include TinyMCETools
 
 steps "Admin creates a page", :type => :feature do
 
@@ -22,10 +23,9 @@ steps "Admin creates a page", :type => :feature do
   end
 
   it "the admin enters page info" do
-    birthday = Time.new.years_ago(30).months_since(6).strftime("%m/%d/%Y")
     fill_in "Title",        :with => "The Cool Page"
     fill_in "Permalink",        :with => "cool_page"
-    fill_in_tinymce "page_content", :with => "Judson is {{ age: #{birthday} }}  Evan is {{ age: not telling }}"
+    fill_in_tinymce "page_content", :with => "Judson is 29 and Evan is not telling"
     click_button "Save Page"
   end
 
@@ -33,7 +33,7 @@ steps "Admin creates a page", :type => :feature do
     current_path.should == "/cool_page"
     within("div#content-body") do
       page.should have_content("Judson is 29")
-      page.should have_content("{{ age: not telling }}")
+      page.should have_content("not telling")
     end
   end
 
@@ -42,6 +42,30 @@ steps "Admin creates a page", :type => :feature do
     click_link "Edit Pages"
     page.should have_css("a[href='/cool_page']")
     page.should have_content(@pr.title)
+  end
+
+  it "when the admin clicks edit" do
+    within("tr#page_#{@pr.id}.page") do
+      click_link "Edit"
+    end
+    page.should have_css("form#edit_page_#{@pr.id}")
+  end
+
+  it "the admin edits the content" do
+    fill_in_tinymce "page_content", :with => "Judson is not really 29 and Evan is in his thirties"
+    click_button "Save Page"
+  end
+
+  it "should show the edited page correctly" do
+    current_path.should == "/cool_page"
+    within("div#content-body") do
+      page.should have_content("Judson is not really 29")
+      page.should have_content("in his thirties")
+    end
+  end
+
+  it "revisits the index page" do
+    click_link "Edit Pages"
   end
 
   #jdl: delete and prompt
