@@ -2,26 +2,13 @@ require 'capybara/rspec'
 require 'selenium-webdriver'
 require 'rspec-steps'
 
-Capybara.server_port = 30303
-
-Capybara.default_wait_time = 15
-
 Capybara.register_driver(:selenium_chrome) do |app|
-  Capybara::Selenium::Driver.new(app,
-                                 :browser => :chrome, :resynchronize => true)
+  Capybara::Selenium::Driver.new(app, :browser => :chrome)
 end
 
-Capybara.register_driver(:selenium_resync) do |app|
-  Capybara::Selenium::Driver.new(app, :resynchronize => true)
-end
+Capybara.default_driver = :selenium
 
-if ENV['SELENIUM_CHROME']
-  Selenium::WebDriver::Chrome.driver_path = "/usr/lib/chromium-browser/chromedriver"
-  Capybara.default_driver = :selenium_chrome
-else
-  Capybara.default_driver = :selenium_resync
-end
-
+=begin
 module SaveAndOpenOnFail
   def instance_eval(&block)
     super(&block)
@@ -84,6 +71,7 @@ end
 class XPath::Expression
   include HandyXPaths::Attrs
 end
+=end
 
 module CKEditorTools
   def fill_in_ckeditor(id, options = {})
@@ -103,5 +91,3 @@ module TinyMCETools
     browser.execute_script("tinymce.getInstanceById('#{id}').setContent('#{options[:with]}')")
   end
 end
-
-
