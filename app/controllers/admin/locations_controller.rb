@@ -1,7 +1,7 @@
 class Admin::LocationsController < Admin::AdminController
   # GET /locations
   def index
-    @locations = Location.roots.all
+    @locations = Location.all
   end
 
   # GET /locations/1

@@ -1,6 +1,5 @@
-%tr{:class => ('highlight' if defined?(selected_location_id) && selected_location_id.to_s == node.id.to_s)}
+%tr{:id => "location_#{node.id.to_s}", :class => ('highlight' if defined?(selected_location_id) && selected_location_id.to_s == node.id.to_s)}
   %td
-    = depth_indicator(depth)
     = node.name
   %td= node.parent.name if node.parent
   %td
@@ -16,4 +15,5 @@
     = link_to 'Show', admin_location_path(node)
     = link_to 'Edit', edit_admin_location_path(node)
     = link_to 'Delete', admin_location_path(node), :confirm => 'Are you sure?', :method => :delete
-
+- if defined? children
+  = children
