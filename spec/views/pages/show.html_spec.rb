@@ -4,6 +4,7 @@ describe "/pages/show" do
   before(:each) do
     activate_authlogic
     assign(:page, @page = Factory(:page))
+    view.stub!(:params).and_return( :controller => 'pages', :action => 'show' )
   end
 
   it "should succeed" do
