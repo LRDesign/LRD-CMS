@@ -25,7 +25,7 @@ group :development, :test do
   gem 'capybara'
   gem 'database_cleaner'
   gem 'rspec-steps', ">= 0.0.6"
-  # gem 'ruby-debug'
+  gem 'debugger'
 end
 
 group :development do
