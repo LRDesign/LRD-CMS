@@ -29,7 +29,7 @@
 
     = yield :header
 
-  %body{ :class => admin? ? 'with_admin' : nil }
+  %body{ :class => body_class }
     = render :partial => 'layouts/admin_nav' if admin?
     #inset
       #wrap
