@@ -7,7 +7,7 @@ gem 'pg'
 gem 'paperclip'
 gem "haml"
 gem "will_paginate", "~> 3.0.beta"
-gem 'tiny_mce'
+gem 'tinymce-rails'
 gem 'authlogic'
 gem 'awesome_nested_set'
 gem 'jquery-rails'
