@@ -1,3 +1,5 @@
+= tinymce_assets
+
 = form_for(@page, :url => url, :format => :html) do |f|
   = f.error_messages
 
@@ -12,13 +14,15 @@
 
   .form_section
     %h3 Invisible Attributes for Search Engines
-    = f.labeled_input :keywords
-    = f.labeled_input :description
+    = f.labeled_input :keywords, :size => 80, :comment => "Comma-separated"
+    = f.labeled_input :description do
+      = f.text_area(:description, :size => "80x2")
 
   .form_section
     %h3 Page Content
     = f.labeled_input :content do
-      = f.text_area(:content, :size => "80x40", :class => 'mceEditor')
+      = f.text_area(:content, :size => "80x40", :class => 'tinymce')
+    = tinymce
 
   .form_section
     %h3 Advanced Options

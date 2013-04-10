@@ -1,10 +1,4 @@
 class Admin::PagesController < Admin::AdminController
-  uses_tiny_mce :options => {
-    :theme => 'advanced',
-    :theme_advanced_resizing => true,
-    :theme_advanced_resize_horizontal => false,
-    :plugins => %w{ table fullscreen }
-  }
   # GET /admin/pages
   def index
     @pages = Page.all
