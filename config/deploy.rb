@@ -30,14 +30,20 @@ namespace :deploy do
     run "ln -nfs #{shared_path}/db_backups #{release_path}/db_backups"
   end
 
-  task :update_git_submodules do
-    run "cd #{release_path}; git submodule init; git submodule update"
+  task :make_tmp_writable do
+    run "chgrp web #{release_path}/tmp"
+    run "mkdir #{release_path}/tmp/cache"
+    run "chgrp -R web #{release_path}/tmp/cache"
+    run "chmod -R go+rw #{release_path}/tmp/cache"
   end
 
-  task :submodules_and_links, :roles => [:app] do
-    update_git_submodules
-    link_shared_files
+  task :make_sitemap_writable do
+    file = "#{release_path}/public/sitemap.xml"
+    run "touch #{file}"
+    run "chgrp web #{file}"
+    run "chmod g+rw #{file}"
   end
+
 
   desc "Install the database"
   task :db_install do
@@ -52,5 +58,5 @@ namespace :sample_data do
   end
 end
 
-after 'deploy:update_code', 'deploy:submodules_and_links'
+after 'deploy:update_code', 'deploy:link_shared_files', 'deploy:make_tmp_writable', 'deploy:make_sitemap_writable'
 
