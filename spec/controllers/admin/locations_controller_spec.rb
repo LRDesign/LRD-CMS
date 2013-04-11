@@ -71,7 +71,7 @@ describe Admin::LocationsController do
         it "should redirect to the created location" do
           post :create, :location => @valid_create_params
           new_location = assigns[:location]
-          response.should redirect_to(admin_location_url(new_location))
+          response.should redirect_to(admin_locations_url)
         end
       end
 
@@ -167,7 +167,7 @@ describe Admin::LocationsController do
 
         it "should redirect to the location" do
           put :update, :id => @location.id, :location => @valid_update_params
-          response.should redirect_to(admin_location_url(@location))
+          response.should redirect_to(admin_locations_url)
         end
       end
 
