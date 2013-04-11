@@ -31,6 +31,7 @@ end
 group :development do
   gem "populator"
   gem "faker"
+  gem "pivotal-github"
 end
 
 # Deploy with Capistrano
