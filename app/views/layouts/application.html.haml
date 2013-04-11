@@ -8,7 +8,11 @@
     - if content_for?(:description)
       %meta{"name" => "description", "content" => yield(:description)}
 
-    %title=  @title ? @title : "Logical Reality Design Default CMS Framework"
+    %title
+      - if content_for?(:title)
+        = yield(:title) + " - " + Rails.configuration.site_title
+      - else
+        = Rails.configuration.site_title
 
     = stylesheet_link_tag 'application', :media => :all
 

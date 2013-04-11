@@ -38,7 +38,7 @@ module LrdCms
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password, :pasword_confirmation]
-                               
+
     config.generators do |g|
       g.template_engine 'lrd:haml'
       g.test_framework :rspec, :fixture => true
@@ -50,6 +50,8 @@ module LrdCms
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+    config.site_title = "LRD Content Management Engine"
 
     Paperclip::Railtie.insert
   end
