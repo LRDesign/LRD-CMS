@@ -24,11 +24,11 @@ class Admin::LocationsController < Admin::AdminController
     @location = Location.new(params[:location])
 
     if @location.save
-      flash[:notice] = 'Location was successfully created.'
+      flash[:notice] = 'Menu Entry was successfully created.'
       if params[:from_page]
         redirect_to(edit_admin_page_path(:id => @location.page_id))
       else
-        redirect_to(admin_location_path(@location.id))
+        redirect_to(admin_locations_path)
       end
     else
       render :action => "new"
@@ -51,8 +51,8 @@ class Admin::LocationsController < Admin::AdminController
     end
 
     if @location.update_attributes(params[:location])
-      flash[:notice] = 'Location was successfully updated.'
-      redirect_to(admin_location_path(@location))
+      flash[:notice] = 'Meny Entry was successfully updated.'
+      redirect_to(admin_locations_path)
     else
       render :action => 'edit'
     end

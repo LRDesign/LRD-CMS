@@ -33,28 +33,24 @@ steps "Admin creates a menu", :type => :feature do
   end
 
   it "should open the new menu item form" do
-    click_link "New Location"
+    click_link "New Menu Entry"
     page.should have_css("form#new_location")
   end
 
   it "admin enters a root menu item" do
     fill_in "Name", :with => "home"
     fill_in "Path", :with => "/"
-    click_button "Save Location"
+    click_button "Save Menu Entry"
   end
 
   it "should show a menu item was created" do
-    page.should have_content("Location was successfully created.")
+    page.should have_content("Menu Entry was successfully created.")
     page.should have_content("home")
     page.should have_content("/")
   end
 
-  it "admin goes back to the menu item index" do
-    click_link "Back"
-  end
-
   it "should open the new menu item form" do
-    click_link "New Location"
+    click_link "New Menu Entry"
     page.should have_css("form#new_location")
   end
 
@@ -62,22 +58,18 @@ steps "Admin creates a menu", :type => :feature do
     fill_in "Name", :with => "Coolness"
     select "The Cool Page", :from => "Page"
     select "home", :from => "Parent"
-    click_button "Save Location"
+    click_button "Save Menu Entry"
   end
 
   it "should show the menu item was created" do
-    page.should have_content("Location was successfully created.")
+    page.should have_content("Menu Entry was successfully created.")
     page.should have_content("Coolness")
     page.should have_content("The Cool Page")
     @cool_menu = Location.last
-  end    
-
-  it "admin goes back to the menu item index" do
-    click_link "Back"
   end
 
   it "should open the new menu item form" do
-    click_link "New Location"
+    click_link "New Menu Entry"
     page.should have_css("form#new_location")
   end
 
@@ -85,15 +77,15 @@ steps "Admin creates a menu", :type => :feature do
     fill_in "Name", :with => "Just stupid"
     select "The Dumb Page", :from => "Page"
     select "home", :from => "Parent"
-    click_button "Save Location"
+    click_button "Save Menu Entry"
   end
 
   it "should show the menu item was created" do
-    page.should have_content("Location was successfully created.")
+    page.should have_content("Menu Entry was successfully created.")
     page.should have_content("Just stupid")
     page.should have_content("The Dumb Page")
     @dumb_menu = Location.last
-  end    
+  end
 
   it "admin visits the site homepage" do
     visit "/"
@@ -109,7 +101,7 @@ steps "Admin creates a menu", :type => :feature do
         within "li#location_#{@dumb_menu.id}" do
           page.should have_css("a[href='/dumb_page']")
           page.should have_content("Just stupid")
-        end        
+        end
       end
     end
   end
@@ -129,7 +121,7 @@ steps "Admin creates a menu", :type => :feature do
 
   it "and changes the order of menu items" do
     select "Last", :from => "Move to"
-    click_button "Save Location"
+    click_button "Save Menu Entry"
   end
 
   it "and goes back to the site homepage" do
@@ -139,8 +131,8 @@ steps "Admin creates a menu", :type => :feature do
   it "should show the menu in the new order" do
     within "div#nav" do
       within "ul#nav_menu" do
-        page.should have_css("li:nth-child(1)#location_#{@dumb_menu.id}") 
-        page.should have_css("li:nth-child(2)#location_#{@cool_menu.id}")        
+        page.should have_css("li:nth-child(1)#location_#{@dumb_menu.id}")
+        page.should have_css("li:nth-child(2)#location_#{@cool_menu.id}")
       end
     end
   end
