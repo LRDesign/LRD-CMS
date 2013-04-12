@@ -5,7 +5,8 @@ gem 'rails'
 # gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'pg'
 gem 'paperclip'
-gem "haml"
+gem "haml-rails"
+gem "sass-rails"
 gem "will_paginate", "~> 3.0.beta"
 gem 'tinymce-rails'
 gem 'authlogic'
