@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "/admin/pages/edit" do
 
   before(:each) do
-    assign(:page, @page = Factory(:page) )
+    assign(:page, @page = FactoryGirl.build(:page) )
   end
 
   it "should succeed" do

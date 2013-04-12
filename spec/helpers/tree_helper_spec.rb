@@ -5,14 +5,14 @@ describe TreeHelper do
   #   +-e
   #   \-f-+-g
   #       \-h
-  let (:a) { Factory(:location, :path => "a", :name => "a") }
-  let (:b) { Factory(:location, :path => "b", :name => "b", :parent => a) }
-  let (:c) { Factory(:location, :path => "c", :name => "c", :parent => b) }
-  let!(:d) { Factory(:location, :path => "d", :name => "d", :parent => c) }
-  let!(:e) { Factory(:location, :path => "e", :name => "e", :parent => a) }
-  let (:f) { Factory(:location, :path => "f", :name => "f", :parent => a) }
-  let!(:g) { Factory(:location, :path => "g", :name => "g", :parent => f) }
-  let!(:h) { Factory(:location, :path => "h", :name => "h", :parent => f) }
+  let (:a) { FactoryGirl.create(:location, :path => "a", :name => "a") }
+  let (:b) { FactoryGirl.create(:location, :path => "b", :name => "b", :parent => a) }
+  let (:c) { FactoryGirl.create(:location, :path => "c", :name => "c", :parent => b) }
+  let!(:d) { FactoryGirl.create(:location, :path => "d", :name => "d", :parent => c) }
+  let!(:e) { FactoryGirl.create(:location, :path => "e", :name => "e", :parent => a) }
+  let (:f) { FactoryGirl.create(:location, :path => "f", :name => "f", :parent => a) }
+  let!(:g) { FactoryGirl.create(:location, :path => "g", :name => "g", :parent => f) }
+  let!(:h) { FactoryGirl.create(:location, :path => "h", :name => "h", :parent => f) }
 
   it "should produce a correct tree for a node with no childen" do
     list_tree("shared/test_nav_node", "shared/test_nav_list", d.reload.descendants.all(:include => :page)).should match_dom_of <<-EOD
