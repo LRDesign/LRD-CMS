@@ -1,5 +1,7 @@
-Factory.define :image do |image|
-  image.image_file_name 'dummy'
-  image.image_file_size 1
-  image.image_content_type 'image/jpeg'
+FactoryGirl.define do
+  factory :image do
+    image_file_name 'dummy'
+    image_file_size 1
+    image_content_type 'image/jpeg'
+  end
 end

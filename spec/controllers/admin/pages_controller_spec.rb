@@ -4,7 +4,7 @@ describe Admin::PagesController do
   include UrlHelper
 
   before(:each) do
-    @page = Factory(:page)
+    @page = FactoryGirl.create(:page)
   end
 
   describe "while logged in" do

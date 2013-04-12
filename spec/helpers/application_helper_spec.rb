@@ -6,7 +6,7 @@ describe ApplicationHelper do
   describe "location path" do
     describe "when attached to page" do
       before(:each) do
-        @loc = Factory(:location_with_page)
+        @loc = FactoryGirl.create(:location_with_page)
       end
 
       it "uses page permalink" do
@@ -16,7 +16,7 @@ describe ApplicationHelper do
 
     describe "when not attached to page" do
       before(:each) do
-        @loc = Factory(:location_without_page)
+        @loc = FactoryGirl.create(:location_without_page)
       end
 
       it "uses loc.path" do

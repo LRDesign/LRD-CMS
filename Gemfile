@@ -24,6 +24,7 @@ group :development, :test do
   gem 'annotate'
   gem 'simplecov'
   gem 'capybara'
+  gem 'selenium-webdriver'
   gem 'database_cleaner'
   gem 'rspec-steps', ">= 0.0.6"
   gem 'debugger'

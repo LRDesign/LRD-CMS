@@ -4,7 +4,7 @@ describe Admin::Upload::DocumentsController do
   include DocumentTestHelper
 
   before(:each) do
-    @document = Factory(:document)
+    @document = FactoryGirl.create(:document)
   end
 
   describe "while logged in" do

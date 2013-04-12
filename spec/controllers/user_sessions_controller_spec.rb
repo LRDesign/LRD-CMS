@@ -4,9 +4,9 @@ describe UserSessionsController do
 
   before(:each) do
     activate_authlogic
-    @user = Factory(:user)
-    @user_session = Factory(:user_session)
-    @user = Factory(:user,
+    @user = FactoryGirl.create(:user)
+    @user_session = FactoryGirl.create(:user_session)
+    @user = FactoryGirl.create(:user,
       :password => 'password',
       :password_confirmation => 'password'
     )
