@@ -37,15 +37,15 @@ describe Location do
 
    describe "resolved path" do
      it "should return the page permalink if there's a page foreign key" do
-       page = FactoryGirl(:page, :permalink => 'some/address')
-       loc = FactoryGirl(:location, :path => 'foobar')
+       page = FactoryGirl.build(:page, :permalink => 'some/address')
+       loc = FactoryGirl.build(:location, :path => 'foobar')
        loc.page = page
        loc.save!
        loc.resolved_path.should == page.permalink
      end
 
      it "should return the location's path if there's no page foreign key" do
-       loc = FactoryGirl(:location, :path => 'foobar')
+       loc = FactoryGirl.build(:location, :path => 'foobar')
        loc.resolved_path.should == 'foobar'
      end
    end

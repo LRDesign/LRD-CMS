@@ -48,8 +48,8 @@ describe Page do
 
   describe "published scope" do
     before :each do
-      @page_1 = FactoryGirl(:page, :published => true)
-      @page_2 = FactoryGirl(:page, :published => false)
+      @page_1 = FactoryGirl.create(:page, :published => true)
+      @page_2 = FactoryGirl.build(:page, :published => false)
     end
     it "should include a published page" do
       Page.published.should include @page_1
