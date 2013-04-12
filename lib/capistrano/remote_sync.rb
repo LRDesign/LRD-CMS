@@ -1,6 +1,5 @@
 require 'yaml'
 require 'pathname'
-require 'ruby-debug'
 
 LOCAL_SQL_PATH = 'sqldumps/'
 
