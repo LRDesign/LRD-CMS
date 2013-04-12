@@ -40,8 +40,8 @@ describe User do
   describe "validations" do
     describe "uniqueness" do
       it "should not create two users with the same login" do
-        user_1 = Factory.create(:user, :login => 'foo')
-        user_2 = Factory.build(:user, :login => 'foo')
+        user_1 = FactoryGirl.create(:user, :login => 'foo')
+        user_2 = FactoryGirl.build(:user, :login => 'foo')
         user_2.should_not be_valid
       end
     end

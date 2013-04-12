@@ -27,25 +27,25 @@ describe Location do
    describe "validations" do
      describe "presence" do
        it "should not create a location with blank name" do
-         Factory.build(:location, :name => nil).should_not be_valid
+         FactoryGirl.build(:location, :name => nil).should_not be_valid
        end
       it "should allow alocation with a name" do
-        Factory.build(:location, :name => 'foo').should be_valid
+        FactoryGirl.build(:location, :name => 'foo').should be_valid
       end
      end
    end
 
    describe "resolved path" do
      it "should return the page permalink if there's a page foreign key" do
-       page = Factory(:page, :permalink => 'some/address')
-       loc = Factory(:location, :path => 'foobar')
+       page = FactoryGirl(:page, :permalink => 'some/address')
+       loc = FactoryGirl(:location, :path => 'foobar')
        loc.page = page
        loc.save!
        loc.resolved_path.should == page.permalink
      end
 
      it "should return the location's path if there's no page foreign key" do
-       loc = Factory(:location, :path => 'foobar')
+       loc = FactoryGirl(:location, :path => 'foobar')
        loc.resolved_path.should == 'foobar'
      end
    end

@@ -4,7 +4,7 @@ describe Admin::LocationsController do
 
   describe "logged in as admin" do
     before(:each) do
-      @location = Factory(:location)
+      @location = FactoryGirl.create(:location)
       authenticate('admin')
     end
 
@@ -113,10 +113,10 @@ describe Admin::LocationsController do
 
       describe "when moving a location" do
         before do
-          @parent = Factory(:location)
-          @l1 = Factory(:location, :name => "Location 1")
-          @l2 = Factory(:location, :name => "Location 2")
-          @l3 = Factory(:location, :name => "Location 3")
+          @parent = FactoryGirl.create(:location)
+          @l1 = FactoryGirl.create(:location, :name => "Location 1")
+          @l2 = FactoryGirl.create(:location, :name => "Location 2")
+          @l3 = FactoryGirl.create(:location, :name => "Location 3")
           @l1.move_to_child_of(@parent)
           @l2.move_to_child_of(@parent)
           @l3.move_to_child_of(@parent)

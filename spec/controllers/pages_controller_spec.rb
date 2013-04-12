@@ -3,8 +3,8 @@ require 'spec_helper'
 describe PagesController do
 
   before(:each) do
-    @page = Factory(:page)
-    @unpublished_page = Factory(:unpublished_page)
+    @page = FactoryGirl.create(:page)
+    @unpublished_page = FactoryGirl.create(:unpublished_page)
   end
 
   ########################################################################################
@@ -14,7 +14,7 @@ describe PagesController do
     it "should expose the requested published page as @page" do
       get :show, :permalink => @page.permalink
       assigns[:page].should == @page
-    end  
+    end
 
     describe "for a non-existent page" do
       it "should return status 404" do
@@ -25,8 +25,8 @@ describe PagesController do
 
     describe "for an unpublished page" do
       before(:each) do
-        get :show, 
-            :permalink => @unpublished_page.permalink 
+        get :show,
+            :permalink => @unpublished_page.permalink
       end
       it "should not expose the page as @page" do
         assigns[:page].should == nil
