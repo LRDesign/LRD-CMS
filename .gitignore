@@ -57,3 +57,4 @@ public/sitemap.xml
 .sass-cache/
 .simplecov
 coverage/
+*.orig
