@@ -4,7 +4,7 @@ describe "/admin/locations/edit" do
   include LocationsHelper
 
   before(:each) do
-    assign(:location, @location = FactoryGirl.build(:location) )
+    assign(:location, @location = FactoryGirl.create(:location) )
   end
 
   it "should succeed" do

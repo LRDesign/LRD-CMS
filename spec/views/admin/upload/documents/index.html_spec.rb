@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "/admin/upload/documents/index" do
   before(:each) do
-    assign(:documents, [ FactoryGirl.build(:document), FactoryGirl.build(:document) ])
+    assign(:documents, [ FactoryGirl.create(:document), FactoryGirl.create(:document) ])
   end
 
   it "should succeed" do
