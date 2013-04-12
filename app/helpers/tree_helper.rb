@@ -62,4 +62,20 @@ module TreeHelper
     list_tree("shared/nav_node", "shared/nav_list", home_location.descendants.all(:include => :page))
   end
 
+  def bottom_nav_menu(root_name)
+    home_location = Location.first(:conditions => {:name => root_name})
+
+    return "" unless home_location
+    Rails.logger.debug{ "Location tree being build from #{home_location.inspect}" }
+
+    list_tree("shared/bottom_nav_node", "shared/bottom_nav_list", home_location.descendants.all(:include => :page))
+  end
+
+  def nav_menu_link(node)
+    if (loc_path(node).include?("http"))
+      link_to(node.name, loc_path(node), :class => active_class(node), :target => :new)
+    else
+      link_to(node.name, loc_path(node), :class => active_class(node))
+    end
+  end
 end
