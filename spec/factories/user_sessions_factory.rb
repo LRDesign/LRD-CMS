@@ -1,4 +1,6 @@
-Factory.define :user_session do |user_session|
-  user_session.login 'admin'
-  user_session.password  'wxyz'
+FactoryGirl.define do
+  factory :user_session do
+    login 'admin'
+    password  'wxyz'
+  end
 end

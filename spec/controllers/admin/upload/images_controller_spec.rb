@@ -4,7 +4,7 @@ describe Admin::Upload::ImagesController do
   include ImageTestHelper
 
   before(:each) do
-    @image = Factory(:image)
+    @image = FactoryGirl.create(:image)
   end
 
   describe "while logged in" do

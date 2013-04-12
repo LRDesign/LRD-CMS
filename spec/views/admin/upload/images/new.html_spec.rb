@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "/admin/upload/images/new" do
   before(:each) do
-    assign(:image, Factory.build(:image))
+    assign(:image, FactoryGirl.build(:image))
   end
 
   it "should succeed" do
