@@ -1,24 +1,27 @@
 default_run_options[:pty] = true
-#ssh_options[:forward_agent] = true
+ssh_options[:forward_agent] = true
 
 # Overwrite the default deploy start/stop/restart actions with passenger ones
-require 'config/deploy/passenger'
+$:.push '.'
 require 'lib/capistrano/remote_sync'
+require 'lib/capistrano/passenger'
 require 'capistrano/ext/multistage'
 require 'bundler'
 require 'bundler/capistrano'
 set :bundle_without,  [:development, :test]
 
-set :repository,  "git@github.com:LRDesign/test-r3.git"
-# set :deploy_via, :remote_cache
+set :repository,  "git@github.com:LRDesign/LRD-CMS.git"
+#set :deploy_via, :remote_cache
 set :scm, 'git'
-# set :git_shallow_clone, 1
 set :scm_verbose, true
-set :git_enable_submodules, 1
 
 set :stages, %w(staging production)
 set :default_stage, 'staging'
 set :use_sudo, false
+
+set :user,   'root'
+set :runner, 'apache'
+set :group,  'apache'
 
 role(:app) { domain }
 role(:web) { domain }
@@ -31,19 +34,23 @@ namespace :deploy do
   end
 
   task :make_tmp_writable do
-    run "chgrp web #{release_path}/tmp"
+    run "chown #{runner}:#{group} #{release_path}/tmp"
     run "mkdir #{release_path}/tmp/cache"
-    run "chgrp -R web #{release_path}/tmp/cache"
-    run "chmod -R go+rw #{release_path}/tmp/cache"
+    run "chown -R #{runner}:#{group} #{release_path}/tmp/cache"
+    run "chmod -R g+rw #{release_path}/tmp"
   end
 
   task :make_sitemap_writable do
     file = "#{release_path}/public/sitemap.xml"
     run "touch #{file}"
-    run "chgrp web #{file}"
+    run "chown #{runner}:#{group} #{file}"
     run "chmod g+rw #{file}"
   end
 
+  after "deploy:setup", :setup_group
+  task :setup_group do
+    run "chown -R #{runner}:#{group} #{deploy_to} && chmod -R g+s #{deploy_to}"
+  end
 
   desc "Install the database"
   task :db_install do
@@ -58,5 +65,9 @@ namespace :sample_data do
   end
 end
 
-after 'deploy:update_code', 'deploy:link_shared_files', 'deploy:make_tmp_writable', 'deploy:make_sitemap_writable'
+# use this if assets precompile is on in capfile
+before "deploy:assets:precompile",'deploy:make_tmp_writable', 'deploy:make_sitemap_writable',  "deploy:link_shared_files"
 
+# use this if assets precompile is OFF in capfile
+#after "deploy:update_code", "deploy:link_shared_files",
+#"deploy:make_sitemap_writable"
