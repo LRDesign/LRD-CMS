@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe "/pages/show" do
   before(:each) do
-    activate_authlogic
     assign(:page, @page = FactoryGirl.build(:page))
     view.stub!(:params).and_return( :controller => 'pages', :action => 'show' )
   end
