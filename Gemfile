@@ -9,7 +9,7 @@ gem "haml-rails"
 gem "sass-rails"
 gem "will_paginate", "~> 3.0.beta"
 gem 'tinymce-rails'
-gem 'authlogic'
+gem 'devise'
 gem 'awesome_nested_set'
 gem 'jquery-rails'
 gem 'mizugumo', "0.1.0"

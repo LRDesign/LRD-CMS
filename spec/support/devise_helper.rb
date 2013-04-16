@@ -1,18 +1,18 @@
-module AuthlogicTestHelper
-  include Authlogic::TestCase
+module DeviseExtraTestHelper
+
   def current_user(stubs = {})
     return nil if current_user_session.nil?
-    current_user_session.user 
+    current_user_session.user
   end
-  
+
   alias :current_person :current_user
 
-  def current_user_session(stubs = {}, user_stubs = {}) 
+  def current_user_session(stubs = {}, user_stubs = {})
     @current_user_session = UserSession.find
-    # else  
+    # else
     #   @current_user_session ||= mock_model(UserSession, {:person => current_user(user_stubs)}.merge(stubs))
-    # end  
-  end    
+    # end
+  end
 
   def login_as(user)
     user = case user
@@ -23,33 +23,34 @@ module AuthlogicTestHelper
            else
              user
            end
-    @current_session = UserSession.create(user)
+    sign_in user
     user
   end
+  alias authenticate login_as
 
   def logout
-    @current_user_session = nil
-    UserSession.find.destroy if UserSession.find
-  end               
-
-  def authenticate(user)
-    activate_authlogic
-    login_as(user)
+    sign_out :user
   end
 
-  def enable_authlogic_without_login
-    activate_authlogic
+  def verify_authorization_successful
+    response.should_not redirect_to(login_path)
   end
+
+  def verify_authorization_unsuccessful
+    response.should redirect_to(login_path)
+  end
+
 end
 
 module RSpec::Rails::ControllerExampleGroup
-  include AuthlogicTestHelper
+  include DeviseExtraTestHelper
 end
 
 module RSpec::Rails::ViewExampleGroup
-  include AuthlogicTestHelper
+  include DeviseExtraTestHelper
 end
 
 module RSpec::Rails::HelperExampleGroup
-  include AuthlogicTestHelper
+  include DeviseExtraTestHelper
 end
+

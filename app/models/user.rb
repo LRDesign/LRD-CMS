@@ -24,10 +24,13 @@
 #
 
 class User < ActiveRecord::Base
-  acts_as_authentic do |c|
-    c.validate_email_field = false
+  devise :database_authenticatable, :registerable, :rememberable, :trackable, :validatable
+
+  def email_required?
+    false
   end
 
   attr_accessible :login, :password, :password_confirmation
   validates_presence_of :login
+  validates_uniqueness_of :login
 end
