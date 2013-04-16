@@ -11,8 +11,11 @@ LrdCms::Application.routes.draw do
   # resources :images, :controller => 'admin/upload/images'
   # resources :documents, :controller => 'admin/upload/documents'
 
-  resource :user_session
-  match '/login', :controller => :user_sessions, :action => "new"
+  devise_for :users
+  devise_scope :user do
+    get "/login" => "devise/sessions#new", :as => :login
+    match "/logout" => "devise/sessions#destroy", :as => :logout
+  end
 
   root :to => 'static#index'
 

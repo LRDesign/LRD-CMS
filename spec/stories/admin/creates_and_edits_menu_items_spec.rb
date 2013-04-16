@@ -8,8 +8,8 @@ steps "Admin creates a menu", :type => :feature do
   end
 
   it "when the admin logs in" do
-    fill_in("user_session_login", :with => "admin")
-    fill_in("user_session_password", :with => "wxyz")
+    fill_in("user_login", :with => "admin")
+    fill_in("user_password", :with => "wxyz")
     click_button("Login")
   end
 

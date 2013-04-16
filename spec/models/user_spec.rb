@@ -32,8 +32,8 @@ describe User do
       user.login.should == 'foo'
     end
     it "should not mass assign crypted_password" do
-      user = User.new(:crypted_password => 'foo')
-      user.crypted_password.should_not == 'foo'
+      user = User.new(:encrypted_password => 'foo')
+      user.encrypted_password.should_not == 'foo'
     end
   end
 
