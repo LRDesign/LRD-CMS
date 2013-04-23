@@ -8,7 +8,7 @@ class PagesController < ApplicationController
       # to the view even if it won't be rendered.
       @page = nil
       Rails.logger.info{"Returning 404 for #{path}"}
-      render "public/404.html", :status => 404
+      render "public/404", :format => [:html],  :status => 404
     end
     @title = @page.title if @page
   end
