@@ -49,7 +49,6 @@ module TreeHelper
   end
 
   def nav_menu(root_name)
-    Rails.logger.info "******************* Nav menu for #{root_name}"
     location_tree(root_name)
   end
 
