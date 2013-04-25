@@ -61,8 +61,9 @@ Capistrano::Configuration.instance.load do
         local_filename = File.join(LOCAL_SQL_PATH, filename)
         remote_dir = File.join(shared_path, REMOTE_SQL_PATH, 'latest.pg')
         remote_filename = File.join(
-          remote_dir,
-          Dir.new(remote_dir).find { |f| ['latest.pg.gz', 'latest.pg'].include?(f) }
+            remote_dir,
+            Dir.new(remote_dir).find { |f| ['latest.pg.gz', 'latest.pg'].include?(f) }
+          )
         end
         Dir.mkdir(LOCAL_SQL_PATH) unless Dir.exists?(LOCAL_SQL_PATH)
 
