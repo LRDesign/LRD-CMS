@@ -64,7 +64,6 @@ Capistrano::Configuration.instance.load do
             remote_dir,
             Dir.new(remote_dir).find { |f| ['latest.pg.gz', 'latest.pg'].include?(f) }
           )
-        end
         Dir.mkdir(LOCAL_SQL_PATH) unless Dir.exists?(LOCAL_SQL_PATH)
 
         # Remote DB dump
