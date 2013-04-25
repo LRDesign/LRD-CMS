@@ -82,20 +82,21 @@ namespace :db do
       require 'pathname'
       filename = Pathname.new(filename).realpath
 
-      # uncompress if it's gzipped
+      # uncompress to a temp file, if it's gzipped
       if filename.to_s =~ /\.gz$/
-       system "gunzip -c #{filename} > #{BACKUP_DIR}/__tmp__.pg"
-       filename = "#{BACKUP_DIR}/__tmp__.pg"
+       tmpfile = Tempfile.new('db')
+       system "gunzip -c #{filename} > #{tmpfile.path}"
+       filename = tmpfile.path
       end
       p "filename is" => filename
       db_config = DatabaseConfig::read
-      p "database config:" => db_config
       p "wipe command: #{PostgresCommands.wipe_db_command(db_config)}"
       system(PostgresCommands.wipe_db_command(db_config))
       system(PostgresCommands.create_db_command(db_config))
       cmd = PostgresCommands.restore_backup_command(db_config, filename)
       puts "Running command: " + cmd
       system(cmd)
+      tmpfile.unlink if  defined?(tmpfile)
     end
 
     desc "Load only persistent tables"
