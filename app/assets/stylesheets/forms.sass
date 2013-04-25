@@ -3,7 +3,7 @@
 form
   :margin-top .5em
   :margin-bottom .5em
-  
+
 .form_section
   :clear both
   :margin-top 1em
@@ -14,16 +14,16 @@ form
     :margin-top .25em
     :padding-left 1em
     :border-bottom 1px solid #aaa
-    
-    
-.form_section:after  
+
+
+.form_section:after
   +clearfix
 
 .labeled_input
   :margin-bottom .25em
   :margin-left 1em
   :clear both
-  
+
   label
     :display block
     :float left
@@ -33,7 +33,7 @@ form
     :margin-right 1em
 
   .assignable
-  
+
   .comment
     :display inline
     :font-style italic
@@ -45,9 +45,9 @@ form
 
 .required label
   :font-weight bold
-  
-  
-.errorExplanation
+
+
+.error_explanation
   +error_notice_colors
   :padding 1em
   :margin-bottom 1em
@@ -56,14 +56,14 @@ form
     :font-size 120%
     :color black
     :margin-top 0
-    
+
   p, ul
     :margin-bottom 0.5em
 
-.fieldWithErrors
+.field_with_errors
   :display inline
   label
     :color red
 
-  input, textarea  
-    :background-color $error_background  
+  input, textarea
+    :background-color $error_background
