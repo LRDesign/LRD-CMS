@@ -1,6 +1,27 @@
+require 'postgres_commands'
+require 'database_config'
+require 'backup_utilities'
+
 BACKUP_DIR = Rails.root + 'db_backups'
 
+# DROP DATABASE
+#psql -U postgres -h lrd-dev -c 'drop database thefriendex_dev'
 
+# CREATE DATABASE
+#createdb -h lrd-dev -U postgres -T template0 thefriendex_dev
+
+# RESTORE FULL DATABASE
+#pg_restore -h lrd-dev -U postgres -d thefriendex_dev db_backups/frx.pg
+
+# BACKUP DATABASE WITH TOC
+# <backup database, is already correct below>
+
+# RESTORE only pages and categories
+# pg_restore -l db_backups/frx.pg  > TOCFILE
+#
+# <edit tocfile to comment out all TABLE DATA lines except:
+#   [ geometry_columns, pages, categories, schema_migrations, spacial_ref_sys ]
+# pg_restore -h lrd-dev -U postgres -d thefriendex_dev db_backups/frx.pg -L db_backups/frxtoc
 
 namespace :db do
   namespace :backups do
@@ -17,94 +38,94 @@ namespace :db do
 
     desc "Remove excess backups, keeping hourlies for 3 days and dailies for one month"
     task :purge do
-      purge_excess_backups(BACKUP_DIR)
+      BackupUtilities.purge_excess_backups(BACKUP_DIR)
     end
 
-    # Defaults to production environment
-    # call with arg like  'rake db:backups:create[development]'
-    # for development (or other) environment
-    desc "backup the database using mysqldump"
-    task :create, :env do |t, args|
-      # puts "args were #{args}"
-      env = args[:env] || 'production'
-      username, password, database, host  = database_config(env)
-      filename = "#{database}_#{Time.now.strftime("%Y-%m-%d_%H:%M")}.sql.bz2"
+    # defaults to development enviroment
+    # call with env like  'RAILS_ENV=production rake db:backups:restore'
+    # for production (or other) environment
+    desc "backup the database"
+    task :create, [:dir, :filename] do |t, args|
+      puts "args were #{args}"
+      env = ENV['RAILS_ENV'] || 'development'
+      dir = args[:dir] || ENV['DIR'] || BACKUP_DIR
+      db_config = DatabaseConfig::read
 
-      system("mkdir -p #{BACKUP_DIR}/")
+      if args[:filename]
+        filename = "#{dir}/#{args[:filename]}"
+      end
 
-      cmd = dump_command(username, password, database, host, filename)
-      # puts cmd
+      filename ||= "#{dir}/#{db_config['database']}_#{Time.now.strftime('%Y-%m-%d_%H:%M')}.pg"
+
+      system("mkdir -p #{dir}/")
+
+      cmd = PostgresCommands.backup_command(db_config, filename)
+      puts "Running command: " + cmd
       system(cmd)
-      system "ln -sfn #{BACKUP_DIR}/#{filename} #{BACKUP_DIR}/latest.sql.bz2"
+      system "gzip #{filename}"
+      system "ln -sfn #{filename}.gz #{dir}/latest.pg.gz"
     end
-  end
-end
 
-def dump_command(username, password, database, host, filename)
-  sections = [ "mysqldump" ]
-  sections << "-u #{username}" if username
-  sections << "--password='#{password}'" if password
-  sections << "-h #{host}" if host
-  sections << "#{database}" if database
-  sections << "| bzip2 --best > #{BACKUP_DIR}/#{filename}"
-  sections.join(' ')
-end
+    # defaults to development enviroment
+    # call with env like  'RAILS_ENV=production rake db:backups:restore'
+    # for production (or other) environment
+    desc 'restore the database backup, defaults to development db'
+    task :restore, [:file] do |t, args|
+      env = ENV['RAILS_ENV'] || 'development'
+      filename = args[:file] || ENV['BACKUP_FILE']
 
-# Reads the database credentials from the local config/database.yml file
-# +db+ the name of the environment to get the credentials for
-# Returns username, password, database
-#
-def database_config(db)
-  puts "database config called for #{db}"
-  database = YAML::load_file('config/database.yml')
-  return (database["#{db}"]['username'] || database["#{db}"]['user']), database["#{db}"]['password'], database["#{db}"]['database'], database["#{db}"]['host']
-end
+      # If a name wasn't passed, try to use the most recent backup in the
+      # standard dir.
+      unless filename
+        filename = "#{BACKUP_DIR}/" + Dir.new(BACKUP_DIR).find { |f| ['latest.pg.gz', 'latest.pg'].include?(f) }
+      end
+      require 'pathname'
+      filename = Pathname.new(filename).realpath
 
+      # uncompress if it's gzipped
+      if filename.to_s =~ /\.gz$/
+       system "gunzip -c #{filename} > #{BACKUP_DIR}/__tmp__.pg"
+       filename = "#{BACKUP_DIR}/__tmp__.pg"
+      end
+      p "filename is" => filename
+      db_config = DatabaseConfig::read
+      p "database config:" => db_config
+      p "wipe command: #{PostgresCommands.wipe_db_command(db_config)}"
+      system(PostgresCommands.wipe_db_command(db_config))
+      system(PostgresCommands.create_db_command(db_config))
+      cmd = PostgresCommands.restore_backup_command(db_config, filename)
+      puts "Running command: " + cmd
+      system(cmd)
+    end
 
-require 'date'
+    desc "Load only persistent tables"
+    task :restore_only_persistent_data  do
+      backup_dir = Rails.root + '/db_backups'
+      db_file = ENV['DB_FILE'] ||  "#{BACKUP_DIR}/latest.pg"
+      tocfile = "#{BACKUP_DIR}/tocfile"
+      system(PostgresCommands.generate_tocfile(db_file, tocfile))
 
-def purge_excess_backups(path)
-  Dir.foreach(path) do |name|
-    next if name == '.' or name == '..'
-
-    full_name = File.join(path, name)
-    #puts "#{full_name} "
-
-    if File.ftype(full_name) == "file"
-      #age = Time.now - File.mtime(full_name)
-      # conjure the age of the backup from the date embedded in
-      # the filename
-      d = date_from_filename(name)
-      unless d.nil?
-        age = Time.now - date_from_filename(name)
-        if(age > 1.month)     #older than one month
-          #put "older than 1mo"
-          File.delete(full_name)  unless first_of_month(name)
-        elsif (age > 7.days)
-          File.delete(full_name)  unless first_of_day(name)
+      # <edit tocfile to comment out all TABLE DATA lines except:
+      #   [ geometry_columns, pages, categories, schema_migrations, spacial_ref_sys ]
+      keep_tables = [ /geometry_columns/, / pages /, / categories /, /schema_migrations/, /spacial_ref_sys/ ]
+      lines = IO.readlines(tocfile).map do |line|
+        if line =~ /TABLE DATA/ and (! keep_tables.any?{ |rx| line =~ rx })
+          '#' + line
+        else
+          line
         end
       end
+      File.open(tocfile, 'w') do |file|
+        file.puts lines
+      end
+
+      db_config = DatabaseConfig::read
+      system(PostgresCommands.wipe_db_command(db_config))
+      system(PostgresCommands.create_db_command(db_config))
+      system(PostgresCommands.load_with_tocfile(db_config, db_file, tocfile))
     end
+
   end
 end
 
-def first_of_month(fname)
-  #The backup at midnight on the first of the month
-  #YYYY-MM-01_07-00
-  fname =~ /\d{4}-\d{2}-01_00:0./
-end
 
-def first_of_day(fname)
-  #The backup at midnight on a day
-  #YYYY-MM-DD_07-00
-  fname =~ /\d{4}-\d{2}-\d{2}_00:0./
-end
-
-def date_from_filename(fname)
-  /(\d{4})-(\d{2})-(\d{2})_(\d{2}):(\d{2})/.match(fname)
-  if $1 and $2 and $3 and $4 and $5
-    Time::local($1.to_i,$2.to_i,$3.to_i,$4.to_i,$5.to_i)
-  else
-    nil
-  end
-end
