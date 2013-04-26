@@ -16,6 +16,10 @@ gem 'mizugumo', "0.1.0"
 gem 'lrd_view_tools'
 gem 'dynamic_form'
 
+group :assets do
+  gem 'turbo-sprockets-rails3'
+end
+
 group :development, :test do
   gem "rspec", ">= 2.1.0"
   gem "rspec-rails", ">= 2.1.0"
