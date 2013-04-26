@@ -2,6 +2,7 @@ module PostgresCommands
 
   def backup_command(config, destination)
     parts = [ "pg_dump -Fc" ]
+    parts.unshift password_env(config)
     parts += command_parts(config)
     parts += [ "-f #{destination}" ]
     parts << "#{config['database']}" if config['database']
@@ -13,6 +14,7 @@ module PostgresCommands
 #pg_restore -h lrd-dev -U postgres -d thefriendex_dev db_backups/frx.pg
   def restore_backup_command(config, source_file)
     parts = [ "pg_restore -c" ]
+    parts.unshift password_env(config)
     parts += command_parts(config)
     parts << "-d #{config['database']}" if config['database']
     parts << "#{source_file}"
@@ -22,6 +24,7 @@ module PostgresCommands
 
   def save_tables_command(config)
     parts = [ "pg_dump -F c" ]
+    parts.unshift password_env(config)
     parts += command_parts(config)
     parts += table_parts(config)
     parts += [ "-f #{DATA_LOCATION}" ]
@@ -35,6 +38,7 @@ module PostgresCommands
   #psql -U postgres -h lrd-dev -c 'drop database thefriendex_dev'
   def wipe_db_command(config)
     parts = [ 'psql postgres' ] #connect to the master database
+    parts.unshift password_env(config)
     parts += command_parts(config)
     parts << "-c 'drop database #{config['database']}'"
     parts.join(' ')
@@ -45,6 +49,7 @@ module PostgresCommands
   #createdb -h lrd-dev -U postgres -T template0 thefriendex_dev
   def create_db_command(config)
     parts = [ 'createdb' ]
+    parts.unshift password_env(config)
     parts += command_parts(config)
     parts << "-T template0 #{config['database']}"
     parts.join(' ')
@@ -61,6 +66,7 @@ module PostgresCommands
   # db_backups/frxtoc
   def load_with_tocfile(config, source_file, tocfile)
     parts = [ "pg_restore" ]
+    parts.unshift password_env(config)
     parts += command_parts(config)
     parts << "-d #{config['database']}" if config['database']
     parts << "#{source_file}"
@@ -71,6 +77,7 @@ module PostgresCommands
 
   def wipe_command(config)
     parts = [ 'psql' ]
+    parts.unshift password_env(config)
     parts += command_parts(config)
     parts << "-d #{config['database']}" if config['database']
     parts << "-c '"
@@ -82,6 +89,7 @@ module PostgresCommands
 
   def load_command(config)
     parts = [ 'pg_restore' ]
+    parts.unshift password_env(config)
     parts += command_parts(config)
     parts += table_parts(config)
     parts << "-d #{config['database']}" if config['database']
@@ -93,10 +101,14 @@ module PostgresCommands
   def command_parts(config)
     parts = []
     parts << "-U #{config['username']}" if config['username']
-    parts << "--password='#{config['password']}'" if config['password']
     parts << "-h #{config['host']}" if config['host']
   end
   module_function :command_parts
+
+  def password_env(config)
+    "PGPASSWORD='#{config['password']}'" if config['password']
+  end
+  module_function :password_env
 
   def table_parts(config)
     parts = []

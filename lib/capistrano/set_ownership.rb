@@ -14,6 +14,12 @@ Capistrano::Configuration.instance.load do
       run "chmod 0666 #{shared_path}/log/*.log"
       make_tmp_writable
       make_sitemap_writable
+      make_scripts_runnable
+    end
+
+    task :make_scripts_runnable do
+      run "chown root:#{group} #{release_path}/scripts/*"
+      run "chmod ug+x #{release_path}/scripts/*"
     end
 
     task :make_tmp_writable do
