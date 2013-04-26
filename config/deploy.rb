@@ -5,6 +5,7 @@ ssh_options[:forward_agent] = true
 $:.push '.'
 require 'lib/capistrano/remote_sync'
 require 'lib/capistrano/passenger'
+require 'lib/capistrano/set_ownership'
 require 'capistrano/ext/multistage'
 require 'bundler'
 require 'bundler/capistrano'
