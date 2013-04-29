@@ -4,7 +4,6 @@ gem 'rails'
 
 # gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'pg'
-gem 'paperclip'
 gem "haml-rails"
 gem "sass-rails"
 gem "will_paginate", "~> 3.0.beta"
@@ -15,6 +14,8 @@ gem 'jquery-rails'
 gem 'mizugumo', "0.1.0"
 gem 'lrd_view_tools'
 gem 'dynamic_form'
+gem 'carrierwave'
+gem "mini_magick"
 
 group :assets do
   gem 'turbo-sprockets-rails3'

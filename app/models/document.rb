@@ -15,6 +15,6 @@ class Document < ActiveRecord::Base
 
   attr_accessible :data
 
-  has_attached_file :data
-  validates_attachment_presence :data
+  mount_uploader :data, DocUploader, :mount_on => :data_file_name
+  validates_integrity_of :data
 end

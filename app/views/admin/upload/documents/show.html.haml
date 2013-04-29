@@ -1,6 +1,6 @@
 - set_headline "Document: #{h @document.data_file_name}"
  
-= link_to(@document.data_file_name, @document.data.url)
+= link_to(@document.data.identifier, @document.data.url)
 %br
 
 %input{:type => 'text', :value => @document.data.url, :size => 80}
