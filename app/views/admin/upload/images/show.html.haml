@@ -1,26 +1,26 @@
-- set_headline "Image: #{h @image.image_file_name}"
+- set_headline "Image: #{h @image.image.identifier}"
 
 %div.uploaded_image#full
   %h2 Full Size 
   = image_tag(@image.image.url)
   %br
 
-  = link_to(@image.image_file_name, @image.image.url)
+  = link_to(@image.image.identifier, @image.image.url)
   %br
 
   %input{:type => 'text', :value => @image.image.url, :size => 80}
   %br
 
-- LRD::ImageStyles.each_key do |style|
+- ImageUploader.versions.each_key do |style|
   %div.uploaded_image{:id => style}
     %h2= style.to_s.capitalize
-    = image_tag(@image.image.url(style))
+    = image_tag(@image.image.send(style).url)
     %br
 
-    = link_to(@image.image_file_name, @image.image.url(style))
+    = link_to(@image.image.identifier, @image.image.send(style).url)
     %br
 
-    %input{:type => 'text', :value => @image.image.url(style), :size => 80}
+    %input{:type => 'text', :value => @image.image.send(style).url, :size => 80}
     %br
 
 = link_to 'Back', admin_upload_images_path

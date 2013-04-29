@@ -51,8 +51,13 @@ module LrdCms
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
+<<<<<<< HEAD
     config.site_title = "LRD Content Management Engine"
 
     Paperclip::Railtie.insert
+=======
+    config.site_title = "Locaverse"
+    
+>>>>>>> b8dfeb0... CarrierWave Conversion
   end
 end

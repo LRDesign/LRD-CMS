@@ -8,7 +8,7 @@
 
   - for document in @documents
     %tr
-      %td= document.data_file_name
+      %td= document.data.identifier
       %td= link_to 'Show', admin_upload_document_path(document)
       %td= link_to 'Destroy', admin_upload_document_path(document), :confirm => 'Are you sure?', :method => :delete
 
