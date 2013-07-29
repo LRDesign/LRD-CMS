@@ -15,7 +15,6 @@ class Image < ActiveRecord::Base
 
   attr_accessible :image
 
-  has_attached_file :image, :styles => LRD::ImageStyles
-  validates_attachment_presence :image
-  validates_attachment_content_type :image, :content_type => /image.*/
+  mount_uploader :image, ImageUploader, :mount_on => :image_file_name
+  validates_integrity_of :image
 end
