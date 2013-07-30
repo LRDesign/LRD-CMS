@@ -34,6 +34,7 @@ group :development, :test do
   gem 'rspec-steps', ">= 0.0.6"
   gem 'debugger'
   gem 'quiet_assets'
+  gem 'poltergeist'
 end
 
 group :development do
