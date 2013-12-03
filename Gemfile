@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails'
+gem 'rails', "~> 3.2"
 
 # gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'pg'
