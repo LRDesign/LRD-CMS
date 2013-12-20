@@ -13,8 +13,6 @@
 
 class Image < ActiveRecord::Base
 
-  attr_accessible :image
-
   mount_uploader :image, ImageUploader, :mount_on => :image_file_name
   validates_integrity_of :image
 end

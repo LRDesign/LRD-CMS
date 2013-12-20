@@ -63,4 +63,8 @@ class Admin::LocationsController < Admin::AdminController
 
     redirect_to(admin_locations_url)
   end
+
+  def location_params
+    params[:location].permit(:name, :path, :parent_id, :page_id, :parent, :page)
+  end
 end

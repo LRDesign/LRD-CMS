@@ -1,77 +1,17 @@
 require 'capybara/rspec'
-require 'selenium-webdriver'
+#require 'selenium-webdriver'
+require 'capybara/poltergeist'
 require 'rspec-steps'
 
 Capybara.register_driver(:selenium_chrome) do |app|
   Capybara::Selenium::Driver.new(app, :browser => :chrome)
 end
 
-Capybara.default_driver = :selenium
-
-=begin
-module SaveAndOpenOnFail
-  def instance_eval(&block)
-    super(&block)
-  rescue Object => ex
-    wrapper = ex.exception("#{ex.message}\nLast view at: file://#{save_page}")
-    begin
-      wrapper.set_backtrace(ex.backtrace)
-    rescue
-    end
-    raise wrapper
-  end
+Capybara.register_driver :poltergeist_debug do |app|
+  Capybara::Poltergeist::Driver.new(app, :inspector => true)
 end
 
-#XXX Pause on error?  Pause every step?  Only on keyword is < debugger
-module PauseForReturn
-  def pause
-    if ENV["RSPEC_PAUSABLE"]
-      puts "Pausing (until [enter] at #{caller[0]}"
-      $stdin.gets
-    else
-      puts "Pause skipped (RSPEC_PAUSABLE unset) at #{caller[0]}"
-    end
-  end
-end
-
-module HandyXPaths
-  class Builder <  XPath::Expression::Self
-    include XPath::HTML
-    include RSpec::Core::Extensions::InstanceEvalWithArgs
-  end
-
-  module Attrs
-    def attrs(hash)
-      all(*hash.map do |name, value|
-        XPath.attr(name) == value
-      end)
-    end
-
-    def all(*expressions)
-      expressions.inject(current) do |chain, expression|
-        chain.where(expression)
-      end
-    end
-  end
-
-  def make_xpath(*args, &block)
-    xpath = Builder.new
-    unless block.nil?
-      xpath = xpath.instance_eval_with_args(*args, &block)
-    end
-    return xpath
-  end
-end
-
-module XPath
-  include HandyXPaths::Attrs
-  extend HandyXPaths::Attrs
-end
-
-class XPath::Expression
-  include HandyXPaths::Attrs
-end
-=end
+Capybara.javascript_driver = :poltergeist
 
 module CKEditorTools
   def fill_in_ckeditor(id, options = {})

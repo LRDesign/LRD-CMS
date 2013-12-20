@@ -14,12 +14,12 @@ LrdCms::Application.routes.draw do
   devise_for :users
   devise_scope :user do
     get "/login" => "devise/sessions#new", :as => :login
-    match "/logout" => "devise/sessions#destroy", :as => :logout
+    delete "/logout" => "devise/sessions#destroy", :as => :logout
   end
 
   root :to => 'static#index'
 
-  match '/*permalink', :controller => :pages, :action => 'show'
+  get '/*permalink', :controller => :pages, :action => 'show'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

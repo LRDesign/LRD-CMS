@@ -13,8 +13,6 @@
 
 class Document < ActiveRecord::Base
 
-  attr_accessible :data
-
   mount_uploader :data, DocUploader, :mount_on => :data_file_name
   validates_integrity_of :data
 end

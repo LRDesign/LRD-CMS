@@ -16,7 +16,7 @@ class Admin::Upload::DocumentsController < Admin::AdminController
 
   # POST /admin/upload/documents
   def create
-    @document = Document.new(params[:document])
+    @document = Document.new(params[:document].permit(:data))
 
     if @document.save
       redirect_to(admin_upload_document_path(@document), :notice => 'Document was successfully created.')

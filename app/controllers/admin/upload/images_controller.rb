@@ -16,7 +16,7 @@ class Admin::Upload::ImagesController < Admin::AdminController
 
   # POST /admin/upload/images
   def create
-    @image = Image.new(params[:image])
+    @image = Image.new(params[:image].permit(:image))
 
     if @image.save
       redirect_to(admin_upload_image_path(@image), :notice => 'Image was successfully created.')
