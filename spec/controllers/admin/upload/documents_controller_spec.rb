@@ -50,8 +50,8 @@ describe Admin::Upload::DocumentsController do
       describe "with valid params" do
         before(:each) do
           @doc = mock_document(:save => true)
-          Document.should_receive(:new).with({'these' => 'params'}).and_return(@doc)
-          post :create, :document => {:these => 'params'}
+          Document.should_receive(:new).with({'document' => 'uploaded_file'}).and_return(@doc)
+          post :create, :document => {:document => 'uploaded_file'}
         end
 
         it "should create a new document and expose it" do

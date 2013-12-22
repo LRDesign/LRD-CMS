@@ -16,6 +16,8 @@ class Admin::Upload::ImagesController < Admin::AdminController
 
   # POST /admin/upload/images
   def create
+    puts "params were"
+    p params
     @image = Image.new(params[:image].permit(:image))
 
     if @image.save

@@ -50,8 +50,8 @@ describe Admin::Upload::ImagesController do
       describe "with valid params" do
         before do
           @img = mock_proper_image(:save => true)
-          Image.should_receive(:new).with({'these' => 'params'}).and_return(@img)
-          post :create, :image => {:these => 'params'}
+          Image.should_receive(:new).with({'image' => 'uploaded_file'}).and_return(@img)
+          post :create, :image => {:image => 'uploaded_file'}
         end
 
         it "should create a new image and expose it" do
@@ -67,8 +67,8 @@ describe Admin::Upload::ImagesController do
         before do
           lambda do
             @img = mock_improper_image(:save => false)
-            Image.should_receive(:new).with({'these' => 'params'}).and_return(@img)
-            post :create, :image => {:these => 'params'}
+            Image.should_receive(:new).with({'image' => 'uploaded_file'}).and_return(@img)
+            post :create, :image => {:image => 'uploaded_file'}
           end.should_not change(Image, :count)
         end
 
