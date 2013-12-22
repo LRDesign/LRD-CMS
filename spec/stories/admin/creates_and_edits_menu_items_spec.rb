@@ -1,7 +1,7 @@
 require 'spec_helper'
 include TinyMCETools
 
-steps "Admin creates a menu", :type => :feature do
+steps "Admin creates a menu", :type => :feature, :pending => "implement fill_in_tinymce for phantomjs" do
 
   it "should load the login page" do
     visit '/login'
@@ -14,6 +14,7 @@ steps "Admin creates a menu", :type => :feature do
   end
 
   it "and creates two pages" do
+
     click_link "Edit Pages"
     click_link "New page"
     fill_in "Title",        :with => "The Cool Page"
