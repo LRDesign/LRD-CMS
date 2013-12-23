@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/collectiveidea/awesome_nested_set
+  revision: 215ad3b9649ec3adda4188513027507124c696f4
+  specs:
+    awesome_nested_set (3.0.0.rc.3)
+      activerecord (>= 4.0.0, < 5)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -30,8 +37,6 @@ GEM
       rake (>= 0.8.7)
     arel (4.0.1)
     atomic (1.1.14)
-    awesome_nested_set (2.1.6)
-      activerecord (>= 3.0.0)
     bcrypt-ruby (3.1.2)
     builder (3.1.4)
     capybara (2.2.0)
@@ -196,7 +201,7 @@ PLATFORMS
 
 DEPENDENCIES
   annotate
-  awesome_nested_set
+  awesome_nested_set!
   capybara
   carrierwave
   database_cleaner
@@ -208,7 +213,7 @@ DEPENDENCIES
   jquery-rails
   lrd_view_tools
   mini_magick
-  mizugumo (= 0.1.0)
+  mizugumo
   pg
   pivotal-github
   poltergeist

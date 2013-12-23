@@ -8,9 +8,9 @@ gem "haml-rails"
 gem "sass-rails"
 gem 'tinymce-rails'
 gem 'devise'
-gem 'awesome_nested_set'
+gem 'awesome_nested_set', :git => 'https://github.com/collectiveidea/awesome_nested_set'
 gem 'jquery-rails'
-gem 'mizugumo', "0.1.0"
+gem 'mizugumo'
 gem 'lrd_view_tools'
 gem 'dynamic_form'
 gem 'carrierwave'
