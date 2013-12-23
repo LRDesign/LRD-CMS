@@ -14,7 +14,7 @@ doc/api
 doc/app
 doc/*.doc
 doc/*.zip     
-config/initializers/session_secret.rb
+config/initializers/secret_token.rb
 db/schema.sql
 db/schema.rb
 db/*.sqlite3*
@@ -40,15 +40,10 @@ last_run
 vendor/**/**/doc/*
 vendor/plugins/footnotes/*
 rsa_key*
-sphinx/*
-config/ultrasphinx/*.conf
-public/stylesheets/screen.css
 doc/millsyncables*
 db/sphinx/*
-config/*.sphinx.conf
 system/datas/*
 sqldumps/*
-config/environments/test_*.rb 
 capybara*.html
 .bundle/*
 .rspec
@@ -59,3 +54,6 @@ public/sitemap.xml
 .simplecov
 coverage/
 *.orig
+.ruby-gemset
+.ruby-version
+*.swp

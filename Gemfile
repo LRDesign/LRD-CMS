@@ -1,17 +1,16 @@
 source 'http://rubygems.org'
 
-gem 'rails', "~> 3.2"
+gem 'rails', "~> 4.0"
 
 # gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'pg'
 gem "haml-rails"
 gem "sass-rails"
-gem "will_paginate", "~> 3.0.beta"
 gem 'tinymce-rails'
 gem 'devise'
-gem 'awesome_nested_set'
+gem 'awesome_nested_set', :git => 'https://github.com/collectiveidea/awesome_nested_set'
 gem 'jquery-rails'
-gem 'mizugumo', "0.1.0"
+gem 'mizugumo'
 gem 'lrd_view_tools'
 gem 'dynamic_form'
 gem 'carrierwave'
@@ -30,9 +29,10 @@ group :development, :test do
   gem 'simplecov'
   gem 'capybara'
   gem 'selenium-webdriver'
+  gem 'poltergeist'
   gem 'database_cleaner'
   gem 'rspec-steps', ">= 0.0.6"
-  gem 'debugger'
+  #gem 'debugger'
   gem 'quiet_assets'
 end
 

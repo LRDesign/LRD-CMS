@@ -19,8 +19,6 @@ require 'sitemap'
 
 class Page < ActiveRecord::Base
 
-  attr_accessible :title, :permalink, :content, :edited_at, :description,
-    :headline, :keywords, :published, :css
 
   validates_presence_of :title, :permalink
   validates_uniqueness_of :title, :permalink

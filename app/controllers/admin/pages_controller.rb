@@ -16,7 +16,7 @@ class Admin::PagesController < Admin::AdminController
 
   # POST /admin/pages
   def create
-    @page = Page.new(params[:page])
+    @page = Page.new(page_params)
 
     if @page.save
       redirect_to(page_path(@page), :notice => 'Page was successfully created.')
@@ -29,7 +29,7 @@ class Admin::PagesController < Admin::AdminController
   def update
     @page = Page.find(params[:id])
 
-    if @page.update_attributes(params[:page])
+    if @page.update_attributes(page_params)
       redirect_to(page_path(@page), :notice => 'Page was successfully updated.')
     else
       render :action => "edit"
@@ -47,4 +47,10 @@ class Admin::PagesController < Admin::AdminController
   # def page_path(page)
   #   "/#{page.permalink}"
   # end
+  #
+
+  def page_params
+    params[:page].permit(:title, :permalink, :content, :edited_at, :description,
+    :headline, :keywords, :published, :css)
+  end
 end

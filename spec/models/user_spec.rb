@@ -26,17 +26,6 @@
 require 'spec_helper'
 
 describe User do
-  describe "mass assignment" do
-    it "should mass assign login" do
-      user = User.new(:login => 'foo')
-      user.login.should == 'foo'
-    end
-    it "should not mass assign crypted_password" do
-      user = User.new(:encrypted_password => 'foo')
-      user.encrypted_password.should_not == 'foo'
-    end
-  end
-
   describe "validations" do
     describe "uniqueness" do
       it "should not create two users with the same login" do
@@ -46,5 +35,4 @@ describe User do
       end
     end
   end
-
 end

@@ -15,14 +15,14 @@ describe TreeHelper do
   let!(:h) { FactoryGirl.create(:location, :path => "h", :name => "h", :parent => f) }
 
   it "should produce a correct tree for a node with no childen" do
-    list_tree("shared/test_nav_node", "shared/test_nav_list", d.reload.descendants.all(:include => :page)).should match_dom_of <<-EOD
+    list_tree("shared/test_nav_node", "shared/test_nav_list", d.reload.descendants).should match_dom_of <<-EOD
 <ul>
 </ul>
     EOD
   end
 
   it "should produce a correct tree for a parent of a big tree" do
-    list_tree("shared/test_nav_node", "shared/test_nav_list", a.reload.descendants.all(:include => :page)).should match_dom_of <<-EOD
+    list_tree("shared/test_nav_node", "shared/test_nav_list", a.reload.descendants).should match_dom_of <<-EOD
 <ul>
 <li>
 <a href="b">b</a>

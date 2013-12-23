@@ -30,7 +30,6 @@ class User < ActiveRecord::Base
     false
   end
 
-  attr_accessible :login, :password, :password_confirmation
   validates_presence_of :login
   validates_uniqueness_of :login
 end

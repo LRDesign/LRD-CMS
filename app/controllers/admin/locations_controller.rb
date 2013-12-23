@@ -7,7 +7,7 @@ class Admin::LocationsController < Admin::AdminController
 
   # GET /locations/new
   def new
-    @location = Location.new(params[:location])
+    @location = Location.new()
   end
 
   # GET /locations/1/edit
@@ -17,7 +17,7 @@ class Admin::LocationsController < Admin::AdminController
 
   # POST /locations
   def create
-    @location = Location.new(params[:location])
+    @location = Location.new(location_params)
 
     if @location.save
       expire_fragment(NAV_MENU_CACHE)
@@ -48,8 +48,8 @@ class Admin::LocationsController < Admin::AdminController
       Rails.logger.debug{"Moved to #{@location.to_text}"}
     end
 
-    if @location.update_attributes(params[:location])
-      flash[:notice] = 'Meny Entry was successfully updated.'
+    if @location.update_attributes(location_params)
+      flash[:notice] = 'Menu Entry was successfully updated.'
       redirect_to(admin_locations_path)
     else
       render :action => 'edit'
@@ -62,5 +62,9 @@ class Admin::LocationsController < Admin::AdminController
     @location.destroy
 
     redirect_to(admin_locations_url)
+  end
+
+  def location_params
+    params[:location].permit(:name, :path, :parent_id, :page_id, :parent, :page)
   end
 end
