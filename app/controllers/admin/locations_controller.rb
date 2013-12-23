@@ -49,7 +49,7 @@ class Admin::LocationsController < Admin::AdminController
     end
 
     if @location.update_attributes(location_params)
-      flash[:notice] = 'Meny Entry was successfully updated.'
+      flash[:notice] = 'Menu Entry was successfully updated.'
       redirect_to(admin_locations_path)
     else
       render :action => 'edit'
