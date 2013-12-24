@@ -53,7 +53,7 @@ module TreeHelper
   end
 
   def location_tree(root_name, options=nil)
-    home_location = Location.first(:conditions => {:name => root_name})
+    home_location = Location.where(:name => root_name).first
 
     return "" unless home_location
     Rails.logger.debug{ "Location tree being build from #{home_location.inspect}" }
@@ -62,7 +62,7 @@ module TreeHelper
   end
 
   def bottom_nav_menu(root_name)
-    home_location = Location.first(:conditions => {:name => root_name})
+    home_location = Location.where(:name => root_name).first
 
     return "" unless home_location
     Rails.logger.debug{ "Location tree being build from #{home_location.inspect}" }

@@ -24,7 +24,6 @@ group :development, :test do
   gem "rspec", ">= 2.1.0"
   gem "rspec-rails", ">= 2.1.0"
   gem "factory_girl_rails"
-  gem "webrat"
   gem 'annotate'
   gem 'simplecov'
   gem 'capybara'
