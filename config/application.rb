@@ -35,15 +35,11 @@ module LrdCms
 
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
+    config.i18n.enforce_available_locales = true
+    config.i18n.default = :en
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password, :pasword_confirmation]
-
-    config.generators do |g|
-      g.template_engine 'lrd:haml'
-      g.test_framework :rspec, :fixture => true
-      g.fixture_replacement 'lrd:factory'
-    end
 
     # Enable the asset pipeline
     config.assets.enabled = true
