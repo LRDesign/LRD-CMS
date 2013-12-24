@@ -187,10 +187,6 @@ GEM
     tzinfo (0.3.38)
     warden (1.2.3)
       rack (>= 1.0)
-    webrat (0.7.3)
-      nokogiri (>= 1.2.0)
-      rack (>= 1.0)
-      rack-test (>= 0.5.3)
     websocket (1.0.7)
     websocket-driver (0.3.1)
     xpath (2.0.0)
@@ -228,4 +224,3 @@ DEPENDENCIES
   simplecov
   tinymce-rails
   turbo-sprockets-rails3
-  webrat

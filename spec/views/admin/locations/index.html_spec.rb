@@ -3,9 +3,8 @@ require 'spec_helper'
 describe "/admin/locations/index" do
   include LocationsHelper
 
-  before(:each) do
-    assign(:locations, [ FactoryGirl.create(:location), FactoryGirl.create(:location) ])
-  end
+  let!(:location) { FactoryGirl.create(:location)  }
+  before { assign(:location, location) }
 
   it "should succeed" do
     render

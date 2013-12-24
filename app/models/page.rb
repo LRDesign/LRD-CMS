@@ -19,7 +19,6 @@ require 'sitemap'
 
 class Page < ActiveRecord::Base
 
-
   validates_presence_of :title, :permalink
   validates_uniqueness_of :title, :permalink
 
@@ -27,8 +26,8 @@ class Page < ActiveRecord::Base
   after_update :regenerate_sitemap
   before_destroy :regenerate_sitemap
 
-  scope :published, where(:published => true)
-  scope :unpublished, where(:published => false)
+  scope :published, -> { where(:published => true) }
+  scope :unpublished, -> { where(:published => false) }
 
   def regenerate_sitemap
     Sitemap.create! unless Rails.env.test?
