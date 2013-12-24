@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "/admin/upload/images/new" do
   before(:each) do
-    assign(:image, FactoryGirl.build(:image))
+    assign(:image, Image.new)
   end
 
   it "should succeed" do
@@ -12,7 +12,7 @@ describe "/admin/upload/images/new" do
 
   it "should render new form" do
     render
-    rendered.should have_selector("form", :action => admin_upload_images_path, :method=> 'post')
+    rendered.should have_selector("form[action='#{admin_upload_images_path}'][method=post]")
   end
 end
 
