@@ -31,7 +31,7 @@ group :development, :test do
   gem 'poltergeist'
   gem 'database_cleaner'
   gem 'rspec-steps', ">= 0.0.6"
-  #gem 'debugger'
+  gem 'byebug'
   gem 'quiet_assets'
 end
 
