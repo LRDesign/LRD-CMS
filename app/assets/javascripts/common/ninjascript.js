@@ -2024,7 +2024,7 @@ define('ninja/behaviors',["ninja/exceptions"], function(Exceptions) {
       delete handlers.priority
       if (typeof handlers.events != "undefined") {
         this.eventHandlers = handlers.events
-      } 
+      }
       else {
         this.eventHandlers = handlers
       }
@@ -2032,7 +2032,7 @@ define('ninja/behaviors',["ninja/exceptions"], function(Exceptions) {
       return this
     }
 
-    behaviors.base.prototype = {   
+    behaviors.base.prototype = {
       //XXX applyTo?
       apply: function(elem) {
         var context = this.inContext({})
@@ -2103,7 +2103,7 @@ define('ninja/behaviors',["ninja/exceptions"], function(Exceptions) {
               config[i] == "overridesOthers") {
               fallThrough = false
             }
-            if (config[i] == "andDoDefault" || 
+            if (config[i] == "andDoDefault" ||
               config[i] == "continues" ||
               config[i] == "allowDefault") {
               stopDefault = false
@@ -2185,15 +2185,15 @@ define('ninja/behaviors',["ninja/exceptions"], function(Exceptions) {
           return result
         }
       },
-      transform: function(elem){ 
-        return elem 
+      transform: function(elem){
+        return elem
       }
     }
 
     return behaviors
   })
 define('sizzle-1.0',['require','exports','module'],function() {
-    /* 
+    /*
      * Sizzle CSS engine
      * Copyright 2009 The Dojo Foundation
      * Released under the MIT, BSD, and GPL Licenses.
@@ -2789,19 +2789,19 @@ define('sizzle-1.0',['require','exports','module'],function() {
             switch (type) {
             case 'only':
             case 'first':
-              while ( (node = node.previousSibling) )	 {
-                if ( node.nodeType === 1 ) { 
-                  return false; 
+              while ( (node = node.previousSibling) )  {
+                if ( node.nodeType === 1 ) {
+                  return false;
                 }
               }
-              if ( type === "first" ) { 
-                return true; 
+              if ( type === "first" ) {
+                return true;
               }
               node = elem;
             case 'last':
-              while ( (node = node.nextSibling) )	 {
-                if ( node.nodeType === 1 ) { 
-                  return false; 
+              while ( (node = node.nextSibling) )  {
+                if ( node.nodeType === 1 ) {
+                  return false;
                 }
               }
               return true;
@@ -2821,7 +2821,7 @@ define('sizzle-1.0',['require','exports','module'],function() {
                   if ( node.nodeType === 1 ) {
                     node.nodeIndex = ++count;
                   }
-                } 
+                }
                 parent.sizcache = doneName;
               }
 
@@ -3220,7 +3220,7 @@ define('sizzle-1.0',['require','exports','module'],function() {
 
       var isXML = function(elem){
         // documentElement is verified for cases where it doesn't yet exist
-        // (such as loading iframes in IE - #4833) 
+        // (such as loading iframes in IE - #4833)
         var documentElement = (elem ? elem.ownerDocument || elem : 0).documentElement;
         return documentElement ? documentElement.nodeName !== "HTML" : false;
       };
@@ -3739,7 +3739,7 @@ define('ninja/tools/json-dispatcher',["utils"], function(Utils) {
     /**
      * Intention is to use JSONHandler like this:
      *
-     * this.ajaxToJson({ 
+     * this.ajaxToJson({
      *   item: function(html) {
      *     $('#items').append($(html))
      *   },
@@ -4182,7 +4182,7 @@ define('ninja/behaviors/placeholder',["ninja"],
               return elem.parents('form')[0]
             },
             retainedInputAttributes: [
-              "name", "class", "style", "title", "lang", "dir", 
+              "name", "class", "style", "title", "lang", "dir",
               "size", "maxlength", "alt", "tabindex", "accesskey",
               "data-.*"
             ]
@@ -4283,7 +4283,7 @@ define('ninja/behaviors/placeholder',["ninja"],
 
                 if( textarea_placeholder) {
                   meta.asTextArea = null
-                } else { 
+                } else {
                   meta.asTextArea = hasPlaceholderText(configs)
                 }
               },
@@ -4311,7 +4311,7 @@ define('ninja/behaviors/trigger-on',["ninja"],
       return {
         triggersOnSelect: function(configs) {
           configs = Ninja.tools.ensureDefaults(configs,
-            { 
+            {
               busyElement: undefined,
               placeholderText: "Select to go",
               placeholderValue: "instructions"
@@ -4391,11 +4391,11 @@ define('ninja/behaviors/confirm',["ninja"],
   })
 define('ninja/behaviors/all',[
     "./utility",
-    "./standard", 
-    "./placeholder", 
+    "./standard",
+    "./placeholder",
     "./trigger-on",
     "./confirm"
-  ], 
+  ],
   function(){})
 define('ninja/tools/overlay',["utils", "ninja"],
   function(Utils, Ninja) {
@@ -4465,7 +4465,7 @@ define('ninja/tools/overlay',["utils", "ninja"],
 
     Ninja.packageTools({
         overlay: function() {
-          // I really liked using 
+          // I really liked using
           //return new Overlay([].map.apply(arguments,[function(i) {return i}]))
           //but IE8 doesn't implement ECMA 2.6.2 5th ed.
 

@@ -1,7 +1,7 @@
 require 'spec_helper'
 include TinyMCETools
 
-steps "Admin creates a page", :type => :feature, :pending => "implement fill_in_tinymce for phantomjs" do
+steps "Admin creates a page", :type => :feature, :js => true do
 
   it "should load the login page" do
     visit '/login'
@@ -73,8 +73,7 @@ steps "Admin creates a page", :type => :feature, :pending => "implement fill_in_
     within("tr#page_#{@pr.id}.page") do
       click_link "Delete"
     end
-    alert = page.driver.browser.switch_to.alert
-    alert.accept
+    accept_alert
   end
 
   it "should be removed from the Pages list" do
