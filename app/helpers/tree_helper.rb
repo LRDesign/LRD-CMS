@@ -58,7 +58,7 @@ module TreeHelper
     return "" unless home_location
     Rails.logger.debug{ "Location tree being build from #{home_location.inspect}" }
 
-    list_tree("shared/nav_node", "shared/nav_list", home_location.descendants.all(:include => :page))
+    list_tree("shared/nav_node", "shared/nav_list", home_location.descendants.includes(:page))
   end
 
   def bottom_nav_menu(root_name)
@@ -67,7 +67,7 @@ module TreeHelper
     return "" unless home_location
     Rails.logger.debug{ "Location tree being build from #{home_location.inspect}" }
 
-    list_tree("shared/bottom_nav_node", "shared/bottom_nav_list", home_location.descendants.all(:include => :page))
+    list_tree("shared/bottom_nav_node", "shared/bottom_nav_list", home_location.descendants.includes(:page))
   end
 
   def nav_menu_link(node)
