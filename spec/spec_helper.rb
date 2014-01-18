@@ -53,7 +53,7 @@ RSpec.configure do |config|
     load 'db/seeds.rb'
   end
 
-  config.after :each, :type => proc{ |value| not truncation_types.include?(value)} do
+  config.before :each, :type => proc{ |value| not truncation_types.include?(value)} do
     DatabaseCleaner.start
   end
 
