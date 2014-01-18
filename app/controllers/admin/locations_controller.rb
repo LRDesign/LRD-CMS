@@ -17,14 +17,11 @@ class Admin::LocationsController < Admin::AdminController
 
   # POST /locations
   def create
-    puts "\n#{__FILE__}:#{__LINE__} => #{params.inspect}"
     @location = Location.new(location_params)
 
-    puts "\n#{__FILE__}:#{__LINE__} => #{Location.all.to_a.inspect}"
     if @location.save
       expire_fragment(NAV_MENU_CACHE)
       flash[:notice] = 'Menu Entry was successfully created.'
-      puts "\n#{__FILE__}:#{__LINE__} => #{Location.all.to_a.inspect}"
       if params[:from_page]
         redirect_to(edit_admin_page_path(:id => @location.page_id))
       else
