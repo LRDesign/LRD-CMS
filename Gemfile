@@ -33,6 +33,7 @@ group :development, :test do
   gem 'rspec-steps', ">= 0.0.6"
   gem 'byebug'
   gem 'quiet_assets'
+  gem 'cadre'
 end
 
 group :development do
