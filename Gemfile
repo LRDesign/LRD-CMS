@@ -1,4 +1,4 @@
-source 'http://rubygems.org'
+source "https://rubygems.org"
 
 gem 'rails', "~> 4.0"
 
@@ -39,22 +39,5 @@ group :development do
   gem "populator"
   gem "faker"
   gem "pivotal-github"
+  gem 'sass-rails-source-maps'
 end
-
-# Deploy with Capistrano
-# gem 'capistrano'
-
-# Bundle the extra gems:
-# gem 'bj'
-# gem 'nokogiri'
-# gem 'aws-s3', :require => 'aws/s3'
-
-# Bundle gems for the local environment. Make sure to
-# put test-only gems in this group so their generators
-# and rake tasks are available in development mode:
-# group :development, :test do
-#   gem 'webrat'
-# end
-
-
-

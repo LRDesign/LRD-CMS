@@ -41,6 +41,7 @@ steps "Admin creates a menu", :type => :feature, :js => true do
   it "admin enters a root menu item" do
     fill_in "Name", :with => "home"
     fill_in "Path", :with => "/"
+    puts page.body
     click_button "Save Menu Entry"
   end
 
@@ -66,7 +67,6 @@ steps "Admin creates a menu", :type => :feature, :js => true do
     page.should have_content("Menu Entry was successfully created.")
     page.should have_content("Coolness")
     page.should have_content("The Cool Page")
-    @cool_menu = Location.last
   end
 
   it "should open the new menu item form" do
@@ -85,7 +85,6 @@ steps "Admin creates a menu", :type => :feature, :js => true do
     page.should have_content("Menu Entry was successfully created.")
     page.should have_content("Just stupid")
     page.should have_content("The Dumb Page")
-    @dumb_menu = Location.last
   end
 
   it "admin visits the site homepage" do

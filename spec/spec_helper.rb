@@ -34,6 +34,12 @@ RSpec.configure do |config|
 
   DatabaseCleaner.strategy = :transaction
 
+  config.before :suite do
+    File::open("log/test.log", "w") do |log|
+      log.write ""
+    end
+  end
+
   config.before :all, :type => :feature do
     Rails.application.config.action_dispatch.show_exceptions = true
     DatabaseCleaner.clean_with :truncation
