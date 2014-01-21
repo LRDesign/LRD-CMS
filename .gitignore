@@ -56,3 +56,6 @@ coverage/
 *.orig
 .ruby-gemset
 *.swp
+errors.err
+.cadre/
+spec/support/cadre.rb

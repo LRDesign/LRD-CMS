@@ -42,7 +42,7 @@ GEM
     byebug (2.5.0)
       columnize (~> 0.3.6)
       debugger-linecache (~> 1.2.0)
-    cadre (0.2.1)
+    cadre (0.2.2)
       thor (~> 0.18.1)
       tilt (~> 1.0)
       valise (~> 1.0)
