@@ -1,49 +1,10 @@
-!!!
-%html{"xmlns"=>"http://www.w3.org/1999/xhtml", "xml:lang"=>"en"}
+- content_for :main_content do
+  #content-wrap
+    -# = render :partial => 'layouts/aux'
 
-  %head
-    %meta{"http-equiv" => "content-type", "content" => "text/html;charset=UTF-8" }
-    - if content_for?(:keywords)
-      %meta{"name" => "keywords", "content" => yield(:keywords)}
-    - if content_for?(:description)
-      %meta{"name" => "description", "content" => yield(:description)}
-
-    %title
-      - if content_for?(:title)
-        = yield(:title) + " - " + Rails.configuration.site_title
-      - else
-        = Rails.configuration.site_title
-
-    = stylesheet_link_tag 'application', :media => :all
-
-    - if Rails.env.production?
-      = javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
-      = javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"
-    -else
-      = javascript_include_tag "jquery-1.9.1.js"
-      = javascript_include_tag "jquery-ui-1.10.2.js"
-
-    = javascript_include_tag 'application.js'
-
-    = csrf_meta_tag
-
-    %style{ :type => 'text/css', :media => 'screen, projection' }
-      = yield :page_css
-
-    = yield :header
-
-  %body{ :class => body_class }
-    = render :partial => 'layouts/admin_nav' if admin?
-    #inset
-      #wrap
-        #header
-          = render :partial => 'layouts/nav'
-
-        #content-wrap
-          -# = render :partial => 'layouts/aux'
-
-          #content
-            %h1= yield :headline if yield :headline
-            #content-body
-              = render :partial => 'layouts/flash' , :locals => { :flash => flash }
-              = yield
+    #content
+      %h1= yield :headline if yield :headline
+      #content-body
+        = render :partial => 'layouts/flash' , :locals => { :flash => flash }
+        = yield
+= render :file => 'layouts/boilerplate'
