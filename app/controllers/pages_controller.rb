@@ -3,13 +3,22 @@ class PagesController < ApplicationController
   def show
     path = params[:permalink]
     @page = Page.find_by_permalink(path)
-    if @page.nil? || !@page.published?
-      # If the page is unpublished, we don't want to expose it
-      # to the view even if it won't be rendered.
+
+    if !@page.nil? && (admin? || @page.published?)
+      if !@page.published?
+        flash.now[:notice] = "This page is not currently viewable by the public."
+      end
+
+      @title = @page.title
+      if @page.layout.nil?
+        render
+      else
+        render :layout => @page.layout
+      end
+    else
       @page = nil
       Rails.logger.info{"Returning 404 for #{path}"}
       render "public/404", :format => [:html],  :status => 404
     end
-    @title = @page.title if @page
   end
 end
