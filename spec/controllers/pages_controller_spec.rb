@@ -2,18 +2,17 @@ require 'spec_helper'
 
 describe PagesController do
 
-  before(:each) do
-    @page = FactoryGirl.create(:page)
-    @unpublished_page = FactoryGirl.create(:unpublished_page)
-  end
-
   ########################################################################################
   #                                      GET SHOW
   ########################################################################################
   describe "responding to GET show" do
+    let! :page do
+      FactoryGirl.create(:page)
+    end
+
     it "should expose the requested published page as @page" do
-      get :show, :permalink => @page.permalink
-      assigns[:page].should == @page
+      get :show, :permalink => page.permalink
+      assigns[:page].should == page
     end
 
     describe "for a non-existent page" do
@@ -24,9 +23,13 @@ describe PagesController do
     end
 
     describe "for an unpublished page" do
+      let! :page do
+        FactoryGirl.create(:page, :publish_end => Time.now - 1.day)
+      end
+
       before(:each) do
         get :show,
-            :permalink => @unpublished_page.permalink
+            :permalink => page.permalink
       end
       it "should not expose the page as @page" do
         assigns[:page].should == nil

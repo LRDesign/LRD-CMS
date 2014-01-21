@@ -28,9 +28,9 @@
 
   .form_section
     %h3 Advanced Options
-    - PAGE_LAYOUTS.size > 1
+    - if PAGE_LAYOUTS.size > 1
       .collapsed
-        = f.labeled)input :layout, :text => "Section" do
+        = f.labeled_input :layout, :text => "Section" do
           = f.select(:layout, PAGE_LAYOUTS)
     .collapsed
       = f.labeled_input :css, :text => 'CSS Styles' do

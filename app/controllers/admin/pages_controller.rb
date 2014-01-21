@@ -50,18 +50,15 @@ class Admin::PagesController < Admin::AdminController
   #
 
   def page_params
-    params[:page]
-  end
+    page_params = params.required(:page)
 
-  def page_attrs
-    params = page_params
-    if params.delete(:published)
-      params[:published_start] = Time.at(0)
+    if page_params.delete(:published)
+      page_params[:published_start] = Time.at(0)
     else
-      params[:published_end] = Time.at(0)
+      page_params[:published_end] = Time.at(0)
     end
 
-    params.permit(:title, :permalink, :content, :edited_at, :description,
+    page_params.permit(:title, :permalink, :content, :edited_at, :description,
                       :headline, :keywords, :publish_start, :publish_end, :css)
   end
 end
