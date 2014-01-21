@@ -34,21 +34,30 @@ RSpec.configure do |config|
 
   DatabaseCleaner.strategy = :transaction
 
-  config.before :all, :type => :feature do
+  config.before :suite do
+    File::open("log/test.log", "w") do |log|
+      log.write ""
+    end
+  end
+
+  truncation_types = [:feature]
+
+  config.before :all, :type => proc{ |value| truncation_types.include?(value)} do
     Rails.application.config.action_dispatch.show_exceptions = true
     DatabaseCleaner.clean_with :truncation
     load 'db/seeds.rb'
   end
 
-  config.after :all, :type => :feature do
+  config.after :all, :type => proc{ |value| truncation_types.include?(value)} do
     DatabaseCleaner.clean_with :truncation
     load 'db/seeds.rb'
   end
 
-  config.before :each, :type => proc{ |value| value != :request } do
+  config.before :each, :type => proc{ |value| not truncation_types.include?(value)} do
     DatabaseCleaner.start
   end
-  config.after :each, :type => proc{ |value| value != :request } do
+
+  config.after :each, :type => proc{ |value| not truncation_types.include?(value)} do
     DatabaseCleaner.clean
   end
 

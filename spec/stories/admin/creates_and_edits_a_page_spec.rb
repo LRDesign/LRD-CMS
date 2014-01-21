@@ -38,17 +38,16 @@ steps "Admin creates a page", :type => :feature, :js => true do
   end
 
   it "visits the page index page" do
-    @pr = Page.last
     click_link "Edit Pages"
     page.should have_css("a[href='/cool_page']")
-    page.should have_content(@pr.title)
+    page.should have_content("The Cool Page")
   end
 
   it "when the admin clicks edit" do
-    within("tr#page_#{@pr.id}.page") do
+    within(:xpath, "//tr[#{class_includes('page')}][.//a[@href='/cool_page']]") do
       click_link "Edit"
     end
-    page.should have_css("form#edit_page_#{@pr.id}")
+    page.should have_css("form.edit_page")
   end
 
   it "the admin edits the content" do
@@ -70,14 +69,14 @@ steps "Admin creates a page", :type => :feature, :js => true do
 
   #jdl: delete and prompt
   it "when the admin clicks delete" do
-    within("tr#page_#{@pr.id}.page") do
+    within(:xpath, "//tr[#{class_includes('page')}][.//a[@href='/cool_page']]") do
       click_link "Delete"
     end
     accept_alert
   end
 
   it "should be removed from the Pages list" do
-    page.should_not have_content(@pr.title)
+    page.should_not have_content("The Cool Page")
   end
 
   it "should no longer be visitable" do
