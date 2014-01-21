@@ -21,13 +21,25 @@ class Page < ActiveRecord::Base
 
   validates_presence_of :title, :permalink
   validates_uniqueness_of :title, :permalink
+  validates_inclusion_of :layout, :in => PAGE_LAYOUTS.values
 
   after_create :regenerate_sitemap
   after_update :regenerate_sitemap
   before_destroy :regenerate_sitemap
 
-  scope :published, -> { where(:published => true) }
-  scope :unpublished, -> { where(:published => false) }
+  has_many :locations
+
+  scope :published, ->do
+    where("(publish_start IS NULL OR publish_start < :now) AND (publish_end IS NULL OR publish_end > :now)", :now => Time.zone.now)
+  end
+
+  scope :unpublished, -> do
+    where("NOT ((publish_start IS NULL OR publish_start < :now) AND (publish_end IS NULL OR publish_end > :now))", :now => Time.zone.now)
+  end
+
+  def published?
+    (publish_start.nil? || publish_start <= Time.zone.now) && (publish_end.nil? || publish_end >= Time.zone.now)
+  end
 
   def regenerate_sitemap
     Sitemap.create! unless Rails.env.test?
