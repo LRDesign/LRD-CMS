@@ -66,7 +66,6 @@ steps "Admin creates a menu", :type => :feature, :js => true do
     page.should have_content("Menu Entry was successfully created.")
     page.should have_content("Coolness")
     page.should have_content("The Cool Page")
-    @cool_menu = Location.last
   end
 
   it "should open the new menu item form" do
@@ -85,7 +84,6 @@ steps "Admin creates a menu", :type => :feature, :js => true do
     page.should have_content("Menu Entry was successfully created.")
     page.should have_content("Just stupid")
     page.should have_content("The Dumb Page")
-    @dumb_menu = Location.last
   end
 
   it "admin visits the site homepage" do
@@ -95,12 +93,10 @@ steps "Admin creates a menu", :type => :feature, :js => true do
   it "should show the menu" do
     within "div#nav" do
       within "ul#nav_menu" do
-        within "li#location_#{@cool_menu.id}" do
-          page.should have_css("a[href='/cool_page']")
+        within :xpath, "//li[.//a[@href='/cool_page']]" do
           page.should have_content("Coolness")
         end
-        within "li#location_#{@dumb_menu.id}" do
-          page.should have_css("a[href='/dumb_page']")
+        within :xpath, "//li[.//a[@href='/dumb_page']]" do
           page.should have_content("Just stupid")
         end
       end
@@ -110,14 +106,14 @@ steps "Admin creates a menu", :type => :feature, :js => true do
   it "should visit the Edit Menu page" do
     click_link "Edit Menu"
     page.should have_css("a[href='/cool_page']")
-    page.should have_content(@cool_menu.name)
+    page.should have_content("Coolness")
   end
 
   it "when the admin clicks edit" do
-    within("tr#location_#{@cool_menu.id}") do
+    within(:xpath, "//table[#{class_includes('listing')}]//tr[.//td/a[@href='/cool_page']]") do
       click_link "Edit"
     end
-    page.should have_css("form#edit_location_#{@cool_menu.id}")
+    page.should have_css("form.edit_location")
   end
 
   it "and changes the order of menu items" do
@@ -132,8 +128,8 @@ steps "Admin creates a menu", :type => :feature, :js => true do
   it "should show the menu in the new order" do
     within "div#nav" do
       within "ul#nav_menu" do
-        page.should have_css("li:nth-child(1)#location_#{@dumb_menu.id}")
-        page.should have_css("li:nth-child(2)#location_#{@cool_menu.id}")
+        page.should have_xpath("//li[1]//a[contains(text(),'Just stupid')]")
+        page.should have_xpath("//li[2]//a[contains(text(),'Coolness')]")
       end
     end
   end

@@ -25,11 +25,27 @@ end
 
 module TinyMCETools
   def fill_in_tinymce(id, options = {})
-    raise "Must pass a hash containing 'with'" if not options.is_a?(Hash) or not options.has_key?(:with)
-    #raise "tiny MCE fill-in only works with Selenium driver" unless page.driver.class == Capybara::Selenium::Driver
+    content =
+      case options
+      when Hash
+        content = options.fetch(:with)
+      when String
+        options
+      else
+        raise "Must pass a string or a hash containing 'with'"
+      end
 
-    #browser = page.driver.browser
-    page.execute_script("$('##{id}').tinymce().setContent('#{options[:with]}')")
+    case page.driver
+    when Capybara::Selenium::Driver
+      page.execute_script("$('##{id}').tinymce().setContent('#{content}')")
+    when Capybara::Poltergeist::Driver
+      within_frame("#{id}_ifr") do
+        element = find("body")
+        element.native.send_keys(content)
+      end
+    else
+      raise "fill_in_tinymce called with unrecognized page.driver: #{page.driver.class.name}"
+    end
   end
 end
 
@@ -37,11 +53,26 @@ module BrowserTools
   def accept_alert
     if poltergeist?
       # do nothing ... really?
-      # http://blog.lucascaton.com.br/index.php/2012/06/14/replacing-selenium-by-poltergeist/
+      # https://github.com/jonleighton/poltergeist/issues/50
+      # Poltergeist's behavior is to return true to window.alert
+      # Does mean it's a challenge to test cancelling e.g. deletes, or
+      # confirming that an alert happens even
     else
       alert = page.driver.browser.switch_to.alert
       alert.accept
     end
+  end
+
+  #renders the xpath to properly match a css class (or other space separated
+  #attribute)
+  #Use like: div[#{attr_includes("class", "findme")}]
+  #
+  def attr_includes(attr, value)
+    "contains(concat(' ', normalize-space(@#{attr}), ' '), ' #{value} ')"
+  end
+
+  def class_includes(value)
+    attr_includes("class", value)
   end
 
   def wait_for_animation

@@ -30,5 +30,7 @@ LrdCms::Application.configure do
 
   config.assets.initialize_on_precompile = false
 
+  config.sass.line_comments = true
+  config.sass.cache = false
 end
 
