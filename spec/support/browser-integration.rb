@@ -9,7 +9,7 @@ Capybara.register_driver(:selenium_chrome) do |app|
 end
 
 Capybara.register_driver :poltergeist_debug do |app|
-  Capybara::Poltergeist::Driver.new(app, :inspector => true)
+  Capybara::Poltergeist::Driver.new(app, :inspector => true, :phantomjs_logger => StringIO.new, :js_errors => false)
 end
 
 Capybara.javascript_driver = (ENV['CAPYBARA_DRIVER'] || :poltergeist_debug).to_sym
