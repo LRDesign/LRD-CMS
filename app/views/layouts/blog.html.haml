@@ -1,0 +1,10 @@
+- content_for :main_content do
+  #content-wrap
+    #content
+      = render :partial => 'layouts/flash' , :locals => { :flash => flash }
+      - unless (yield :headline).blank?
+        %h1=raw yield :headline
+      #content-body
+        = yield
+  = render :partial => 'layouts/footer'
+= render :file => 'layouts/boilerplate'

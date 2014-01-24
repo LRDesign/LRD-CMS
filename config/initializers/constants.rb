@@ -6,7 +6,8 @@ STATIC_PATHS_FOR_SITEMAP = [
 ]
 
 PAGE_LAYOUTS = {
-  "Default" => nil
+  "Default" => nil,
+  "Blog" => "blog"
 }
 
 NAV_MENU_CACHE = "nav_menu"

@@ -1,13 +1,14 @@
 LrdCms::Application.routes.draw do
+
   namespace :admin do
     resources :images
     resources :documents
     resources :pages
     resources :locations
-  end
 
-  # resources :images, :controller => 'admin/upload/images'
-  # resources :documents, :controller => 'admin/upload/documents'
+    resources :blog_posts, :except => 'show'
+    resources :topics, :except => 'show'
+  end
 
   devise_for :users
   devise_scope :user do

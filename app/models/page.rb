@@ -29,12 +29,24 @@ class Page < ActiveRecord::Base
 
   has_many :locations
 
-  scope :published, ->do
+  scope :brochure, -> do
+    where(:layout => nil)
+  end
+
+  scope :blog, -> do
+    where(:layout => "blog")
+  end
+
+  scope :published, -> do
     where("(publish_start IS NULL OR publish_start < :now) AND (publish_end IS NULL OR publish_end > :now)", :now => Time.zone.now)
   end
 
   scope :unpublished, -> do
     where("NOT ((publish_start IS NULL OR publish_start < :now) AND (publish_end IS NULL OR publish_end > :now))", :now => Time.zone.now)
+  end
+
+  scope :most_recent, -> do
+    order(:updated_at => :desc).limit(5)
   end
 
   def published?

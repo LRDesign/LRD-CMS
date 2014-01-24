@@ -1,9 +1,8 @@
 class Admin::LocationsController < Admin::AdminController
   # GET /locations
   def index
-    @locations = Location.all
+    @locations = location_scope.all
   end
-
 
   # GET /locations/new
   def new
@@ -13,6 +12,7 @@ class Admin::LocationsController < Admin::AdminController
   # GET /locations/1/edit
   def edit
     @location = Location.find(params[:id])
+    @location_scope = location_scope
   end
 
   # POST /locations
@@ -58,13 +58,19 @@ class Admin::LocationsController < Admin::AdminController
 
   # DELETE /locations/1
   def destroy
-    @location = Location.find(params[:id])
+    @location = location_scope.find(params[:id])
     @location.destroy
 
     redirect_to(admin_locations_url)
   end
 
+  private
+
+  def location_scope
+    Location.main_menu
+  end
+
   def location_params
-    params[:location].permit(:name, :path, :parent_id, :page_id, :parent, :page)
+    params.required(:location).permit(:name, :path, :parent_id, :page_id, :parent, :page)
   end
 end

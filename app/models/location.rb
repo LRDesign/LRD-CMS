@@ -25,4 +25,15 @@ class Location < ActiveRecord::Base
     page ? page.permalink : path
   end
 
+  def self.topics_root
+    find_or_create(:name => "Blog Topics")
+  end
+
+  scope :main_menu, -> do
+    root.self_and_descendants
+  end
+
+  scope :blog_topics, -> do
+    children_of(topics_root.id)
+  end
 end
