@@ -11,3 +11,6 @@ unless Location.root
   Location.create!(:name => "Home")
 end
 
+unless Location.where(:name => "Blog Topics").exists?
+  Location.create!(:name => "Blog Topics")
+end

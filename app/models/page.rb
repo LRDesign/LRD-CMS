@@ -2,17 +2,29 @@
 #
 # Table name: pages
 #
-#  id          :integer(4)      not null, primary key
-#  title       :string(255)
-#  headline    :string(255)
-#  permalink   :string(255)
-#  content     :text
-#  published   :boolean(1)      default(TRUE), not null
-#  keywords    :text
-#  description :text
-#  edited_at   :datetime
-#  created_at  :datetime
-#  updated_at  :datetime
+#  id                 :integer          not null, primary key
+#  title              :string(255)
+#  headline           :string(255)
+#  permalink          :string(255)
+#  content            :text
+#  css                :text
+#  published          :boolean          default(TRUE), not null
+#  keywords           :text
+#  description        :text
+#  edited_at          :datetime
+#  created_at         :datetime
+#  updated_at         :datetime
+#  image_file_name    :string(255)
+#  image_file_size    :integer
+#  image_content_type :string(255)
+#  image_updated_at   :datetime
+#  optional_column    :text
+#  overlay_headline   :boolean
+#  image_height       :integer
+#  image_width        :integer
+#  layout             :string(255)
+#  publish_start      :datetime
+#  publish_end        :datetime
 #
 
 require 'sitemap'
@@ -45,9 +57,9 @@ class Page < ActiveRecord::Base
     where("NOT ((publish_start IS NULL OR publish_start < :now) AND (publish_end IS NULL OR publish_end > :now))", :now => Time.zone.now)
   end
 
-  scope :most_recent, -> do
-    order(:updated_at => :desc).limit(5)
-  end
+  scope :most_recent, proc {|count|
+    order(:updated_at => :desc).limit(count || 5)
+  }
 
   def published?
     (publish_start.nil? || publish_start <= Time.zone.now) && (publish_end.nil? || publish_end >= Time.zone.now)

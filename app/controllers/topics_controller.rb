@@ -5,7 +5,7 @@ class TopicsController < ApplicationController
   end
 
   def show
-    topic_ids = Location.blog_topics.where(:name => params[:name]).descendants.map(&:id)
-    @posts = Page.where(:location_id => topic_ids)
+    @topic = Location.where(:id => params["id"]).first
+    @posts = @topic.descendants.map{|loc| loc.page}.compact
   end
 end

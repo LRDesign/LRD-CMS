@@ -2,9 +2,9 @@
 #
 # Table name: images
 #
-#  id                 :integer(4)      not null, primary key
+#  id                 :integer          not null, primary key
 #  image_file_name    :string(255)
-#  image_file_size    :integer(4)
+#  image_file_size    :integer
 #  image_content_type :string(255)
 #  image_updated_at   :datetime
 #  created_at         :datetime

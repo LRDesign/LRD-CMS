@@ -4,7 +4,7 @@ describe Admin::LocationsController do
 
   describe "logged in as admin" do
     before(:each) do
-      @location = FactoryGirl.create(:location)
+      @location = FactoryGirl.create(:location, :parent => Location.root)
       authenticate('admin')
     end
 
@@ -14,7 +14,7 @@ describe Admin::LocationsController do
     describe "GET index" do
       it "should expose all locations as @locations" do
         get :index
-        assigns[:locations].should == [@location]
+        assigns[:locations].should include @location
       end
     end
 

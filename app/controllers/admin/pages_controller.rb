@@ -1,7 +1,7 @@
 class Admin::PagesController < Admin::AdminController
   # GET /admin/pages
   def index
-    @pages = page_scope.all
+    @pages = page_scope
   end
 
   # GET /admin/pages/new

@@ -1,12 +1,13 @@
 class Admin::LocationsController < Admin::AdminController
   # GET /locations
   def index
-    @locations = location_scope.all
+    @locations = location_scope
   end
 
   # GET /locations/new
   def new
     @location = Location.new()
+    @location_scope = location_scope
   end
 
   # GET /locations/1/edit
@@ -38,7 +39,7 @@ class Admin::LocationsController < Admin::AdminController
     @location = Location.find(params[:id])
 
     expire_fragment(NAV_MENU_CACHE)
-    unless (move_to = params[:location].delete("move_to")).blank?
+    unless (move_to = params[:location]["move_to"]).blank?
       Rails.logger.debug{"Moving [#{move_to}]: #{@location.to_text}"}
       if move_to == "last"
         @location.move_to_right_of(@location.siblings.last)

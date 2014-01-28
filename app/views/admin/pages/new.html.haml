@@ -2,5 +2,4 @@
 
 = link_to 'Back to List', admin_pages_path
 
-= render :partial => "admin/pages/form", :locals => {:url => admin_pages_path }
-
+= render :partial => "form", :locals => {:url => url_for(:action => :create)}

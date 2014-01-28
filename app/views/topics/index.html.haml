@@ -4,10 +4,10 @@
       %h3= post.title
       %h4= post.updated_at
       %p= post.content
-      = link_to(pages_path(post), "Full text...")
+      = link_to("Full text...", page_path(post))
 
 %ul.topics
   - @topics.each do |topic|
-    %li= link_to(topic_path(topic), topic.name)
+    %li= link_to(topic.name, topic_path(topic))
 
 -#.archives

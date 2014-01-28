@@ -19,7 +19,7 @@ describe Admin::PagesController do
     describe "GET index" do
       it "should expose all pages as @pages" do
         get :index
-        assigns[:pages].should == Page.all
+        assigns[:pages].should == Page.brochure
       end
     end
 

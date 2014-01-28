@@ -1,7 +1,7 @@
 module Admin::LocationsHelper
   def location_parent_selector(form)
     form.select(:parent_id,
-      @location_scope.all.collect  {|p| [p.name, p.id]}, { :include_blank => "" }
+      @location_scope.collect  {|p| [p.name, p.id]}, { :include_blank => "" }
     )
   end
 
@@ -19,8 +19,8 @@ module Admin::LocationsHelper
     )
   end
 
-  def topic_selector(form)
-    form.select(:topic_id, Location.blog_topics.map { |c| [c.title, c.id]})
+  def topic_selector(page)
+    select_tag("page[topic_id]", options_from_collection_for_select(Location.blog_topics, "id", "name", @page_topic_id))
   end
 
   def list_tree(locations, add_depth = 0, selected_location_id = nil)
