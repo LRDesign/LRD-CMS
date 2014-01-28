@@ -1,374 +1,409 @@
 /*
- * NinjaScript - 0.11.1
+ * NinjaScript - 0.12.0
  * written by and copyright 2010-2014 Judson Lester and Logical Reality Design
  * Licensed under the MIT license
  *
- * 01-13-2014
+ * 01-26-2014
  */
 var ninjascript = {behaviors:{}};
 ninjascript.behaviors.Abstract = function() {
 };
 (function() {
-  ninjascript.behaviors.Abstract.prototype.expandRules = function(b) {
+  ninjascript.behaviors.Abstract.prototype.expandRules = function(a) {
     return[]
   }
 })();
-ninjascript.behaviors.Select = function(b) {
-  this.menu = b
+ninjascript.behaviors.Select = function(a) {
+  this.menu = a
 };
 ninjascript.behaviors.Select.prototype = new ninjascript.behaviors.Abstract;
 (function() {
-  ninjascript.behaviors.Select.prototype.choose = function(b) {
-    for(var d in this.menu) {
-      if(jQuery(b).is(d)) {
-        return this.menu[d].choose(b)
+  ninjascript.behaviors.Select.prototype.choose = function(a) {
+    for(var f in this.menu) {
+      if(jQuery(a).is(f)) {
+        return this.menu[f].choose(a)
       }
     }
     return null
   }
 })();
-ninjascript.configuration = {messageWrapping:function(b, d) {
-  return"<div class='flash " + d + "'><p>" + b + "</p></div>"
+ninjascript.configuration = {messageWrapping:function(a, f) {
+  return"<div class='flash " + f + "'><p>" + a + "</p></div>"
 }, messageList:"#messages", busyLaziness:200};
 ninjascript.exceptions = {};
 (function() {
-  function b(b) {
-    var c = function(a) {
-      Error.call(this, a);
+  function a(a) {
+    var c = function(b) {
+      Error.call(this, b);
       Error.captureStackTrace && Error.captureStackTrace(this, this.constructor);
-      this.name = b;
-      this.message = a
+      this.name = a;
+      this.message = b
     };
     c.prototype = Error();
     return c
   }
-  ninjascript.exceptions.CouldntChoose = b("CouldntChoose");
-  ninjascript.exceptions.TransformFailed = b("TransformFailed")
+  ninjascript.exceptions.CouldntChoose = a("CouldntChoose");
+  ninjascript.exceptions.TransformFailed = a("TransformFailed")
 })();
-ninjascript.behaviors.Meta = function(b) {
-  this.chooser = b
+ninjascript.behaviors.Meta = function(a) {
+  this.chooser = a
 };
 ninjascript.behaviors.Meta.prototype = new ninjascript.behaviors.Abstract;
 (function() {
-  ninjascript.behaviors.Meta.prototype.choose = function(b) {
-    var d = this.chooser(b);
-    if(void 0 !== d) {
-      return d.choose(b)
+  ninjascript.behaviors.Meta.prototype.choose = function(a) {
+    var f = this.chooser(a);
+    if(void 0 !== f) {
+      return f.choose(a)
     }
-    throw new ninjascript.exceptions.CouldntChoose("Couldn't choose behavior for " + b.toString());
+    throw new ninjascript.exceptions.CouldntChoose("Couldn't choose behavior for " + a.toString());
   }
 })();
 ninjascript.Extensible = function() {
 };
-ninjascript.Extensible.addPackage = function(b, d) {
-  var c = {}, a = function(a) {
+ninjascript.Extensible.addPackage = function(a, f) {
+  var c = {}, b = function(b) {
     return function(c) {
       for(functionName in c) {
-        c.hasOwnProperty(functionName) && (a[functionName] = c[functionName])
+        c.hasOwnProperty(functionName) && (b[functionName] = c[functionName])
       }
     }
   };
-  c.Ninja = a(b.Ninja);
-  c.tools = a(b.tools);
+  c.Ninja = b(a.Ninja);
+  c.tools = b(a.tools);
   c.behaviors = c.Ninja;
   c.behaviours = c.Ninja;
   c.ninja = c.Ninja;
-  return d(c)
+  return f(c)
 };
 (function() {
-  ninjascript.Extensible.prototype.inject = function(b) {
-    this.extensions = b;
-    for(property in b) {
-      b.hasOwnProperty(property) && (this[property] = b[property])
+  ninjascript.Extensible.prototype.inject = function(a) {
+    this.extensions = a;
+    for(property in a) {
+      a.hasOwnProperty(property) && (this[property] = a[property])
     }
   }
 })();
-ninjascript.Logger = function() {
-  this.log_function = null
+ninjascript.Logger = function(a, f, c) {
+  this.name = a;
+  this.config = f;
+  this.parentLogger = c
+};
+ninjascript.LoggerConfig = function(a) {
+  this.logger = a
 };
 (function() {
-  var b = ninjascript.Logger.prototype;
-  b.log = function(b) {
-    this.log_function(b)
+  var a = ninjascript.Logger.prototype;
+  a.logWithLevel = function(a, c, b) {
+    c.unshift([this.name, this.getLevel()]);
+    a <= this.getLevel() ? this.actuallyLog(a, c, b) : this.parentLogger && this.parentLogger.logWithLevel(a, c, b)
   };
-  b.active_logging = function(b) {
+  a.actuallyLog = function(a, c, b) {
+    var d = a + ":", e = [];
+    for(a = 0;a < c.length;a++) {
+      d = d + "[" + c[a][0] + ":" + c[a][1] + "]"
+    }
+    e.push(d);
+    for(a = 0;a < b.length;a++) {
+      e.push(b[a])
+    }
     try {
-      console.log(b)
-    }catch(c) {
+      console.log.apply(console, e)
+    }catch(g) {
     }
   };
-  b.inactive_logging = function(b) {
+  a.getLevel = function() {
+    return this.config.level
   };
-  b.deactivate_logging = function() {
-    this.log_function = this.inactive_logging
+  a.childLogger = function(a, c) {
+    var b = {level:c || 0};
+    this.config[a] = b;
+    return new ninjascript.Logger(a, b, this)
   };
-  b.activate_logging = function() {
-    this.log_function = this.active_logging
+  a.fatal = function() {
+    this.logWithLevel(0, [], arguments)
   };
-  ninjascript.Logger.instance = new ninjascript.Logger;
-  ninjascript.Logger.instance.activate_logging();
-  ninjascript.Logger.log = function(b) {
-    ninjascript.Logger.instance.log(b)
+  a.error = function() {
+    this.logWithLevel(1, [], arguments)
   };
-  ninjascript.Logger.deactivate = function() {
-    ninjascript.Logger.instance.deactivate_logging()
+  a.warn = function() {
+    this.logWithLevel(2, [], arguments)
+  };
+  a.info = function() {
+    this.logWithLevel(3, [], arguments)
+  };
+  a.debug = function() {
+    this.logWithLevel(4, [], arguments)
+  };
+  a.log = a.error
+})();
+(function() {
+  ninjascript.Logger.rootConfig = {level:0};
+  ninjascript.Logger.rootLogger = new ninjascript.Logger("root", ninjascript.Logger.rootConfig);
+  ninjascript.Logger.forComponent = function(a, f) {
+    return ninjascript.Logger.rootLogger.childLogger(a, f)
   }
 })();
-ninjascript.behaviors.EventHandlerConfig = function(b, d) {
-  this.name = b;
+ninjascript.behaviors.EventHandlerConfig = function(a, f) {
+  this.name = a;
   this.stopPropagate = this.stopDefault = this.fallThrough = !0;
   this.fireMutation = this.stopImmediate = !1;
-  if("function" == typeof d) {
-    this.handle = d
-  }else {
-    this.handle = d[0];
-    console.log(d);
-    d = d.slice(1, d.length);
-    for(var c = d.length, a = 0;a < c;a++) {
-      if("dontContinue" == d[a] || "overridesOthers" == d[a]) {
-        this.fallThrough = !1
-      }
-      if("andDoDefault" == d[a] || "continues" == d[a] || "allowDefault" == d[a]) {
-        this.stopDefault = !1
-      }
-      if("allowPropagate" == d[a] || "dontStopPropagation" == d[a]) {
-        this.stopPropagate = !1
-      }
-      "andDoOthers" == d[a] && (this.stopImmediate = !1);
-      "changesDOM" == d[a] && (this.fireMutation = !0)
-    }
-  }
+  this.normalizeConfig(f)
 };
 (function() {
-  var b = ninjascript.behaviors.EventHandlerConfig.prototype;
-  b.buildHandlerFunction = function(b) {
-    var c = this.handle, a = this, e = function(e) {
-      c.apply(this, arguments);
-      e.isFallthroughPrevented() || "undefined" === typeof b || b.apply(this, arguments);
-      return a.stopDefault ? !1 : !e.isDefaultPrevented()
+  var a = ninjascript.behaviors.EventHandlerConfig.prototype, f = ninjascript.Logger.forComponent("event-handler");
+  a.normalizeConfig = function(c) {
+    if("function" == typeof c) {
+      this.handle = c
+    }else {
+      this.handle = c[0];
+      f.info(c);
+      c = c.slice(1, c.length);
+      for(var b = c.length, a = 0;a < b;a++) {
+        if("dontContinue" == c[a] || "overridesOthers" == c[a]) {
+          this.fallThrough = !1
+        }
+        if("andDoDefault" == c[a] || "continues" == c[a] || "allowDefault" == c[a]) {
+          this.stopDefault = !1
+        }
+        if("allowPropagate" == c[a] || "dontStopPropagation" == c[a]) {
+          this.stopPropagate = !1
+        }
+        "andDoOthers" == c[a] && (this.stopImmediate = !1);
+        "changesDOM" == c[a] && (this.fireMutation = !0)
+      }
+    }
+  };
+  a.buildHandlerFunction = function(a) {
+    var b = this.handle, d = this, e = function(e) {
+      b.apply(this, arguments);
+      e.isFallthroughPrevented() || "undefined" === typeof a || a.apply(this, arguments);
+      return d.stopDefault ? !1 : !e.isDefaultPrevented()
     };
-    this.fallThrough || (e = this.prependAction(e, function(a) {
-      a.preventFallthrough()
+    this.fallThrough || (e = this.prependAction(e, function(b) {
+      b.preventFallthrough()
     }));
-    this.stopDefault && (e = this.prependAction(e, function(a) {
-      a.preventDefault()
+    this.stopDefault && (e = this.prependAction(e, function(b) {
+      b.preventDefault()
     }));
-    this.stopPropagate && (e = this.prependAction(e, function(a) {
-      a.stopPropagation()
+    this.stopPropagate && (e = this.prependAction(e, function(b) {
+      b.stopPropagation()
     }));
-    this.stopImmediate && (e = this.prependAction(e, function(a) {
-      a.stopImmediatePropagation()
+    this.stopImmediate && (e = this.prependAction(e, function(b) {
+      b.stopImmediatePropagation()
     }));
-    this.fireMutation && (e = this.appendAction(e, function(c) {
-      a.fireMutationEvent()
+    this.fireMutation && (e = this.appendAction(e, function(b) {
+      d.fireMutationEvent()
     }));
-    return e = this.prependAction(e, function(a) {
-      a.isFallthroughPrevented = function() {
+    e = this.prependAction(e, function(b) {
+      b.isFallthroughPrevented = function() {
         return!1
       };
-      a.preventFallthrough = function() {
-        a.isFallthroughPrevented = function() {
+      b.preventFallthrough = function() {
+        b.isFallthroughPrevented = function() {
           return!0
         }
       }
+    });
+    return e = this.prependAction(e, function(b) {
+      f.debug(b)
     })
   };
-  b.prependAction = function(b, c) {
+  a.prependAction = function(a, b) {
     return function() {
-      c.apply(this, arguments);
-      return b.apply(this, arguments)
+      b.apply(this, arguments);
+      return a.apply(this, arguments)
     }
   };
-  b.appendAction = function(b, c) {
+  a.appendAction = function(a, b) {
     return function() {
-      var a = b.apply(this, arguments);
-      c.apply(this, arguments);
-      return a
+      var d = a.apply(this, arguments);
+      b.apply(this, arguments);
+      return d
     }
   }
 })();
 ninjascript.sizzle = function() {
-  function b(l) {
-    for(var a = "", c, e = 0;l[e];e++) {
-      c = l[e], 3 === c.nodeType || 4 === c.nodeType ? a += c.nodeValue : 8 !== c.nodeType && (a += b(c.childNodes))
+  function a(h) {
+    for(var b = "", c, d = 0;h[d];d++) {
+      c = h[d], 3 === c.nodeType || 4 === c.nodeType ? b += c.nodeValue : 8 !== c.nodeType && (b += a(c.childNodes))
     }
-    return a
+    return b
   }
-  function d(l, a, c, b, e, d) {
-    e = 0;
-    for(var f = b.length;e < f;e++) {
-      var g = b[e];
+  function f(h, b, a, c, d, e) {
+    d = 0;
+    for(var f = c.length;d < f;d++) {
+      var g = c[d];
       if(g) {
-        for(var g = g[l], k = !1;g;) {
-          if(g.sizcache === c) {
-            k = b[g.sizset];
+        for(var g = g[h], k = !1;g;) {
+          if(g.sizcache === a) {
+            k = c[g.sizset];
             break
           }
-          1 !== g.nodeType || d || (g.sizcache = c, g.sizset = e);
-          if(g.nodeName.toLowerCase() === a) {
+          1 !== g.nodeType || e || (g.sizcache = a, g.sizset = d);
+          if(g.nodeName.toLowerCase() === b) {
             k = g;
             break
           }
-          g = g[l]
+          g = g[h]
         }
-        b[e] = k
+        c[d] = k
       }
     }
   }
-  function c(a, c, b, e, d, f) {
+  function c(h, b, a, c, d, e) {
     d = 0;
-    for(var g = e.length;d < g;d++) {
-      var v = e[d];
-      if(v) {
-        for(var v = v[a], h = !1;v;) {
-          if(v.sizcache === b) {
-            h = e[v.sizset];
+    for(var f = c.length;d < f;d++) {
+      var g = c[d];
+      if(g) {
+        for(var g = g[h], k = !1;g;) {
+          if(g.sizcache === a) {
+            k = c[g.sizset];
             break
           }
-          if(1 === v.nodeType) {
-            if(f || (v.sizcache = b, v.sizset = d), "string" !== typeof c) {
-              if(v === c) {
-                h = !0;
+          if(1 === g.nodeType) {
+            if(e || (g.sizcache = a, g.sizset = d), "string" !== typeof b) {
+              if(g === b) {
+                k = !0;
                 break
               }
             }else {
-              if(0 < k.filter(c, [v]).length) {
-                h = v;
+              if(0 < l.filter(b, [g]).length) {
+                k = g;
                 break
               }
             }
           }
-          v = v[a]
+          g = g[h]
         }
-        e[d] = h
+        c[d] = k
       }
     }
   }
-  var a = /((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^[\]]*\]|['"][^'"]*['"]|[^[\]'"]+)+\]|\\.|[^ >+~,(\[\\]+)+|[>+~])(\s*,\s*)?((?:.|\r|\n)*)/g, e = 0, f = Object.prototype.toString, h = !1, n = !0;
+  var b = /((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^[\]]*\]|['"][^'"]*['"]|[^[\]'"]+)+\]|\\.|[^ >+~,(\[\\]+)+|[>+~])(\s*,\s*)?((?:.|\r|\n)*)/g, d = 0, e = Object.prototype.toString, g = !1, m = !0;
   [0, 0].sort(function() {
-    n = !1;
+    m = !1;
     return 0
   });
-  var k = function(l, c, b, e) {
-    b = b || [];
-    var d = c = c || document;
-    if(1 !== c.nodeType && 9 !== c.nodeType) {
+  var l = function(h, a, c, d) {
+    c = c || [];
+    var f = a = a || document;
+    if(1 !== a.nodeType && 9 !== a.nodeType) {
       return[]
     }
-    if(!l || "string" !== typeof l) {
-      return b
+    if(!h || "string" !== typeof h) {
+      return c
     }
-    for(var m = [], p, h, q, t, n = !0, s = y(c), B = l;null !== (a.exec(""), p = a.exec(B));) {
-      if(B = p[3], m.push(p[1]), p[2]) {
-        t = p[3];
+    for(var g = [], p, n, q, m, r = !0, s = u(a), z = h;null !== (b.exec(""), p = b.exec(z));) {
+      if(z = p[3], g.push(p[1]), p[2]) {
+        m = p[3];
         break
       }
     }
-    if(1 < m.length && u.exec(l)) {
-      if(2 === m.length && g.relative[m[0]]) {
-        h = r(m[0] + m[1], c)
+    if(1 < g.length && y.exec(h)) {
+      if(2 === g.length && k.relative[g[0]]) {
+        n = t(g[0] + g[1], a)
       }else {
-        for(h = g.relative[m[0]] ? [c] : k(m.shift(), c);m.length;) {
-          l = m.shift(), g.relative[l] && (l += m.shift()), h = r(l, h)
+        for(n = k.relative[g[0]] ? [a] : l(g.shift(), a);g.length;) {
+          h = g.shift(), k.relative[h] && (h += g.shift()), n = t(h, n)
         }
       }
     }else {
-      if(!e && 1 < m.length && 9 === c.nodeType && !s && g.match.ID.test(m[0]) && !g.match.ID.test(m[m.length - 1]) && (p = k.find(m.shift(), c, s), c = p.expr ? k.filter(p.expr, p.set)[0] : p.set[0]), c) {
-        for(p = e ? {expr:m.pop(), set:x(e)} : k.find(m.pop(), 1 !== m.length || "~" !== m[0] && "+" !== m[0] || !c.parentNode ? c : c.parentNode, s), h = p.expr ? k.filter(p.expr, p.set) : p.set, 0 < m.length ? q = x(h) : n = !1;m.length;) {
-          var w = m.pop();
-          p = w;
-          g.relative[w] ? p = m.pop() : w = "";
-          null == p && (p = c);
-          g.relative[w](q, p, s)
+      if(!d && 1 < g.length && 9 === a.nodeType && !s && k.match.ID.test(g[0]) && !k.match.ID.test(g[g.length - 1]) && (p = l.find(g.shift(), a, s), a = p.expr ? l.filter(p.expr, p.set)[0] : p.set[0]), a) {
+        for(p = d ? {expr:g.pop(), set:v(d)} : l.find(g.pop(), 1 !== g.length || "~" !== g[0] && "+" !== g[0] || !a.parentNode ? a : a.parentNode, s), n = p.expr ? l.filter(p.expr, p.set) : p.set, 0 < g.length ? q = v(n) : r = !1;g.length;) {
+          var x = g.pop();
+          p = x;
+          k.relative[x] ? p = g.pop() : x = "";
+          null == p && (p = a);
+          k.relative[x](q, p, s)
         }
       }else {
         q = []
       }
     }
-    q || (q = h);
-    q || k.error(w || l);
-    if("[object Array]" === f.call(q)) {
-      if(n) {
-        if(c && 1 === c.nodeType) {
-          for(l = 0;null != q[l];l++) {
-            q[l] && (!0 === q[l] || 1 === q[l].nodeType && A(c, q[l])) && b.push(h[l])
+    q || (q = n);
+    q || l.error(x || h);
+    if("[object Array]" === e.call(q)) {
+      if(r) {
+        if(a && 1 === a.nodeType) {
+          for(h = 0;null != q[h];h++) {
+            q[h] && (!0 === q[h] || 1 === q[h].nodeType && w(a, q[h])) && c.push(n[h])
           }
         }else {
-          for(l = 0;null != q[l];l++) {
-            q[l] && 1 === q[l].nodeType && b.push(h[l])
+          for(h = 0;null != q[h];h++) {
+            q[h] && 1 === q[h].nodeType && c.push(n[h])
           }
         }
       }else {
-        b.push.apply(b, q)
+        c.push.apply(c, q)
       }
     }else {
-      x(q, b)
+      v(q, c)
     }
-    t && (k(t, d, b, e), k.uniqueSort(b));
-    return b
+    m && (l(m, f, c, d), l.uniqueSort(c));
+    return c
   };
-  k.uniqueSort = function(a) {
-    if(s && (h = n, a.sort(s), h)) {
-      for(var c = 1;c < a.length;c++) {
-        a[c] === a[c - 1] && a.splice(c--, 1)
+  l.uniqueSort = function(h) {
+    if(r && (g = m, h.sort(r), g)) {
+      for(var a = 1;a < h.length;a++) {
+        h[a] === h[a - 1] && h.splice(a--, 1)
       }
     }
-    return a
+    return h
   };
-  k.matches = function(a, c) {
-    return k(a, null, null, c)
+  l.matches = function(h, a) {
+    return l(h, null, null, a)
   };
-  k.find = function(a, c, b) {
-    var e, d;
-    if(!a) {
+  l.find = function(h, a, b) {
+    var c, d;
+    if(!h) {
       return[]
     }
-    for(var f = 0, k = g.order.length;f < k;f++) {
-      var h = g.order[f];
-      if(d = g.leftMatch[h].exec(a)) {
-        var u = d[1];
+    for(var e = 0, f = k.order.length;e < f;e++) {
+      var g = k.order[e];
+      if(d = k.leftMatch[g].exec(h)) {
+        var l = d[1];
         d.splice(1, 1);
-        if("\\" !== u.substr(u.length - 1) && (d[1] = (d[1] || "").replace(/\\/g, ""), e = g.find[h](d, c, b), null != e)) {
-          a = a.replace(g.match[h], "");
+        if("\\" !== l.substr(l.length - 1) && (d[1] = (d[1] || "").replace(/\\/g, ""), c = k.find[g](d, a, b), null != c)) {
+          h = h.replace(k.match[g], "");
           break
         }
       }
     }
-    e || (e = c.getElementsByTagName("*"));
-    return{set:e, expr:a}
+    c || (c = a.getElementsByTagName("*"));
+    return{set:c, expr:h}
   };
-  k.filter = function(a, c, b, e) {
-    for(var d = a, f = [], h = c, u, t, n = c && c[0] && y(c[0]);a && c.length;) {
-      for(var s in g.filter) {
-        if(null != (u = g.leftMatch[s].exec(a)) && u[2]) {
-          var x = g.filter[s], r, w;
-          w = u[1];
-          t = !1;
-          u.splice(1, 1);
-          if("\\" !== w.substr(w.length - 1)) {
-            h === f && (f = []);
-            if(g.preFilter[s]) {
-              if(u = g.preFilter[s](u, h, b, f, e, n), !u) {
-                t = r = !0
+  l.filter = function(h, a, b, c) {
+    for(var d = h, e = [], f = a, g, n, y = a && a[0] && u(a[0]);h && a.length;) {
+      for(var m in k.filter) {
+        if(null != (g = k.leftMatch[m].exec(h)) && g[2]) {
+          var v = k.filter[m], s, r;
+          r = g[1];
+          n = !1;
+          g.splice(1, 1);
+          if("\\" !== r.substr(r.length - 1)) {
+            f === e && (e = []);
+            if(k.preFilter[m]) {
+              if(g = k.preFilter[m](g, f, b, e, c, y), !g) {
+                n = s = !0
               }else {
-                if(!0 === u) {
+                if(!0 === g) {
                   continue
                 }
               }
             }
-            if(u) {
-              for(var z = 0;null != (w = h[z]);z++) {
-                if(w) {
-                  r = x(w, u, z, h);
-                  var A = e ^ !!r;
-                  b && null != r ? A ? t = !0 : h[z] = !1 : A && (f.push(w), t = !0)
+            if(g) {
+              for(var w = 0;null != (r = f[w]);w++) {
+                if(r) {
+                  s = v(r, g, w, f);
+                  var t = c ^ !!s;
+                  b && null != s ? t ? n = !0 : f[w] = !1 : t && (e.push(r), n = !0)
                 }
               }
             }
-            if(void 0 !== r) {
-              b || (h = f);
-              a = a.replace(g.match[s], "");
-              if(!t) {
+            if(void 0 !== s) {
+              b || (f = e);
+              h = h.replace(k.match[m], "");
+              if(!n) {
                 return[]
               }
               break
@@ -376,114 +411,114 @@ ninjascript.sizzle = function() {
           }
         }
       }
-      if(a === d) {
-        if(null == t) {
-          k.error(a)
+      if(h === d) {
+        if(null == n) {
+          l.error(h)
         }else {
           break
         }
       }
-      d = a
+      d = h
     }
-    return h
+    return f
   };
-  k.error = function(a) {
-    throw"Syntax error, unrecognized expression: " + a;
+  l.error = function(h) {
+    throw"Syntax error, unrecognized expression: " + h;
   };
-  var g = k.selectors = {order:["ID", "NAME", "TAG"], match:{ID:/#((?:[\w\u00c0-\uFFFF-]|\\.)+)/, CLASS:/\.((?:[\w\u00c0-\uFFFF-]|\\.)+)/, NAME:/\[name=['"]*((?:[\w\u00c0-\uFFFF-]|\\.)+)['"]*\]/, ATTR:/\[\s*((?:[\w\u00c0-\uFFFF-]|\\.)+)\s*(?:(\S?=)\s*(['"]*)(.*?)\3|)\s*\]/, TAG:/^((?:[\w\u00c0-\uFFFF\*-]|\\.)+)/, CHILD:/:(only|nth|last|first)-child(?:\((even|odd|[\dn+-]*)\))?/, POS:/:(nth|eq|gt|lt|first|last|even|odd)(?:\((\d*)\))?(?=[^-]|$)/, PSEUDO:/:((?:[\w\u00c0-\uFFFF-]|\\.)+)(?:\((['"]?)((?:\([^\)]+\)|[^\(\)]*)+)\2\))?/},
-  leftMatch:{}, attrMap:{"class":"className", "for":"htmlFor"}, attrHandle:{href:function(a) {
-    return a.getAttribute("href")
-  }}, relative:{"+":function(a, c) {
-    var b = "string" === typeof c, e = b && !/\W/.test(c), b = b && !e;
-    e && (c = c.toLowerCase());
-    for(var e = 0, d = a.length, f;e < d;e++) {
-      if(f = a[e]) {
-        for(;(f = f.previousSibling) && 1 !== f.nodeType;) {
+  var k = l.selectors = {order:["ID", "NAME", "TAG"], match:{ID:/#((?:[\w\u00c0-\uFFFF-]|\\.)+)/, CLASS:/\.((?:[\w\u00c0-\uFFFF-]|\\.)+)/, NAME:/\[name=['"]*((?:[\w\u00c0-\uFFFF-]|\\.)+)['"]*\]/, ATTR:/\[\s*((?:[\w\u00c0-\uFFFF-]|\\.)+)\s*(?:(\S?=)\s*(['"]*)(.*?)\3|)\s*\]/, TAG:/^((?:[\w\u00c0-\uFFFF\*-]|\\.)+)/, CHILD:/:(only|nth|last|first)-child(?:\((even|odd|[\dn+-]*)\))?/, POS:/:(nth|eq|gt|lt|first|last|even|odd)(?:\((\d*)\))?(?=[^-]|$)/, PSEUDO:/:((?:[\w\u00c0-\uFFFF-]|\\.)+)(?:\((['"]?)((?:\([^\)]+\)|[^\(\)]*)+)\2\))?/}, 
+  leftMatch:{}, attrMap:{"class":"className", "for":"htmlFor"}, attrHandle:{href:function(h) {
+    return h.getAttribute("href")
+  }}, relative:{"+":function(h, a) {
+    var b = "string" === typeof a, c = b && !/\W/.test(a), b = b && !c;
+    c && (a = a.toLowerCase());
+    for(var c = 0, d = h.length, e;c < d;c++) {
+      if(e = h[c]) {
+        for(;(e = e.previousSibling) && 1 !== e.nodeType;) {
         }
-        a[e] = b || f && f.nodeName.toLowerCase() === c ? f || !1 : f === c
+        h[c] = b || e && e.nodeName.toLowerCase() === a ? e || !1 : e === a
       }
     }
-    b && k.filter(c, a, !0)
-  }, ">":function(a, c) {
-    var b = "string" === typeof c;
-    if(b && !/\W/.test(c)) {
-      c = c.toLowerCase();
-      for(var e = 0, d = a.length;e < d;e++) {
-        var f = a[e];
-        f && (b = f.parentNode, a[e] = b.nodeName.toLowerCase() === c ? b : !1)
+    b && l.filter(a, h, !0)
+  }, ">":function(a, b) {
+    var c = "string" === typeof b;
+    if(c && !/\W/.test(b)) {
+      b = b.toLowerCase();
+      for(var d = 0, e = a.length;d < e;d++) {
+        var f = a[d];
+        f && (c = f.parentNode, a[d] = c.nodeName.toLowerCase() === b ? c : !1)
       }
     }else {
-      e = 0;
-      for(d = a.length;e < d;e++) {
-        (f = a[e]) && (a[e] = b ? f.parentNode : f.parentNode === c)
+      d = 0;
+      for(e = a.length;d < e;d++) {
+        (f = a[d]) && (a[d] = c ? f.parentNode : f.parentNode === b)
       }
-      b && k.filter(c, a, !0)
+      c && l.filter(b, a, !0)
     }
-  }, "":function(a, b, f) {
-    var g = e++, k = c;
+  }, "":function(a, b, e) {
+    var g = d++, k = c;
     if("string" === typeof b && !/\W/.test(b)) {
-      var m = b = b.toLowerCase(), k = d
+      var n = b = b.toLowerCase(), k = f
     }
-    k("parentNode", b, g, a, m, f)
-  }, "~":function(a, b, f) {
-    var g = e++, k = c;
+    k("parentNode", b, g, a, n, e)
+  }, "~":function(a, b, e) {
+    var g = d++, k = c;
     if("string" === typeof b && !/\W/.test(b)) {
-      var m = b = b.toLowerCase(), k = d
+      var n = b = b.toLowerCase(), k = f
     }
-    k("previousSibling", b, g, a, m, f)
-  }}, find:{ID:function(a, c, b) {
-    if("undefined" !== typeof c.getElementById && !b) {
-      return(a = c.getElementById(a[1])) ? [a] : []
+    k("previousSibling", b, g, a, n, e)
+  }}, find:{ID:function(a, b, c) {
+    if("undefined" !== typeof b.getElementById && !c) {
+      return(a = b.getElementById(a[1])) ? [a] : []
     }
-  }, NAME:function(a, c) {
-    if("undefined" !== typeof c.getElementsByName) {
-      for(var b = [], e = c.getElementsByName(a[1]), f = 0, d = e.length;f < d;f++) {
-        e[f].getAttribute("name") === a[1] && b.push(e[f])
+  }, NAME:function(a, b) {
+    if("undefined" !== typeof b.getElementsByName) {
+      for(var c = [], d = b.getElementsByName(a[1]), e = 0, f = d.length;e < f;e++) {
+        d[e].getAttribute("name") === a[1] && c.push(d[e])
       }
-      return 0 === b.length ? null : b
+      return 0 === c.length ? null : c
     }
-  }, TAG:function(a, c) {
-    return c.getElementsByTagName(a[1])
-  }}, preFilter:{CLASS:function(a, c, b, e, f, d) {
+  }, TAG:function(a, b) {
+    return b.getElementsByTagName(a[1])
+  }}, preFilter:{CLASS:function(a, b, c, d, e, f) {
     a = " " + a[1].replace(/\\/g, "") + " ";
-    if(d) {
+    if(f) {
       return a
     }
-    d = 0;
-    for(var g;null != (g = c[d]);d++) {
-      g && (f ^ (g.className && 0 <= (" " + g.className + " ").replace(/[\t\n]/g, " ").indexOf(a)) ? b || e.push(g) : b && (c[d] = !1))
+    f = 0;
+    for(var g;null != (g = b[f]);f++) {
+      g && (e ^ (g.className && 0 <= (" " + g.className + " ").replace(/[\t\n]/g, " ").indexOf(a)) ? c || d.push(g) : c && (b[f] = !1))
     }
     return!1
   }, ID:function(a) {
     return a[1].replace(/\\/g, "")
-  }, TAG:function(a, c) {
+  }, TAG:function(a, b) {
     return a[1].toLowerCase()
   }, CHILD:function(a) {
     if("nth" === a[1]) {
-      var c = /(-?)(\d*)n((?:\+|-)?\d*)/.exec("even" === a[2] && "2n" || "odd" === a[2] && "2n+1" || !/\D/.test(a[2]) && "0n+" + a[2] || a[2]);
-      a[2] = c[1] + (c[2] || 1) - 0;
-      a[3] = c[3] - 0
+      var b = /(-?)(\d*)n((?:\+|-)?\d*)/.exec("even" === a[2] && "2n" || "odd" === a[2] && "2n+1" || !/\D/.test(a[2]) && "0n+" + a[2] || a[2]);
+      a[2] = b[1] + (b[2] || 1) - 0;
+      a[3] = b[3] - 0
     }
-    a[0] = e++;
+    a[0] = d++;
     return a
-  }, ATTR:function(a, c, b, e, f, d) {
-    c = a[1].replace(/\\/g, "");
-    !d && g.attrMap[c] && (a[1] = g.attrMap[c]);
+  }, ATTR:function(a, b, c, d, e, f) {
+    b = a[1].replace(/\\/g, "");
+    !f && k.attrMap[b] && (a[1] = k.attrMap[b]);
     "~=" === a[2] && (a[4] = " " + a[4] + " ");
     return a
-  }, PSEUDO:function(c, b, e, f, d) {
-    if("not" === c[1]) {
-      if(1 < (a.exec(c[3]) || "").length || /^\w/.test(c[3])) {
-        c[3] = k(c[3], null, null, b)
+  }, PSEUDO:function(a, c, d, e, f) {
+    if("not" === a[1]) {
+      if(1 < (b.exec(a[3]) || "").length || /^\w/.test(a[3])) {
+        a[3] = l(a[3], null, null, c)
       }else {
-        return c = k.filter(c[3], b, e, 1 ^ d), e || f.push.apply(f, c), !1
+        return a = l.filter(a[3], c, d, 1 ^ f), d || e.push.apply(e, a), !1
       }
     }else {
-      if(g.match.POS.test(c[0]) || g.match.CHILD.test(c[0])) {
+      if(k.match.POS.test(a[0]) || k.match.CHILD.test(a[0])) {
         return!0
       }
     }
-    return c
+    return a
   }, POS:function(a) {
     a.unshift(!0);
     return a
@@ -500,8 +535,8 @@ ninjascript.sizzle = function() {
     return!!a.firstChild
   }, empty:function(a) {
     return!a.firstChild
-  }, has:function(a, c, b) {
-    return!!k(b[3], a).length
+  }, has:function(a, b, c) {
+    return!!l(c[3], a).length
   }, header:function(a) {
     return/h\d/i.test(a.nodeName)
   }, text:function(a) {
@@ -524,373 +559,384 @@ ninjascript.sizzle = function() {
     return"button" === a.type || "button" === a.nodeName.toLowerCase()
   }, input:function(a) {
     return/input|select|textarea|button/i.test(a.nodeName)
-  }}, setFilters:{first:function(a, c) {
-    return 0 === c
-  }, last:function(a, c, b, e) {
-    return c === e.length - 1
-  }, even:function(a, c) {
-    return 0 === c % 2
-  }, odd:function(a, c) {
-    return 1 === c % 2
-  }, lt:function(a, c, b) {
-    return c < b[3] - 0
-  }, gt:function(a, c, b) {
-    return c > b[3] - 0
-  }, nth:function(a, c, b) {
-    return b[3] - 0 === c
-  }, eq:function(a, c, b) {
-    return b[3] - 0 === c
-  }}, filter:{PSEUDO:function(a, c, e, f) {
-    var d = c[1], h = g.filters[d];
-    if(h) {
-      return h(a, e, c, f)
+  }}, setFilters:{first:function(a, b) {
+    return 0 === b
+  }, last:function(a, b, c, d) {
+    return b === d.length - 1
+  }, even:function(a, b) {
+    return 0 === b % 2
+  }, odd:function(a, b) {
+    return 1 === b % 2
+  }, lt:function(a, b, c) {
+    return b < c[3] - 0
+  }, gt:function(a, b, c) {
+    return b > c[3] - 0
+  }, nth:function(a, b, c) {
+    return c[3] - 0 === b
+  }, eq:function(a, b, c) {
+    return c[3] - 0 === b
+  }}, filter:{PSEUDO:function(b, c, d, e) {
+    var f = c[1], g = k.filters[f];
+    if(g) {
+      return g(b, d, c, e)
     }
-    if("contains" === d) {
-      return 0 <= (a.textContent || a.innerText || b([a]) || "").indexOf(c[3])
+    if("contains" === f) {
+      return 0 <= (b.textContent || b.innerText || a([b]) || "").indexOf(c[3])
     }
-    if("not" === d) {
+    if("not" === f) {
       c = c[3];
-      e = 0;
-      for(f = c.length;e < f;e++) {
-        if(c[e] === a) {
+      d = 0;
+      for(e = c.length;d < e;d++) {
+        if(c[d] === b) {
           return!1
         }
       }
       return!0
     }
-    k.error("Syntax error, unrecognized expression: " + d)
-  }, CHILD:function(a, c) {
-    var b = c[1], e = a;
-    switch(b) {
+    l.error("Syntax error, unrecognized expression: " + f)
+  }, CHILD:function(a, b) {
+    var c = b[1], d = a;
+    switch(c) {
       case "only":
       ;
       case "first":
-        for(;e = e.previousSibling;) {
-          if(1 === e.nodeType) {
+        for(;d = d.previousSibling;) {
+          if(1 === d.nodeType) {
             return!1
           }
         }
-        if("first" === b) {
+        if("first" === c) {
           return!0
         }
-        e = a;
+        d = a;
       case "last":
-        for(;e = e.nextSibling;) {
-          if(1 === e.nodeType) {
+        for(;d = d.nextSibling;) {
+          if(1 === d.nodeType) {
             return!1
           }
         }
         return!0;
       case "nth":
-        var b = c[2], f = c[3];
-        if(1 === b && 0 === f) {
+        var c = b[2], e = b[3];
+        if(1 === c && 0 === e) {
           return!0
         }
-        var d = c[0], g = a.parentNode;
-        if(g && (g.sizcache !== d || !a.nodeIndex)) {
-          for(var k = 0, e = g.firstChild;e;e = e.nextSibling) {
-            1 === e.nodeType && (e.nodeIndex = ++k)
+        var f = b[0], g = a.parentNode;
+        if(g && (g.sizcache !== f || !a.nodeIndex)) {
+          for(var k = 0, d = g.firstChild;d;d = d.nextSibling) {
+            1 === d.nodeType && (d.nodeIndex = ++k)
           }
-          g.sizcache = d
+          g.sizcache = f
         }
-        e = a.nodeIndex - f;
-        return 0 === b ? 0 === e : 0 === e % b && 0 <= e / b
+        d = a.nodeIndex - e;
+        return 0 === c ? 0 === d : 0 === d % c && 0 <= d / c
     }
-  }, ID:function(a, c) {
-    return 1 === a.nodeType && a.getAttribute("id") === c
-  }, TAG:function(a, c) {
-    return"*" === c && 1 === a.nodeType || a.nodeName.toLowerCase() === c
-  }, CLASS:function(a, c) {
-    return-1 < (" " + (a.className || a.getAttribute("class")) + " ").indexOf(c)
-  }, ATTR:function(a, c) {
-    var b = c[1], b = g.attrHandle[b] ? g.attrHandle[b](a) : null != a[b] ? a[b] : a.getAttribute(b), e = b + "", f = c[2], d = c[4];
-    return null == b ? "!=" === f : "=" === f ? e === d : "*=" === f ? 0 <= e.indexOf(d) : "~=" === f ? 0 <= (" " + e + " ").indexOf(d) : d ? "!=" === f ? e !== d : "^=" === f ? 0 === e.indexOf(d) : "$=" === f ? e.substr(e.length - d.length) === d : "|=" === f ? e === d || e.substr(0, d.length + 1) === d + "-" : !1 : e && !1 !== b
-  }, POS:function(a, c, b, e) {
-    var d = g.setFilters[c[2]];
-    if(d) {
-      return d(a, b, c, e)
+  }, ID:function(a, b) {
+    return 1 === a.nodeType && a.getAttribute("id") === b
+  }, TAG:function(a, b) {
+    return"*" === b && 1 === a.nodeType || a.nodeName.toLowerCase() === b
+  }, CLASS:function(a, b) {
+    return-1 < (" " + (a.className || a.getAttribute("class")) + " ").indexOf(b)
+  }, ATTR:function(a, b) {
+    var c = b[1], c = k.attrHandle[c] ? k.attrHandle[c](a) : null != a[c] ? a[c] : a.getAttribute(c), d = c + "", e = b[2], f = b[4];
+    return null == c ? "!=" === e : "=" === e ? d === f : "*=" === e ? 0 <= d.indexOf(f) : "~=" === e ? 0 <= (" " + d + " ").indexOf(f) : f ? "!=" === e ? d !== f : "^=" === e ? 0 === d.indexOf(f) : "$=" === e ? d.substr(d.length - f.length) === f : "|=" === e ? d === f || d.substr(0, f.length + 1) === f + "-" : !1 : d && !1 !== c
+  }, POS:function(a, b, c, d) {
+    var e = k.setFilters[b[2]];
+    if(e) {
+      return e(a, c, b, d)
     }
-  }}}, u = g.match.POS, t;
-  for(t in g.match) {
-    g.match[t] = RegExp(g.match[t].source + /(?![^\[]*\])(?![^\(]*\))/.source), g.leftMatch[t] = RegExp(/(^(?:.|\r|\n)*?)/.source + g.match[t].source.replace(/\\(\d+)/g, function(a, c) {
-      return"\\" + (c - 0 + 1)
+  }}}, y = k.match.POS, n;
+  for(n in k.match) {
+    k.match[n] = RegExp(k.match[n].source + /(?![^\[]*\])(?![^\(]*\))/.source), k.leftMatch[n] = RegExp(/(^(?:.|\r|\n)*?)/.source + k.match[n].source.replace(/\\(\d+)/g, function(a, b) {
+      return"\\" + (b - 0 + 1)
     }))
   }
-  var x = function(a, c) {
+  var v = function(a, b) {
     a = Array.prototype.slice.call(a, 0);
-    return c ? (c.push.apply(c, a), c) : a
+    return b ? (b.push.apply(b, a), b) : a
   };
   try {
     Array.prototype.slice.call(document.documentElement.childNodes, 0)[0].nodeType
-  }catch(z) {
-    x = function(a, c) {
-      var b = c || [];
-      if("[object Array]" === f.call(a)) {
-        Array.prototype.push.apply(b, a)
+  }catch(s) {
+    v = function(a, b) {
+      var c = b || [];
+      if("[object Array]" === e.call(a)) {
+        Array.prototype.push.apply(c, a)
       }else {
         if("number" === typeof a.length) {
-          for(var e = 0, d = a.length;e < d;e++) {
-            b.push(a[e])
+          for(var d = 0, f = a.length;d < f;d++) {
+            c.push(a[d])
           }
         }else {
-          for(e = 0;a[e];e++) {
-            b.push(a[e])
+          for(d = 0;a[d];d++) {
+            c.push(a[d])
           }
         }
       }
-      return b
+      return c
     }
   }
-  var s;
-  document.documentElement.compareDocumentPosition ? s = function(a, c) {
-    if(!a.compareDocumentPosition || !c.compareDocumentPosition) {
-      return a == c && (h = !0), a.compareDocumentPosition ? -1 : 1
+  var r;
+  document.documentElement.compareDocumentPosition ? r = function(a, b) {
+    if(!a.compareDocumentPosition || !b.compareDocumentPosition) {
+      return a == b && (g = !0), a.compareDocumentPosition ? -1 : 1
     }
-    var b = a.compareDocumentPosition(c) & 4 ? -1 : a === c ? 0 : 1;
-    0 === b && (h = !0);
-    return b
-  } : "sourceIndex" in document.documentElement ? s = function(a, c) {
-    if(!a.sourceIndex || !c.sourceIndex) {
-      return a == c && (h = !0), a.sourceIndex ? -1 : 1
+    var c = a.compareDocumentPosition(b) & 4 ? -1 : a === b ? 0 : 1;
+    0 === c && (g = !0);
+    return c
+  } : "sourceIndex" in document.documentElement ? r = function(a, b) {
+    if(!a.sourceIndex || !b.sourceIndex) {
+      return a == b && (g = !0), a.sourceIndex ? -1 : 1
     }
-    var b = a.sourceIndex - c.sourceIndex;
-    0 === b && (h = !0);
-    return b
-  } : document.createRange && (s = function(a, c) {
-    if(!a.ownerDocument || !c.ownerDocument) {
-      return a == c && (h = !0), a.ownerDocument ? -1 : 1
+    var c = a.sourceIndex - b.sourceIndex;
+    0 === c && (g = !0);
+    return c
+  } : document.createRange && (r = function(a, b) {
+    if(!a.ownerDocument || !b.ownerDocument) {
+      return a == b && (g = !0), a.ownerDocument ? -1 : 1
     }
-    var b = a.ownerDocument.createRange(), e = c.ownerDocument.createRange();
-    b.setStart(a, 0);
-    b.setEnd(a, 0);
-    e.setStart(c, 0);
-    e.setEnd(c, 0);
-    b = b.compareBoundaryPoints(Range.START_TO_END, e);
-    0 === b && (h = !0);
-    return b
+    var c = a.ownerDocument.createRange(), d = b.ownerDocument.createRange();
+    c.setStart(a, 0);
+    c.setEnd(a, 0);
+    d.setStart(b, 0);
+    d.setEnd(b, 0);
+    c = c.compareBoundaryPoints(Range.START_TO_END, d);
+    0 === c && (g = !0);
+    return c
   });
   (function() {
-    var a = document.createElement("div"), c = "script" + (new Date).getTime();
-    a.innerHTML = "<a name='" + c + "'/>";
-    var b = document.documentElement;
-    b.insertBefore(a, b.firstChild);
-    document.getElementById(c) && (g.find.ID = function(a, c, b) {
-      if("undefined" !== typeof c.getElementById && !b) {
-        return(c = c.getElementById(a[1])) ? c.id === a[1] || "undefined" !== typeof c.getAttributeNode && c.getAttributeNode("id").nodeValue === a[1] ? [c] : void 0 : []
+    var a = document.createElement("div"), b = "script" + (new Date).getTime();
+    a.innerHTML = "<a name='" + b + "'/>";
+    var c = document.documentElement;
+    c.insertBefore(a, c.firstChild);
+    document.getElementById(b) && (k.find.ID = function(a, b, c) {
+      if("undefined" !== typeof b.getElementById && !c) {
+        return(b = b.getElementById(a[1])) ? b.id === a[1] || "undefined" !== typeof b.getAttributeNode && b.getAttributeNode("id").nodeValue === a[1] ? [b] : void 0 : []
       }
-    }, g.filter.ID = function(a, c) {
-      var b = "undefined" !== typeof a.getAttributeNode && a.getAttributeNode("id");
-      return 1 === a.nodeType && b && b.nodeValue === c
+    }, k.filter.ID = function(a, b) {
+      var c = "undefined" !== typeof a.getAttributeNode && a.getAttributeNode("id");
+      return 1 === a.nodeType && c && c.nodeValue === b
     });
-    b.removeChild(a);
-    b = a = null
+    c.removeChild(a);
+    c = a = null
   })();
   (function() {
     var a = document.createElement("div");
     a.appendChild(document.createComment(""));
-    0 < a.getElementsByTagName("*").length && (g.find.TAG = function(a, c) {
-      var b = c.getElementsByTagName(a[1]);
+    0 < a.getElementsByTagName("*").length && (k.find.TAG = function(a, b) {
+      var c = b.getElementsByTagName(a[1]);
       if("*" === a[1]) {
-        for(var e = [], d = 0;b[d];d++) {
-          1 === b[d].nodeType && e.push(b[d])
+        for(var d = [], e = 0;c[e];e++) {
+          1 === c[e].nodeType && d.push(c[e])
         }
-        b = e
+        c = d
       }
-      return b
+      return c
     });
     a.innerHTML = "<a href='#'></a>";
-    a.firstChild && "undefined" !== typeof a.firstChild.getAttribute && "#" !== a.firstChild.getAttribute("href") && (g.attrHandle.href = function(a) {
+    a.firstChild && "undefined" !== typeof a.firstChild.getAttribute && "#" !== a.firstChild.getAttribute("href") && (k.attrHandle.href = function(a) {
       return a.getAttribute("href", 2)
     });
     a = null
   })();
   document.querySelectorAll && function() {
-    var a = k, c = document.createElement("div");
-    c.innerHTML = "<p class='TEST'></p>";
-    if(!c.querySelectorAll || 0 !== c.querySelectorAll(".TEST").length) {
-      k = function(c, b, e, d) {
-        b = b || document;
-        if(!d && 9 === b.nodeType && !y(b)) {
+    var a = l, b = document.createElement("div");
+    b.innerHTML = "<p class='TEST'></p>";
+    if(!b.querySelectorAll || 0 !== b.querySelectorAll(".TEST").length) {
+      l = function(b, c, d, e) {
+        c = c || document;
+        if(!e && 9 === c.nodeType && !u(c)) {
           try {
-            return x(b.querySelectorAll(c), e)
+            return v(c.querySelectorAll(b), d)
           }catch(f) {
           }
         }
-        return a(c, b, e, d)
+        return a(b, c, d, e)
       };
-      for(var b in a) {
-        k[b] = a[b]
+      for(var c in a) {
+        l[c] = a[c]
       }
-      c = null
+      b = null
     }
   }();
   (function() {
     var a = document.createElement("div");
     a.innerHTML = "<div class='test e'></div><div class='test'></div>";
-    a.getElementsByClassName && 0 !== a.getElementsByClassName("e").length && (a.lastChild.className = "e", 1 !== a.getElementsByClassName("e").length && (g.order.splice(1, 0, "CLASS"), g.find.CLASS = function(a, c, b) {
-      if("undefined" !== typeof c.getElementsByClassName && !b) {
-        return c.getElementsByClassName(a[1])
+    a.getElementsByClassName && 0 !== a.getElementsByClassName("e").length && (a.lastChild.className = "e", 1 !== a.getElementsByClassName("e").length && (k.order.splice(1, 0, "CLASS"), k.find.CLASS = function(a, b, c) {
+      if("undefined" !== typeof b.getElementsByClassName && !c) {
+        return b.getElementsByClassName(a[1])
       }
     }, a = null))
   })();
-  var A = document.compareDocumentPosition ? function(a, c) {
-    return!!(a.compareDocumentPosition(c) & 16)
-  } : function(a, c) {
-    return a !== c && (a.contains ? a.contains(c) : !0)
-  }, y = function(a) {
+  var w = document.compareDocumentPosition ? function(a, b) {
+    return!!(a.compareDocumentPosition(b) & 16)
+  } : function(a, b) {
+    return a !== b && (a.contains ? a.contains(b) : !0)
+  }, u = function(a) {
     return(a = (a ? a.ownerDocument || a : 0).documentElement) ? "HTML" !== a.nodeName : !1
-  }, r = function(a, c) {
-    for(var b = [], e = "", d, f = c.nodeType ? [c] : c;d = g.match.PSEUDO.exec(a);) {
-      e += d[0], a = a.replace(g.match.PSEUDO, "")
+  }, t = function(a, b) {
+    for(var c = [], d = "", e, f = b.nodeType ? [b] : b;e = k.match.PSEUDO.exec(a);) {
+      d += e[0], a = a.replace(k.match.PSEUDO, "")
     }
-    a = g.relative[a] ? a + "*" : a;
-    d = 0;
-    for(var h = f.length;d < h;d++) {
-      k(a, f[d], b)
+    a = k.relative[a] ? a + "*" : a;
+    e = 0;
+    for(var g = f.length;e < g;e++) {
+      l(a, f[e], c)
     }
-    return k.filter(e, b)
+    return l.filter(d, c)
   };
-  return k
+  return l
 }();
 ninjascript.tools = {};
-ninjascript.tools.JSONHandler = function(b) {
-  this.desc = b
+ninjascript.tools.JSONHandler = function(a) {
+  this.desc = a
 };
 (function() {
-  var b = ninjascript.tools.JSONHandler.prototype, d = ninjascript.Logger.log;
-  b.receive = function(c) {
-    this.compose([], c, this.desc);
+  var a = ninjascript.tools.JSONHandler.prototype, f = ninjascript.Logger.forComponent("json");
+  a.receive = function(a) {
+    this.compose([], a, this.desc);
     return null
   };
-  b.compose = function(c, a, b) {
-    if("function" == typeof b) {
+  a.compose = function(a, b, d) {
+    if("function" == typeof d) {
       try {
-        b.call(this, a)
-      }catch(f) {
-        d("prototype.Caught = " + f + " while handling JSON at " + c.join("/"))
+        d.call(this, b)
+      }catch(e) {
+        f.error("prototype.Caught = " + e + " while handling JSON at " + a.join("/"))
       }
     }else {
-      for(var h in a) {
-        a.hasOwnProperty(h) && h in b && this.compose(c.concat([h]), a[h], b[h])
+      for(var g in b) {
+        b.hasOwnProperty(g) && g in d && this.compose(a.concat([g]), b[g], d[g])
       }
     }
     return null
   };
-  b.inspectTree = function(c) {
-    var a = [], b;
-    for(b in c) {
-      "function" == typeof c[b] ? a.push(b) : Utils.forEach(this.inspectTree(c[b]), function(c) {
-        a.push(b + "." + c)
+  a.inspectTree = function(a) {
+    var b = [], d;
+    for(d in a) {
+      "function" == typeof a[d] ? b.push(d) : Utils.forEach(this.inspectTree(a[d]), function(a) {
+        b.push(d + "." + a)
       })
     }
-    return a
+    return b
   };
-  b.inspect = function() {
+  a.inspect = function() {
     return this.inspectTree(this.desc).join("\n")
   }
 })();
 ninjascript.utils = {};
 (function() {
-  var b = ninjascript.utils;
-  b.isArray = function(b) {
-    return"undefined" == typeof b ? !1 : b.constructor == Array
+  var a = ninjascript.utils;
+  a.isArray = function(a) {
+    return"undefined" == typeof a ? !1 : a.constructor == Array
   };
-  b.enrich = function(b, c) {
-    return jQuery.extend(b, c)
+  a.enrich = function(a, c) {
+    return jQuery.extend(a, c)
   };
-  b.clone = function(b) {
-    return jQuery.extend(!0, {}, b)
+  a.clone = function(a) {
+    return jQuery.extend(!0, {}, a)
   };
-  b.forEach = function(b, c, a) {
-    if("function" == typeof b.forEach) {
-      return b.forEach(c, a)
+  a.filter = "function" == typeof Array.prototype.filter ? function(a, c, b) {
+    return"function" == typeof a.filter ? a.filter(c, b) : Array.prototype.filter.call(a, c, b)
+  } : function(a, c, b) {
+    if("function" == typeof a.filter) {
+      return a.filter(c, b)
+    }
+    for(var d = [], e = a.length, g = 0;g < e;g += 1) {
+      c.call(b, a[g], g, a) && d.push(a[g])
+    }
+    return d
+  };
+  a.forEach = function(a, c, b) {
+    if("function" == typeof a.forEach) {
+      return a.forEach(c, b)
     }
     if("function" == typeof Array.prototype.forEach) {
-      return Array.prototype.forEach.call(b, c, a)
+      return Array.prototype.forEach.call(a, c, b)
     }
-    for(var e = Number(b.length), f = 0;f < e;f += 1) {
-      "undefined" != typeof b[f] && c.call(a, b[f], f, b)
+    for(var d = Number(a.length), e = 0;e < d;e += 1) {
+      "undefined" != typeof a[e] && c.call(b, a[e], e, a)
     }
   }
 })();
-ninjascript.BehaviorBinding = function(b) {
-  var d = function() {
+ninjascript.BehaviorBinding = function(a) {
+  var f = function() {
     this.stashedElements = [];
     this.eventHandlerSet = {}
   };
-  d.prototype = b;
-  b = new d;
-  b.initialize = function(c, a, b) {
-    this.behaviorConfig = a;
-    this.parent = c;
-    this.acquireTransform(a.transform);
-    this.acquireEventHandlers(a.eventHandlers);
-    this.acquireHelpers(a.helpers);
-    this.postElement = this.previousElement = b;
-    c = this.transform(b);
-    void 0 !== c && (this.postElement = c);
+  f.prototype = a;
+  a = new f;
+  a.initialize = function(a, b, d) {
+    this.behaviorConfig = b;
+    this.parent = a;
+    this.acquireTransform(b.transform);
+    this.acquireEventHandlers(b.eventHandlers);
+    this.acquireHelpers(b.helpers);
+    this.postElement = this.previousElement = d;
+    a = this.transform(d);
+    void 0 !== a && (this.postElement = a);
     this.element = this.postElement;
     return this
   };
-  b.binding = function(c, a) {
-    var b = this, d = function() {
-      this.initialize(b, c, a)
+  a.binding = function(a, b) {
+    var d = this, e = function() {
+      this.initialize(d, a, b)
     };
-    d.prototype = this;
-    return new d
+    e.prototype = this;
+    return new e
   };
-  b.acquireEventHandlers = function(c) {
-    for(var a = c.length, b = 0, d, b = 0;b < a;b++) {
-      d = c[b].name;
-      var h = this, n = c[b].buildHandlerFunction(this.parent[d]);
-      this[d] = function() {
+  a.acquireEventHandlers = function(a) {
+    for(var b = a.length, d = 0, e, d = 0;d < b;d++) {
+      e = a[d].name;
+      var g = this, f = a[d].buildHandlerFunction(this.parent[e]);
+      this[e] = function() {
         var a = Array.prototype.shift.call(arguments);
         Array.prototype.unshift.call(arguments, this);
         Array.prototype.unshift.call(arguments, a);
-        return n.apply(h, arguments)
+        return f.apply(g, arguments)
       }
     }
   };
-  b.acquireHelpers = function(c) {
-    for(var a in c) {
-      this[a] = c[a]
+  a.acquireHelpers = function(a) {
+    for(var b in a) {
+      this[b] = a[b]
     }
   };
-  b.acquireTransform = function(c) {
-    this.transform = c
+  a.acquireTransform = function(a) {
+    this.transform = a
   };
-  b.stash = function(c) {
-    this.stashedElements.unshift(c);
-    jQuery(c).detach();
-    return c
+  a.stash = function(a) {
+    this.stashedElements.unshift(a);
+    jQuery(a).detach();
+    return a
   };
-  b.unstash = function() {
-    var c = jQuery(this.stashedElements.shift()), a = this.hiddenDiv();
-    c.data("ninja-visited", this);
-    jQuery(a).append(c);
+  a.unstash = function() {
+    var a = jQuery(this.stashedElements.shift()), b = this.hiddenDiv();
+    a.data("ninja-visited", this);
+    jQuery(b).append(a);
     this.parent.bindHandlers();
-    return c
+    return a
   };
-  b.clearStash = function() {
+  a.clearStash = function() {
     this.stashedElements = []
   };
-  b.cascadeEvent = function(c) {
+  a.cascadeEvent = function(a) {
     for(;0 < this.stashedElements.length;) {
-      this.unstash().trigger(c)
+      this.unstash().trigger(a)
     }
   };
-  b.bindHandlers = function() {
-    for(var c = jQuery(this.postElement), a = this.behaviorConfig.eventHandlers, b = a.length, d = 0;d < b;d++) {
-      c.bind(a[d].name, this[a[d].name])
+  a.bindHandlers = function() {
+    for(var a = jQuery(this.postElement), b = this.behaviorConfig.eventHandlers, d = b.length, e = 0;e < d;e++) {
+      a.bind(b[e].name, this[b[e].name])
     }
   };
-  b.unbindHandlers = function() {
-    for(var c = jQuery(this.postElement), a = this.behaviorConfig.eventHandlers, b = a.length, d = 0;d < b;d++) {
-      c.unbind(a[d].name, this[a[d].name])
+  a.unbindHandlers = function() {
+    for(var a = jQuery(this.postElement), b = this.behaviorConfig.eventHandlers, d = b.length, e = 0;e < d;e++) {
+      a.unbind(b[e].name, this[b[e].name])
     }
   };
-  return b.binding({transform:function(c) {
-    return c
+  return a.binding({transform:function(a) {
+    return a
   }, eventHandlers:[], helpers:{}}, null)
 };
 ninjascript.BehaviorRuleBuilder = function() {
@@ -900,207 +946,217 @@ ninjascript.BehaviorRuleBuilder = function() {
   this.behaviors = []
 };
 (function() {
-  var b = ninjascript.BehaviorRuleBuilder.prototype, d = ninjascript.utils;
-  b.normalizeFinder = function(c) {
-    return"string" == typeof c ? function(a) {
-      return ninjascript.sizzle(c, a)
-    } : c
+  var a = ninjascript.BehaviorRuleBuilder.prototype, f = ninjascript.utils;
+  a.normalizeFinder = function(a) {
+    return"string" == typeof a ? function(b) {
+      return ninjascript.sizzle(a, b)
+    } : a
   };
-  b.normalizeBehavior = function(c) {
-    return c instanceof ninjascript.behaviors.Abstract ? c : "function" == typeof c ? c.call(this.ninja) : new ninjascript.behaviors.Basic(c)
+  a.normalizeBehavior = function(a) {
+    return a instanceof ninjascript.behaviors.Abstract ? a : "function" == typeof a ? a.call(this.ninja) : new ninjascript.behaviors.Basic(a)
   };
-  b.buildRules = function(c) {
+  a.buildRules = function(a) {
     this.rules = [];
+    this.originalFinder = this.finder;
     this.finder = this.normalizeFinder(this.finder);
-    for(d.isArray(c) ? this.behaviors = c : this.behaviors = [c];0 < this.behaviors.length;) {
-      if(c = this.behaviors.shift(), c = this.normalizeBehavior(c), d.isArray(c)) {
-        this.behaviors = this.behaviors.concat(c)
+    for(f.isArray(a) ? this.behaviors = a : this.behaviors = [a];0 < this.behaviors.length;) {
+      if(a = this.behaviors.shift(), a = this.normalizeBehavior(a), f.isArray(a)) {
+        this.behaviors = this.behaviors.concat(a)
       }else {
-        var a = new ninjascript.BehaviorRule;
-        a.finder = this.finder;
-        a.behavior = c;
-        this.rules.push(a)
+        var b = new ninjascript.BehaviorRule;
+        b.finder = this.finder;
+        b.originalFinder = this.originalFinder == this.finder ? "[same]" : this.originalFinder;
+        b.behavior = a;
+        this.rules.push(b)
       }
     }
   }
 })();
-ninjascript.behaviors.Basic = function(b) {
+ninjascript.behaviors.Basic = function(a) {
   this.helpers = {};
   this.eventHandlers = [];
   this.priority = this.lexicalOrder = 0;
-  "function" == typeof b.transform && (this.transform = b.transform, delete b.transform);
-  "undefined" != typeof b.helpers && (this.helpers = b.helpers, delete b.helpers);
-  "undefined" != typeof b.priority && (this.priority = b.priority);
-  delete b.priority;
-  this.eventHandlers = "undefined" != typeof b.events ? this.eventConfigs(b.events) : this.eventConfigs(b);
+  "function" == typeof a.transform && (this.transform = a.transform, delete a.transform);
+  "undefined" != typeof a.helpers && (this.helpers = a.helpers, delete a.helpers);
+  "undefined" != typeof a.priority && (this.priority = a.priority);
+  delete a.priority;
+  this.eventHandlers = "undefined" != typeof a.events ? this.eventConfigs(a.events) : this.eventConfigs(a);
   return this
 };
 ninjascript.behaviors.Basic.prototype = new ninjascript.behaviors.Abstract;
 (function() {
-  var b = ninjascript.behaviors.Basic.prototype, d = ninjascript.behaviors.EventHandlerConfig;
-  b.priority = function(c) {
-    this.priority = c;
+  var a = ninjascript.behaviors.Basic.prototype, f = ninjascript.behaviors.EventHandlerConfig;
+  a.priority = function(a) {
+    this.priority = a;
     return this
   };
-  b.choose = function(c) {
+  a.choose = function(a) {
     return this
   };
-  b.eventConfigs = function(c) {
-    var a = [], b;
-    for(b in c) {
-      a.push(new d(b, c[b]))
+  a.eventConfigs = function(a) {
+    var b = [], d;
+    for(d in a) {
+      b.push(new f(d, a[d]))
     }
+    return b
+  };
+  a.transform = function(a) {
     return a
   };
-  b.transform = function(c) {
-    return c
-  };
-  b.expandRules = function(c) {
+  a.expandRules = function(a) {
     return[]
   };
-  b.helpers = {}
+  a.helpers = {}
 })();
 ninjascript.BehaviorRule = function() {
-  this.finder = function(b) {
+  this.finder = function(a) {
     return[]
   };
   this.behavior = null
 };
-ninjascript.BehaviorRule.build = function(b, d, c) {
+ninjascript.BehaviorRule.build = function(a, f, c) {
   builder = new ninjascript.BehaviorRuleBuilder;
-  builder.ninja = b;
-  builder.finder = d;
+  builder.ninja = a;
+  builder.finder = f;
   builder.buildRules(c);
   return builder.rules
 };
 (function() {
-  var b = ninjascript.BehaviorRule.prototype;
-  b.match = function(b) {
-    return this.matchRoots([b], this.finder)
+  var a = ninjascript.BehaviorRule.prototype;
+  a.match = function(a) {
+    return this.matchRoots([a], this.finder)
   };
-  b.matchRoots = function(b, c) {
-    var a, e = b.length, f = [];
-    for(a = 0;a < e;a++) {
-      f = f.concat(c(b[a]))
+  a.matchRoots = function(a, c) {
+    var b, d = a.length, e = [];
+    for(b = 0;b < d;b++) {
+      e = e.concat(c(a[b]))
     }
-    return f
+    return e
   };
-  b.chainFinder = function(b) {
+  a.chainFinder = function(a) {
     return function(c) {
-      return this.matchRoots(precendent.finder(c), b)
+      return this.matchRoots(precendent.finder(c), a)
     }
   };
-  b.chainRule = function(b, c) {
-    var a = new ninjascript.BehaviorRule;
-    a.finder = this.chainFinder(b);
-    a.behavior = c;
-    return a
+  a.chainRule = function(a, c) {
+    var b = new ninjascript.BehaviorRule;
+    b.finder = this.chainFinder(a);
+    b.behavior = c;
+    return b
   }
 })();
-ninjascript.BehaviorCollection = function(b) {
+ninjascript.BehaviorCollection = function(a) {
   this.lexicalCount = 0;
   this.rules = [];
-  this.parts = b;
-  this.tools = b.tools;
+  this.parts = a;
+  this.tools = a.tools;
   return this
 };
 (function() {
-  var b = ninjascript.BehaviorCollection.prototype, d = ninjascript.utils, c = ninjascript.BehaviorBinding, a = ninjascript.BehaviorRule, e = d.forEach, f = ninjascript.Logger.log, h = ninjascript.exceptions.TransformFailed, n = ninjascript.exceptions.CouldntChoose;
-  b.ninja = function() {
+  var a = ninjascript.BehaviorCollection.prototype, f = ninjascript.utils, c = ninjascript.BehaviorBinding, b = ninjascript.BehaviorRule, d = f.forEach, e = f.filter, g = ninjascript.Logger.forComponent("behavior-list"), m = ninjascript.exceptions.TransformFailed, l = ninjascript.exceptions.CouldntChoose;
+  a.ninja = function() {
     return this.parts.ninja
   };
-  b.addBehavior = function(c, b) {
-    d.isArray(b) ? e(b, function(a) {
-      this.addBehavior(c, a)
-    }, this) : e(a.build(this.ninja(), c, b), function(a) {
+  a.addBehavior = function(a, c) {
+    f.isArray(c) ? d(c, function(b) {
+      this.addBehavior(a, b)
+    }, this) : d(b.build(this.ninja(), a, c), function(a) {
       this.addBehaviorRule(a)
     }, this)
   };
-  b.addBehaviorRule = function(a) {
+  a.addBehaviorRule = function(a) {
     a.behavior.lexicalOrder = this.lexicalCount;
     this.lexicalCount += 1;
     this.rules.push(a)
   };
-  b.finalize = function() {
-    for(var a, c = 0;c < this.rules.length;c++) {
-      a = this.rules[c];
+  a.finalize = function() {
+    var a;
+    g.info("Finalizing ruleset. Rule count:", this.rules.length);
+    for(var b = 0;b < this.rules.length;b++) {
+      a = this.rules[b];
       a = a.behavior.expandRules(a);
-      for(var b = 0;b < a.length;b++) {
-        this.addBehaviorRule(a[b])
+      for(var c = 0;c < a.length;c++) {
+        this.addBehaviorRule(a[c])
       }
     }
+    g.debug("Complete ruleset:", this.rules)
   };
-  b.applyAll = function(a) {
-    var c, b, e, d, f, h, n, y = !1, r = [];
-    f = this.rules.length;
-    for(c = 0;c < f;c++) {
-      for(h = this.rules[c].match(a), d = h.length, n = r.length, b = 0;b < d;b++) {
-        for(e = 0;e < n;e++) {
-          if(h[b] == r[e].element) {
-            r[e].behaviors.push(this.rules[c].behavior);
-            y = !0;
+  a.applyAll = function(a) {
+    var b, c, d, f, l, m, u, t = !1, h = [];
+    l = this.rules.length;
+    g.info("Applying all behavior rules");
+    for(b = 0;b < l;b++) {
+      for(m = this.rules[b].match(document), m = e(m, function(b) {
+        return jQuery.contains(a, b)
+      }), f = m.length, 0 >= f && g.debug("Behavior matched no elements:", this.rules[b]), u = h.length, c = 0;c < f;c++) {
+        t = !1;
+        for(d = 0;d < u;d++) {
+          if(m[c] == h[d].element) {
+            h[d].behaviors.push(this.rules[b].behavior);
+            t = !0;
             break
           }
         }
-        y || (r.push({element:h[b], behaviors:[this.rules[c].behavior]}), n = r.length)
+        t || (h.push({element:m[c], behaviors:[this.rules[b].behavior]}), u = h.length)
       }
     }
-    for(c = 0;c < n;c++) {
-      jQuery(r[c].element).data("ninja-visited") || this.apply(r[c].element, r[c].behaviors)
+    g.debug("Elements with behaviors:", h);
+    for(b = 0;b < u;b++) {
+      jQuery(h[b].element).data("ninja-visited") || (g.debug("Applying:", h[b]), this.apply(h[b].element, h[b].behaviors))
     }
   };
-  b.apply = function(a, b) {
-    var e = [], e = this.collectBehaviors(a, b), d = jQuery(a).data("ninja-visited");
-    d ? d.unbindHandlers() : d = c(this.tools);
-    this.applyBehaviorsInContext(d, a, e)
+  a.apply = function(a, b) {
+    var d = [], d = this.collectBehaviors(a, b), e = jQuery(a).data("ninja-visited");
+    e ? e.unbindHandlers() : e = c(this.tools);
+    this.applyBehaviorsInContext(e, a, d)
   };
-  b.collectBehaviors = function(a, c) {
-    var b = [];
-    e(c, function(c) {
+  a.collectBehaviors = function(a, b) {
+    var c = [];
+    d(b, function(b) {
       try {
-        b.push(c.choose(a))
-      }catch(e) {
-        if(e instanceof n) {
-          f("!!! couldn't choose")
+        c.push(b.choose(a))
+      }catch(d) {
+        if(d instanceof l) {
+          g.warn("couldn't choose")
         }else {
-          throw f(e), e;
+          throw g.errror(d), d;
         }
       }
     });
-    return b
-  };
-  b.applyBehaviorsInContext = function(a, c, b) {
-    var d = a;
-    b = this.sortBehaviors(b);
-    e(b, function(b) {
-      try {
-        a = a.binding(b, c), c = a.element
-      }catch(e) {
-        if(e instanceof h) {
-          f("!!! Transform failed")
-        }else {
-          throw f(e), e;
-        }
-      }
-    });
-    d.visibleElement = c;
-    jQuery(c).data("ninja-visited", a);
-    a.bindHandlers();
-    this.tools.fireMutationEvent();
     return c
   };
-  b.sortBehaviors = function(a) {
-    return a.sort(function(a, c) {
-      return a.priority != c.priority ? void 0 === a.priority ? -1 : void 0 === c.priority ? 1 : a.priority - c.priority : a.lexicalOrder - c.lexicalOrder
+  a.applyBehaviorsInContext = function(a, b, c) {
+    var e = a;
+    c = this.sortBehaviors(c);
+    d(c, function(c) {
+      try {
+        a = a.binding(c, b), b = a.element
+      }catch(d) {
+        if(d instanceof m) {
+          g.warn("Transform failed", a.element, c)
+        }else {
+          throw g.error(d), d;
+        }
+      }
+    });
+    e.visibleElement = b;
+    jQuery(b).data("ninja-visited", a);
+    a.bindHandlers();
+    this.tools.fireMutationEvent();
+    return b
+  };
+  a.sortBehaviors = function(a) {
+    return a.sort(function(a, b) {
+      return a.priority != b.priority ? void 0 === a.priority ? -1 : void 0 === b.priority ? 1 : a.priority - b.priority : a.lexicalOrder - b.lexicalOrder
     })
   }
 })();
 ninjascript.mutation = {};
-ninjascript.mutation.EventHandler = function(b, d) {
+ninjascript.mutation.EventHandler = function(a, f) {
   this.eventQueue = [];
   this.mutationTargets = [];
-  this.behaviorCollection = d;
-  this.docRoot = b;
+  this.behaviorCollection = f;
+  this.docRoot = a;
   var c = this;
   this.handleMutationEvent = function(a) {
     c.mutationEventTriggered(a)
@@ -1110,49 +1166,51 @@ ninjascript.mutation.EventHandler = function(b, d) {
   }
 };
 (function() {
-  var b = ninjascript.mutation.EventHandler.prototype, d = ninjascript.utils.forEach;
-  b.setup = function() {
+  var a = ninjascript.mutation.EventHandler.prototype, f = ninjascript.Logger.forComponent("mutation"), c = ninjascript.utils.forEach;
+  a.setup = function() {
     this.docRoot.bind("DOMSubtreeModified DOMNodeInserted thisChangedDOM", this.handleMutationEvent);
     this.docRoot.one("DOMSubtreeModified DOMNodeInserted", this.handleNaturalMutationEvent);
     this.setup = function() {
     }
   };
-  b.teardown = function() {
+  a.teardown = function() {
     delete this.setup;
     this.docRoot.unbind("DOMSubtreeModified DOMNodeInserted thisChangedDOM", this.handleMutationEvent)
   };
-  b.detachSyntheticMutationEvents = function() {
+  a.detachSyntheticMutationEvents = function() {
+    f.debug("Detaching polyfill mutation functions");
     this.fireMutationEvent = function() {
     };
     this.addMutationTargets = function() {
     }
   };
-  b.addMutationTargets = function(c) {
-    this.mutationTargets = this.mutationTargets.concat(c)
+  a.addMutationTargets = function(a) {
+    this.mutationTargets = this.mutationTargets.concat(a)
   };
-  b.fireMutationEvent = function() {
-    var c = this.mutationTargets;
-    if(0 < c.length) {
-      for(var a = c[0];0 < c.length;a = c.shift()) {
-        jQuery(a).trigger("thisChangedDOM")
+  a.fireMutationEvent = function() {
+    var a = this.mutationTargets;
+    if(0 < a.length) {
+      for(var c = a[0];0 < a.length;c = a.shift()) {
+        jQuery(c).trigger("thisChangedDOM")
       }
     }else {
       this.docRoot.trigger("thisChangedDOM")
     }
   };
-  b.mutationEventTriggered = function(c) {
-    0 == this.eventQueue.length ? (this.enqueueEvent(c), this.handleQueue()) : this.enqueueEvent(c)
+  a.mutationEventTriggered = function(a) {
+    0 == this.eventQueue.length ? (this.enqueueEvent(a), this.handleQueue()) : this.enqueueEvent(a)
   };
-  b.enqueueEvent = function(c) {
-    var a = !1, b = [];
-    d(this.eventQueue, function(d) {
-      a = a || jQuery.contains(d.target, c.target);
-      jQuery.contains(c.target, d.target) || b.push(d)
+  a.enqueueEvent = function(a) {
+    var d = !1, e = [];
+    f.debug("enqueueing");
+    c(this.eventQueue, function(c) {
+      d = d || jQuery.contains(c.target, a.target);
+      jQuery.contains(a.target, c.target) || e.push(c)
     });
-    a || (b.unshift(c), this.eventQueue = b)
+    d || (e.unshift(a), this.eventQueue = e)
   };
-  b.handleQueue = function() {
-    for(;0 != this.eventQueue.length;) {
+  a.handleQueue = function() {
+    for(f.info("consuming queue");0 != this.eventQueue.length;) {
       this.behaviorCollection.applyAll(this.eventQueue[0].target), this.eventQueue.shift()
     }
   }
@@ -1161,38 +1219,38 @@ ninjascript.NinjaScript = function() {
 };
 ninjascript.NinjaScript.prototype = new ninjascript.Extensible;
 (function() {
-  var b = ninjascript.NinjaScript.prototype, d = ninjascript.utils, c = ninjascript.Logger.log;
-  b.plugin = function(a) {
+  var a = ninjascript.NinjaScript.prototype, f = ninjascript.utils, c = ninjascript.Logger.forComponent("ninja");
+  a.plugin = function(a) {
     return ninjascript.Extensible.addPackage({Ninja:this, tools:this.tools}, a)
   };
-  b.configure = function(a) {
-    d.enrich(this.config, a)
+  a.configure = function(a) {
+    f.enrich(this.config, a)
   };
-  b.respondToJson = function(a) {
+  a.respondToJson = function(a) {
     this.jsonDispatcher.addHandler(a)
   };
-  b.goodBehavior = function(a) {
-    var b = this.extensions.collection, d;
-    for(d in a) {
-      "undefined" == typeof a[d] ? c("Selector " + d + " not properly defined - ignoring") : b.addBehavior(d, a[d])
+  a.goodBehavior = function(a) {
+    var d = this.extensions.collection, e;
+    for(e in a) {
+      "undefined" == typeof a[e] ? c.warn("Selector " + e + " not properly defined - ignoring") : d.addBehavior(e, a[e])
     }
     this.failSafeGo()
   };
-  b.behavior = b.goodBehavior;
-  b.failSafeGo = function() {
+  a.behavior = a.goodBehavior;
+  a.failSafeGo = function() {
     this.failSafeGo = function() {
     };
     jQuery(window).load(function() {
       Ninja.go()
     })
   };
-  b.badBehavior = function(a) {
+  a.badBehavior = function(a) {
     throw Error("Called Ninja.behavior() after Ninja.go() - don't do that.  'Go' means 'I'm done, please proceed'");
   };
-  b.go = function() {
+  a.go = function() {
     this.behavior != this.badBehavior && (this.behavior = this.badBehavior, this.extensions.collection.finalize(), this.mutationHandler.setup(), this.mutationHandler.fireMutationEvent())
   };
-  b.stop = function() {
+  a.stop = function() {
     this.mutationHandler.teardown();
     this.behavior = this.goodBehavior
   }
@@ -1201,65 +1259,65 @@ ninjascript.Tools = function() {
 };
 ninjascript.Tools.prototype = new ninjascript.Extensible;
 (function() {
-  var b = ninjascript.Tools.prototype, d = ninjascript.exceptions.TransformFailed, c = ninjascript.Logger.log;
-  b.forEach = ninjascript.utils.forEach;
-  b.ensureDefaults = function(a, c) {
+  var a = ninjascript.Tools.prototype, f = ninjascript.utils, c = ninjascript.exceptions.TransformFailed, b = ninjascript.Logger.forComponent("tools");
+  a.forEach = f.forEach;
+  a.ensureDefaults = function(a, b) {
     a instanceof Object || (a = {});
-    for(var b in c) {
-      "undefined" == typeof a[b] && ("undefined" != typeof this.ninja.config[b] ? a[b] = this.ninja.config[b] : "undefined" != typeof c[b] && (a[b] = c[b]))
+    for(var c in b) {
+      "undefined" == typeof a[c] && ("undefined" != typeof this.ninja.config[c] ? a[c] = this.ninja.config[c] : "undefined" != typeof b[c] && (a[c] = b[c]))
     }
     return a
   };
-  b.getRootOfDocument = function() {
+  a.getRootOfDocument = function() {
     return jQuery("html")
   };
-  b.getRootCollection = function() {
+  a.getRootCollection = function() {
     return this.ninja.collection
   };
-  b.fireMutationEvent = function() {
+  a.fireMutationEvent = function() {
     this.ninja.mutationHandler.fireMutationEvent()
   };
-  b.copyAttributes = function(a, c, b) {
-    var d = RegExp("^" + b.join("$|^") + "$");
-    c = jQuery(c);
+  a.copyAttributes = function(a, b, c) {
+    var f = RegExp("^" + c.join("$|^") + "$");
+    b = jQuery(b);
     this.forEach(a.attributes, function(a) {
-      d.test(a.nodeName) && c.attr(a.nodeName, a.nodeValue)
+      f.test(a.nodeName) && b.attr(a.nodeName, a.nodeValue)
     })
   };
-  b.deriveElementsFrom = function(a, c) {
-    switch(typeof c) {
+  a.deriveElementsFrom = function(a, b) {
+    switch(typeof b) {
       case "undefined":
         return a;
       case "string":
-        return jQuery(c);
+        return jQuery(b);
       case "function":
-        return c(a)
+        return b(a)
     }
   };
-  b.extractMethod = function(a, b) {
+  a.extractMethod = function(a, c) {
     if(void 0 !== a.dataset && void 0 !== a.dataset.method && 0 < a.dataset.method.length) {
-      return c("Override via prototype.dataset = " + a.dataset.method), a.dataset.method
+      return b.info("Override via prototype.dataset = " + a.dataset.method), a.dataset.method
     }
     if(void 0 === a.dataset && void 0 !== jQuery(a).attr("data-method")) {
-      return c("Override via data-prototype.method = " + jQuery(a).attr("data-method")), jQuery(a).attr("data-method")
+      return b.info("Override via data-prototype.method = " + jQuery(a).attr("data-method")), jQuery(a).attr("data-method")
     }
-    if("undefined" !== typeof b) {
-      for(var d = 0, h = b.length;d < h;d++) {
-        if("Method" == b[d].name) {
-          return c("Override via prototype.Method = " + b[d].value), b[d].value
+    if("undefined" !== typeof c) {
+      for(var f = 0, m = c.length;f < m;f++) {
+        if("Method" == c[f].name) {
+          return b.info("Override via prototype.Method = " + c[f].value), c[f].value
         }
       }
     }
     return"undefined" !== typeof a.method ? a.method : "GET"
   };
-  b.cantTransform = function(a) {
-    throw new d(a);
+  a.cantTransform = function(a) {
+    throw new c(a);
   };
-  b.message = function(a, c) {
-    var b = this.ninja.config.messageWrapping(a, c);
-    jQuery(this.ninja.config.messageList).append(b)
+  a.message = function(a, b) {
+    var c = this.ninja.config.messageWrapping(a, b);
+    jQuery(this.ninja.config.messageList).append(c)
   };
-  b.hiddenDiv = function() {
+  a.hiddenDiv = function() {
     var a = jQuery("div#ninja-hide");
     if(0 < a.length) {
       return a[0]
@@ -1270,21 +1328,21 @@ ninjascript.Tools.prototype = new ninjascript.Extensible;
     return a
   }
 })();
-ninjascript.plugin = function(b) {
-  ninjascript.Extensible.addPackage({Ninja:ninjascript.NinjaScript.prototype, tools:ninjascript.Tools.prototype}, b)
+ninjascript.plugin = function(a) {
+  ninjascript.Extensible.addPackage({Ninja:ninjascript.NinjaScript.prototype, tools:ninjascript.Tools.prototype}, a)
 };
 ninjascript.packagedBehaviors = {};
 ninjascript.packagedBehaviors.confirm = {};
 (function() {
-  ninjascript.plugin(function(b) {
-    b.behaviors({confirms:function(b) {
-      function c(a, c) {
-        confirm(b.confirmMessage(c)) || (a.preventDefault(), a.preventFallthrough())
+  ninjascript.plugin(function(a) {
+    a.behaviors({confirms:function(a) {
+      function c(b, c) {
+        confirm(a.confirmMessage(c)) || (b.preventDefault(), b.preventFallthrough())
       }
-      b = this.tools.ensureDefaults(b, {confirmMessage:function(a) {
+      a = this.tools.ensureDefaults(a, {confirmMessage:function(a) {
         return $(a).attr("data-confirm")
       }});
-      "string" == typeof b.confirmMessage && (message = b.confirmMessage, b.confirmMessage = function(a) {
+      "string" == typeof a.confirmMessage && (message = a.confirmMessage, a.confirmMessage = function(a) {
         return message
       });
       return new this.types.selects({form:new this.types.does({priority:20, events:{submit:[c, "andDoDefault"]}}), "a,input":new this.types.does({priority:20, events:{click:[c, "andDoDefault"]}})})
@@ -1293,10 +1351,10 @@ ninjascript.packagedBehaviors.confirm = {};
 })();
 ninjascript.packagedBehaviors.placeholder = {};
 (function() {
-  var b = {placeholderSubmitter:function(a) {
-    return new this.types.does({priority:1E3, submit:[function(c, b, d) {
+  var a = {placeholderSubmitter:function(a) {
+    return new this.types.does({priority:1E3, submit:[function(c, e, f) {
       a.prepareForSubmit();
-      d(c)
+      f(c)
     }, "andDoDefault"]})
   }, grabsPlaceholderText:function(a) {
     a = this.tools.ensureDefaults(a, {textElementSelector:function(a) {
@@ -1306,59 +1364,59 @@ ninjascript.packagedBehaviors.placeholder = {};
       return 0 == c.length ? null : c[0]
     }});
     return new this.types.does({priority:-10, transform:function(c) {
-      var b = $(a.findTextElement(c));
-      null === b && this.cantTransform();
-      this.placeholderText = b.text();
-      $(c).attr("placeholder", b.text());
-      this.stash(b.detach())
+      var e = $(a.findTextElement(c));
+      null === e && this.cantTransform();
+      this.placeholderText = e.text();
+      $(c).attr("placeholder", e.text());
+      this.stash(e.detach())
     }})
-  }}, d = !!("placeholder" in document.createElement("input")), c = !!("placeholder" in document.createElement("textarea"));
-  d || (b.alternateInput = function(a, c) {
+  }}, f = !!("placeholder" in document.createElement("input")), c = !!("placeholder" in document.createElement("textarea"));
+  f || (a.alternateInput = function(a, c) {
     return new this.types.does({helpers:{prepareForSubmit:function() {
       $(this.element).val("")
     }}, transform:function() {
       this.applyBehaviors(c, [placeholderSubmitter(this)])
     }, events:{focus:function(c) {
       c = $(this.element);
-      var b = c.attr("id");
+      var d = c.attr("id");
       c.attr("id", "");
       c.replaceWith(a);
-      a.attr("id", b);
+      a.attr("id", d);
       a.focus()
     }}})
-  }, b.hasPlaceholderPassword = function(a) {
+  }, a.hasPlaceholderPassword = function(a) {
     a = this.tools.ensureDefaults(a, {findParentForm:function(a) {
       return a.parents("form")[0]
     }, retainedInputAttributes:"name class style title lang dir size maxlength alt tabindex accesskey data-.*".split(" ")});
     return new this.types.does({priority:1E3, helpers:{swapInAlternate:function() {
-      var a = $(this.element), c = a.attr("id");
-      "" == a.val() && (a.attr("id", ""), a.replaceWith(this.placeholderTextInput), this.placeholderTextInput.attr("id", c))
+      var a = $(this.element), b = a.attr("id");
+      "" == a.val() && (a.attr("id", ""), a.replaceWith(this.placeholderTextInput), this.placeholderTextInput.attr("id", b))
     }}, transform:function(c) {
-      var b, d = $(c);
-      b = $('<input type="text">');
-      this.copyAttributes(c, b, a.retainedInputAttributes);
-      b.addClass("ninja_placeholder");
-      b.val(this.placeholderText);
-      d = alternateInput(d, a.findParentForm(d));
-      this.applyBehaviors(b, [d]);
-      this.placeholderTextInput = b;
+      var e, f = $(c);
+      e = $('<input type="text">');
+      this.copyAttributes(c, e, a.retainedInputAttributes);
+      e.addClass("ninja_placeholder");
+      e.val(this.placeholderText);
+      f = alternateInput(f, a.findParentForm(f));
+      this.applyBehaviors(e, [f]);
+      this.placeholderTextInput = e;
       this.swapInAlternate();
       return c
     }, events:{blur:function(a) {
       this.swapInAlternate()
     }}})
   });
-  d && c || (b.hasPlaceholderText = function(a) {
+  f && c || (a.hasPlaceholderText = function(a) {
     a = this.tools.ensureDefaults(a, {findParentForm:function(a) {
       return a.parents("form")[0]
     }});
     return new this.types.does({priority:1E3, helpers:{prepareForSubmit:function() {
       $(this.element).hasClass("ninja_placeholder") && $(this.element).val("")
     }}, transform:function(c) {
-      var b = $(c);
-      b.addClass("ninja_placeholder");
-      b.val(this.placeholderText);
-      this.applyBehaviors(a.findParentForm(b), [placeholderSubmitter(this)]);
+      var e = $(c);
+      e.addClass("ninja_placeholder");
+      e.val(this.placeholderText);
+      this.applyBehaviors(a.findParentForm(e), [placeholderSubmitter(this)]);
       return c
     }, events:{focus:function(a) {
       $(this.element).hasClass("ninja_placeholder") && $(this.element).removeClass("ninja_placeholder").val("")
@@ -1366,78 +1424,78 @@ ninjascript.packagedBehaviors.placeholder = {};
       "" == $(this.element).val() && $(this.element).addClass("ninja_placeholder").val(this.placeholderText)
     }}})
   });
-  b.hasPlaceholder = function(a) {
-    var b = [this.grabsPlaceholderText(a)], f = null, h = null, n = null;
-    d && c || (d || (f = this.hasPlaceholderText(a), h = this.hasPlaceholderPassword(a)), c || (n = this.hasPlaceholderText(a)), b.push(new this.types.chooses(function(a) {
+  a.hasPlaceholder = function(a) {
+    var d = [this.grabsPlaceholderText(a)], e = null, g = null, m = null;
+    f && c || (f || (e = this.hasPlaceholderText(a), g = this.hasPlaceholderPassword(a)), c || (m = this.hasPlaceholderText(a)), d.push(new this.types.chooses(function(a) {
       a = $(a);
       if(a.is("input[type=text]")) {
-        return f
+        return e
       }
       if(a.is("textarea")) {
-        return n
+        return m
       }
       if(a.is("input[type=password]")) {
-        return h
+        return g
       }
     })));
-    return b
+    return d
   };
-  ninjascript.plugin(function(a) {
-    a.Ninja(b)
+  ninjascript.plugin(function(b) {
+    b.Ninja(a)
   })
 })();
 ninjascript.packagedBehaviors.standard = {};
 (function() {
-  var b = ninjascript.Logger.log;
-  ninjascript.plugin(function(d) {
-    d.ninja({submitsAsAjax:function(c) {
-      var a = this.submitsAsAjaxLink(c), b = this.submitsAsAjaxForm(c);
-      return new this.types.chooses(function(c) {
-        switch(c.tagName.toLowerCase()) {
+  var a = ninjascript.Logger.forComponent("standard-behaviors");
+  ninjascript.plugin(function(f) {
+    f.ninja({submitsAsAjax:function(a) {
+      var b = this.submitsAsAjaxLink(a), d = this.submitsAsAjaxForm(a);
+      return new this.types.chooses(function(a) {
+        switch(a.tagName.toLowerCase()) {
           case "a":
-            return a;
+            return b;
           case "form":
-            return b
+            return d
         }
       })
-    }, submitsAsAjaxLink:function(c) {
-      c = this.tools.ensureDefaults(c, {busyElement:function(a) {
+    }, submitsAsAjaxLink:function(a) {
+      a = this.tools.ensureDefaults(a, {busyElement:function(a) {
         return $(a).parents("address,blockquote,body,dd,div,p,dl,dt,table,form,ol,ul,tr")[0]
       }});
-      c.actions || (c.actions = c.expectsJSON);
-      return new this.types.does({priority:10, helpers:{findOverlay:function(a) {
-        return this.deriveElementsFrom(a, c.busyElement)
-      }}, events:{click:function(a) {
-        this.overlayAndSubmit(this.visibleElement, a.target, a.target.href, c.actions)
+      a.actions || (a.actions = a.expectsJSON);
+      return new this.types.does({priority:10, helpers:{findOverlay:function(b) {
+        return this.deriveElementsFrom(b, a.busyElement)
+      }}, events:{click:function(b) {
+        this.overlayAndSubmit(this.visibleElement, b.target, b.target.href, a.actions)
       }}})
-    }, submitsAsAjaxForm:function(c) {
-      c = this.tools.ensureDefaults(c, {busyElement:void 0});
-      c.actions || (c.actions = c.expectsJSON);
-      return new this.types.does({priority:10, helpers:{findOverlay:function(a) {
-        return this.deriveElementsFrom(a, c.busyElement)
-      }}, events:{submit:function(a) {
-        this.overlayAndSubmit(this.visibleElement, a.target, a.target.action, c.actions)
+    }, submitsAsAjaxForm:function(a) {
+      a = this.tools.ensureDefaults(a, {busyElement:void 0});
+      a.actions || (a.actions = a.expectsJSON);
+      return new this.types.does({priority:10, helpers:{findOverlay:function(b) {
+        return this.deriveElementsFrom(b, a.busyElement)
+      }}, events:{submit:function(b) {
+        this.overlayAndSubmit(this.visibleElement, b.target, b.target.action, a.actions)
       }}})
-    }, becomesAjaxLink:function(c) {
-      c = this.tools.ensureDefaults(c, {busyElement:void 0, retainedFormAttributes:"id class lang dir title data-.*".split(" ")});
-      return[this.submitsAsAjax(c), this.becomesLink(c)]
+    }, becomesAjaxLink:function(a) {
+      a = this.tools.ensureDefaults(a, {busyElement:void 0, retainedFormAttributes:"id class lang dir title data-.*".split(" ")});
+      return[this.submitsAsAjax(a), this.becomesLink(a)]
     }, becomesLink:function(c) {
       c = this.tools.ensureDefaults(c, {retainedFormAttributes:"id class lang dir title rel data-.*".split(" ")});
-      return new this.types.does({priority:30, transform:function(a) {
-        var d, f;
-        0 < (f = jQuery("button[type=submit]", a)).size() ? (console.log(f), d = f.first().text()) : 0 < (f = jQuery("input[type=image]", a)).size() ? (d = f[0], d = "<img src='" + d.src + "' alt='" + d.alt + "'") : 0 < (f = jQuery("input[type=submit]", a)).size() ? (1 < f.size() && b("Multiple submits.  Using: " + f[0]), d = f[0].value) : (b("Couldn't find a submit input in form"), this.cantTransform("Couldn't find a submit input"));
+      return new this.types.does({priority:30, transform:function(b) {
+        var d, e;
+        0 < (e = jQuery("button[type=submit]", b)).size() ? d = e.first().text() : 0 < (e = jQuery("input[type=image]", b)).size() ? (d = e[0], d = "<img src='" + d.src + "' alt='" + d.alt + "'") : 0 < (e = jQuery("input[type=submit]", b)).size() ? (1 < e.size() && a.warn("Multiple submits.  Using: " + e[0]), d = e[0].value) : (a.error("Couldn't find a submit input in form"), this.cantTransform("Couldn't find a submit input"));
         d = jQuery("<a rel='nofollow' href='#'>" + d + "</a>");
-        this.copyAttributes(a, d, c.retainedFormAttributes);
-        this.stash(jQuery(a).replaceWith(d));
+        this.copyAttributes(b, d, c.retainedFormAttributes);
+        this.stash(jQuery(b).replaceWith(d));
         return d
       }, events:{click:function(a, c) {
         this.cascadeEvent("submit")
       }}})
-    }, decays:function(c) {
-      c = this.tools.ensureDefaults(c, {lifetime:1E4, diesFor:600});
-      return new this.types.does({priority:100, transform:function(a) {
-        jQuery(a).delay(c.lifetime).slideUp(c.diesFor, function() {
-          jQuery(a).remove();
+    }, decays:function(a) {
+      a = this.tools.ensureDefaults(a, {lifetime:1E4, diesFor:600});
+      return new this.types.does({priority:100, transform:function(b) {
+        jQuery(b).delay(a.lifetime).slideUp(a.diesFor, function() {
+          jQuery(b).remove();
           this.tools.fireMutationEvent()
         })
       }, events:{click:[function(a) {
@@ -1448,37 +1506,37 @@ ninjascript.packagedBehaviors.standard = {};
 })();
 ninjascript.packagedBehaviors.triggerOn = {};
 (function() {
-  ninjascript.plugin(function(b) {
-    b.behaviors({cascadeEvent:function(b) {
+  ninjascript.plugin(function(a) {
+    a.behaviors({cascadeEvent:function(a) {
     }, removed:function() {
-    }, triggersOnSelect:function(b) {
-      var c = b = this.tools.ensureDefaults(b, {busyElement:void 0, selectElement:function(a) {
+    }, triggersOnSelect:function(a) {
+      var c = a = this.tools.ensureDefaults(a, {busyElement:void 0, selectElement:function(a) {
         return $(a).find("select").first()
       }, submitElement:function(a) {
         return $(a).find("input[type='submit']").first()
       }, placeholderText:"Select to go", placeholderValue:"instructions"});
-      "object" === typeof b.actions && (c = b.actions);
-      return new this.types.does({priority:20, helpers:{findOverlay:function(a) {
-        return this.deriveElementsFrom(a, b.busyElement)
-      }}, transform:function(a) {
-        var c = this.deriveElementsFrom(a, b.selectElement), f = this.deriveElementsFrom(a, b.submitElement);
-        "undefined" != typeof c && "undefined" != typeof f || this.cantTransform();
-        c.prepend("<option value='" + b.placeholderValue + "'> " + b.placeholderText + "</option>");
-        c.val(b.placeholderValue);
-        $(a).find("input[type='submit']").remove();
-        return a
-      }, events:{change:[function(a, b) {
-        this.overlayAndSubmit(b, b.action, c)
+      "object" === typeof a.actions && (c = a.actions);
+      return new this.types.does({priority:20, helpers:{findOverlay:function(b) {
+        return this.deriveElementsFrom(b, a.busyElement)
+      }}, transform:function(b) {
+        var c = this.deriveElementsFrom(b, a.selectElement), e = this.deriveElementsFrom(b, a.submitElement);
+        "undefined" != typeof c && "undefined" != typeof e || this.cantTransform();
+        c.prepend("<option value='" + a.placeholderValue + "'> " + a.placeholderText + "</option>");
+        c.val(a.placeholderValue);
+        $(b).find("input[type='submit']").remove();
+        return b
+      }, events:{change:[function(a, d) {
+        this.overlayAndSubmit(d, d.action, c)
       }, "andDoDefault"]}})
     }})
   })
 })();
 ninjascript.packagedBehaviors.utility = {};
 (function() {
-  ninjascript.plugin(function(b) {
-    b.behaviors({suppressChangeEvents:function() {
-      return new this.types.does({events:{DOMSubtreeModified:function(b) {
-      }, DOMNodeInserted:function(b) {
+  ninjascript.plugin(function(a) {
+    a.behaviors({suppressChangeEvents:function() {
+      return new this.types.does({events:{DOMSubtreeModified:function(a) {
+      }, DOMNodeInserted:function(a) {
       }}})
     }})
   })
@@ -1488,103 +1546,104 @@ ninjascript.tools.JSONDispatcher = function() {
   this.handlers = []
 };
 (function() {
-  var b = ninjascript.utils, d = ninjascript.tools.JSONDispatcher.prototype, c = ninjascript.Logger.log;
-  d.addHandler = function(a) {
+  var a = ninjascript.utils, f = ninjascript.tools.JSONDispatcher.prototype, c = ninjascript.Logger.forComponent("json-dispatcher");
+  f.addHandler = function(a) {
     this.handlers.push(new ninjascript.tools.JSONHandler(a))
   };
-  d.dispatch = function(a) {
-    for(var b = this.handlers.length, d = 0;d < b;d++) {
+  f.dispatch = function(a) {
+    for(var d = this.handlers.length, e = 0;e < d;e++) {
       try {
-        this.handlers[d].receive(a)
-      }catch(h) {
-        c("prototype.Caught = " + h + " while handling JSON response.")
+        this.handlers[e].receive(a)
+      }catch(f) {
+        c.error("prototype.Caught = " + f + " while handling JSON response.")
       }
     }
   };
-  d.inspect = function() {
-    var a = [];
-    b.forEach(this.handlers, function(b) {
-      a.push(b.inspect())
+  f.inspect = function() {
+    var b = [];
+    a.forEach(this.handlers, function(a) {
+      b.push(a.inspect())
     });
-    return"JSONDispatcher, " + this.handlers.length + " handlers:\n" + a.join("\n")
+    return"JSONDispatcher, " + this.handlers.length + " handlers:\n" + b.join("\n")
   }
 })();
 ninjascript.build = function() {
-  var b = {};
-  b.tools = new ninjascript.Tools(b);
-  b.config = ninjascript.configuration;
-  b.collection = new ninjascript.BehaviorCollection(b);
-  b.jsonDispatcher = new ninjascript.tools.JSONDispatcher;
-  b.mutationHandler = new ninjascript.mutation.EventHandler(b.tools.getRootOfDocument(), b.collection);
-  b.types = {does:ninjascript.behaviors.Basic, chooses:ninjascript.behaviors.Meta, selects:ninjascript.behaviors.Select};
-  b.ninja = new ninjascript.NinjaScript(b);
-  b.tools.inject(b);
-  b.ninja.inject(b);
-  return b.ninja
+  var a = {};
+  a.tools = new ninjascript.Tools(a);
+  a.config = ninjascript.configuration;
+  a.collection = new ninjascript.BehaviorCollection(a);
+  a.jsonDispatcher = new ninjascript.tools.JSONDispatcher;
+  a.mutationHandler = new ninjascript.mutation.EventHandler(a.tools.getRootOfDocument(), a.collection);
+  a.config.logger = ninjascript.Logger.rootConfig;
+  a.types = {does:ninjascript.behaviors.Basic, chooses:ninjascript.behaviors.Meta, selects:ninjascript.behaviors.Select};
+  a.ninja = new ninjascript.NinjaScript(a);
+  a.tools.inject(a);
+  a.ninja.inject(a);
+  return a.ninja
 };
 Ninja = ninjascript.build();
-Ninja.orders = function(b) {
-  b(window.Ninja)
+Ninja.orders = function(a) {
+  a(window.Ninja)
 };
-ninjascript.tools.Overlay = function(b) {
-  b = this.convertToElementArray(b);
+ninjascript.tools.Overlay = function(a) {
+  a = this.convertToElementArray(a);
   this.laziness = 0;
-  var d = this;
-  this.set = jQuery(jQuery.map(b, function(b, a) {
-    return d.buildOverlayFor(b)
+  var f = this;
+  this.set = jQuery(jQuery.map(a, function(a, b) {
+    return f.buildOverlayFor(a)
   }))
 };
 (function() {
-  var b = ninjascript.utils.forEach, d = ninjascript.tools.Overlay.prototype;
-  d.convertToElementArray = function(c) {
-    var a = this;
+  var a = ninjascript.utils.forEach, f = ninjascript.tools.Overlay.prototype;
+  f.convertToElementArray = function(c) {
+    var b = this;
     switch(typeof c) {
       case "undefined":
         return[];
       case "boolean":
         return[];
       case "string":
-        return a.convertToElementArray(jQuery(c));
+        return b.convertToElementArray(jQuery(c));
       case "function":
-        return a.convertToElementArray(c());
+        return b.convertToElementArray(c());
       case "object":
         if("focus" in c && "blur" in c && !("jquery" in c)) {
           return[c]
         }
         if("length" in c && "0" in c) {
           var d = [];
-          b(c, function(b) {
-            d = d.concat(a.convertToElementArray(b))
+          a(c, function(a) {
+            d = d.concat(b.convertToElementArray(a))
           });
           return d
         }
         return[]
     }
   };
-  d.buildOverlayFor = function(b) {
-    var a = jQuery(document.createElement("div"));
-    b = jQuery(b);
-    var d = b.offset();
-    a.css("position", "absolute");
-    a.css("top", d.top);
-    a.css("left", d.left);
-    a.width(b.outerWidth());
-    a.height(b.outerHeight());
-    a.css("display", "none");
-    return a[0]
+  f.buildOverlayFor = function(a) {
+    var b = jQuery(document.createElement("div"));
+    a = jQuery(a);
+    var d = a.offset();
+    b.css("position", "absolute");
+    b.css("top", d.top);
+    b.css("left", d.left);
+    b.width(a.outerWidth());
+    b.height(a.outerHeight());
+    b.css("display", "none");
+    return b[0]
   };
-  d.affix = function() {
+  f.affix = function() {
     this.set.appendTo(jQuery("body"));
     overlaySet = this.set;
     window.setTimeout(function() {
       overlaySet.css("display", "block")
     }, this.laziness)
   };
-  d.remove = function() {
+  f.remove = function() {
     this.set.remove()
   };
-  ninjascript.plugin(function(b) {
-    b.tools({overlay:function() {
+  ninjascript.plugin(function(a) {
+    a.tools({overlay:function() {
       return new ninjascript.tools.Overlay(jQuery.makeArray(arguments))
     }, busyOverlay:function(a) {
       a = this.overlay(a);
@@ -1592,16 +1651,16 @@ ninjascript.tools.Overlay = function(b) {
       a.laziness = this.ninja.config.busyLaziness;
       return a
     }, buildOverlayFor:function(a) {
-      var b = jQuery(document.createElement("div"));
+      var c = jQuery(document.createElement("div"));
       a = jQuery(a);
-      var c = a.offset();
-      b.css("position", "absolute");
-      b.css("top", c.top);
-      b.css("left", c.left);
-      b.width(a.outerWidth());
-      b.height(a.outerHeight());
-      b.css("zIndex", "2");
-      return b
+      var e = a.offset();
+      c.css("position", "absolute");
+      c.css("top", e.top);
+      c.css("left", e.left);
+      c.width(a.outerWidth());
+      c.height(a.outerHeight());
+      c.css("zIndex", "2");
+      return c
     }})
   })
 })();
@@ -1613,62 +1672,63 @@ ninjascript.tools.AjaxSubmitter = function() {
   return this
 };
 (function() {
-  var b = ninjascript.Logger.log, d = ninjascript.tools.AjaxSubmitter.prototype;
-  d.submit = function() {
-    b("Computed prototype.method = " + this.method);
+  var a = ninjascript.Logger.forComponent("ajax"), f = ninjascript.tools.AjaxSubmitter.prototype;
+  f.submit = function() {
+    a.info("Computed prototype.method = " + this.method);
     jQuery.ajax(this.ajaxData())
   };
-  d.sourceForm = function(b) {
-    this.formData = jQuery(b).serializeArray()
+  f.sourceForm = function(a) {
+    this.formData = jQuery(a).serializeArray()
   };
-  d.ajaxData = function() {
+  f.ajaxData = function() {
     return{data:this.formData, dataType:this.dataType, url:this.action, type:this.method, complete:this.responseHandler(), success:this.successHandler(), error:this.onError}
   };
-  d.successHandler = function() {
-    var b = this;
-    return function(a, d, f) {
-      b.onSuccess(f, d, a)
+  f.successHandler = function() {
+    var a = this;
+    return function(b, d, e) {
+      a.onSuccess(e, d, b)
     }
   };
-  d.responseHandler = function() {
-    var b = this;
-    return function(a, d) {
-      b.onResponse(a, d);
+  f.responseHandler = function() {
+    var a = this;
+    return function(b, d) {
+      a.onResponse(b, d);
       Ninja.tools.fireMutationEvent()
     }
   };
-  d.onResponse = function(b, a) {
+  f.onResponse = function(a, b) {
   };
-  d.onSuccess = function(b, a, d) {
+  f.onSuccess = function(a, b, d) {
   };
-  d.onError = function(c, a, d) {
-    b(c.responseText);
+  f.onError = function(c, b, d) {
+    a.error(c.responseText);
     Ninja.tools.message("Server prototype.error = " + c.statusText, "error")
   };
-  ninjascript.plugin(function(b) {
-    b.tools({ajaxSubmitter:function() {
+  ninjascript.plugin(function(a) {
+    a.tools({ajaxSubmitter:function() {
       return new ninjascript.tools.AjaxSubmitter
     }, ajaxToJson:function(a) {
       a = this.ajaxSubmitter();
-      var b = this.jsonDispatcher;
+      var c = this.jsonDispatcher;
       a.dataType = "json";
-      a.onSuccess = function(a, c, d) {
-        b.dispatch(d)
+      a.onSuccess = function(a, b, f) {
+        c.dispatch(f)
       };
       return a
-    }, overlayAndSubmit:function(a, b, c, d) {
-      var n = this.busyOverlay(this.findOverlay(a));
-      a = "undefined" == typeof d ? this.ajaxSubmitter() : this.ajaxToJson(d);
-      a.sourceForm(b);
-      a.action = c;
-      a.method = this.extractMethod(b, a.formData);
+    }, overlayAndSubmit:function(a, c, e, f) {
+      var m = this.busyOverlay(this.findOverlay(a));
+      a = "undefined" == typeof f ? this.ajaxSubmitter() : this.ajaxToJson(f);
+      a.sourceForm(c);
+      a.action = e;
+      a.method = this.extractMethod(c, a.formData);
       a.onResponse = function(a, b) {
-        n.remove()
+        m.remove()
       };
-      n.affix();
+      m.affix();
       a.submit()
     }})
   })
 })();
 ninjascript.tools.all = {};
 ninjascript.loaded = {};
+
