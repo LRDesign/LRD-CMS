@@ -94,25 +94,49 @@ module BrowserTools
     end
   end
 
-  def snapshot(dir)
-    require 'fileutils'
-
-    dir = "tmp/#{dir}"
-
+  def frame_index(dir)
     @frame_dirs ||= Hash.new do |h,k|
-      puts "Clearing #{k}"
+      puts "Clearing #{k} to store snapshots in"
       FileUtils.rm_rf(k)
       FileUtils.mkdir_p(k)
       h[k] = 0
     end
-    frame = (@frame_dirs[dir] += 1)
+    @frame_dirs[dir] += 1
+  end
 
-    path = "#{dir}/#{"%03i" % frame}.png"
-    msg = "Saving screenshot: #{path} (from: #{caller[0]})"
-    puts msg
-    Rails.logger.info(msg)
+  def save_snapshot(dir, name)
+    require 'fileutils'
+
+    dir = "tmp/#{dir}"
+
+    path = "#{dir}/#{"%03i" % frame_index(dir)}-#{name}.png"
     page.driver.save_screenshot(path, :full => true)
+
+    yield path if block_given?
   rescue Capybara::NotSupportedByDriverError => nsbde
     BrowserTools.warn("Can't use snapshot", nsbde.inspect)
   end
+
+  def snapshot(dir)
+    save_snapshot(dir, "debug") do |path|
+      msg = "Saved screenshot: #{path} (from: #{caller[0].sub(/^#{Dir.pwd}/,'')})"
+      puts msg
+      Rails.logger.info(msg)
+    end
+  end
+end
+
+module SnapStep
+  def self.included(steps)
+    steps.after(:step) do
+      save_snapshot(example.metadata[:snapshots_into], example.description.downcase.gsub(/\s+/, "-"))
+    end
+  end
+end
+
+RSpec.configure do |config|
+  config.include BrowserTools, :type => :feature
+  config.include TinyMCETools, :type => :feature
+
+  config.include SnapStep, :snapshots_into => proc{|v| v.is_a? String}
 end

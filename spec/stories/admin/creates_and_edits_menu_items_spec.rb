@@ -1,7 +1,6 @@
 require 'spec_helper'
-include TinyMCETools
 
-steps "Admin creates a menu", :type => :feature, :js => true do
+steps "Admin creates a menu", :type => :feature, :js => true, :snapshots_into => "edits-menu" do
 
   it "should load the login page" do
     visit '/login'
@@ -126,12 +125,9 @@ steps "Admin creates a menu", :type => :feature, :js => true do
   end
 
   it "should show the menu in the new order" do
-    within "div#nav" do
-      within "ul#nav_menu" do
-        page.should have_xpath("//li[1]//a[contains(text(),'Just stupid')]")
-        page.should have_xpath("//li[2]//a[contains(text(),'Coolness')]")
-      end
-    end
+    page.should have_xpath("//div[@id='nav']" +
+                           "//ul[@id='nav_menu']" +
+                           "//li[.//a[contains(text(),'Just stupid')]]/following-sibling::li[.//a[contains(text(),'Coolness')]]")
   end
 
 end
