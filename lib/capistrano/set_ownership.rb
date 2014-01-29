@@ -22,9 +22,10 @@ Capistrano::Configuration.instance.load do
       run "chmod ug+x #{release_path}/scripts/*"
     end
 
+    before "deploy:restart", "deploy:make_tmp_writable"
     task :make_tmp_writable do
       run "chown #{runner}:#{group} #{release_path}/tmp"
-      run "mkdir #{release_path}/tmp/cache"
+      run "mkdir -p #{release_path}/tmp/cache"
       run "chown -R #{runner}:#{group} #{release_path}/tmp/cache"
       run "chmod -R g+rw #{release_path}/tmp"
     end
