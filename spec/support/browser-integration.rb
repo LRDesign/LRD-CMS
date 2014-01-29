@@ -96,7 +96,7 @@ module BrowserTools
 
   def frame_index(dir)
     @frame_dirs ||= Hash.new do |h,k|
-      puts "Clearing #{k}"
+      puts "Clearing #{k} to store snapshots in"
       FileUtils.rm_rf(k)
       FileUtils.mkdir_p(k)
       h[k] = 0
