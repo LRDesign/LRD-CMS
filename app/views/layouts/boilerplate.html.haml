@@ -1,7 +1,9 @@
 !!!
 %html{"xmlns"=>"http://www.w3.org/1999/xhtml", "xml:lang"=>"en"}
-
   %head
+    - unless Rails.env.production?
+      / Using revision: $Id$
+      -# jdl observes: the above could also be made visible pretty easily
     %meta{"http-equiv" => "content-type", "content" => "text/html;charset=UTF-8" }
     - if content_for?(:keywords)
       %meta{"name" => "keywords", "content" => yield(:keywords)}
