@@ -8,8 +8,6 @@ require 'rspec/rails'
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 ActiveSupport::Deprecation.debug = true
 
-include BrowserTools
-
 RSpec.configure do |config|
   # == Mock Framework
   #
