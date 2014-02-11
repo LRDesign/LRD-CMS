@@ -7,11 +7,13 @@ class Admin::PagesController < Admin::AdminController
   # GET /admin/pages/new
   def new
     @page = Page.new
+    @human_name = human_name
   end
 
   # GET /admin/pages/1/edit
   def edit
     @page = page_scope.find(params[:id])
+    @human_name = human_name
   end
 
   # POST /admin/pages
@@ -19,7 +21,7 @@ class Admin::PagesController < Admin::AdminController
     @page = Page.new(page_attrs)
 
     if @page.save
-      redirect_to(page_path(@page), :notice => 'Page was successfully created.')
+      redirect_to(page_path(@page), :notice => "#{human_name} was successfully created.")
     else
       render :action => "new"
     end
@@ -33,9 +35,9 @@ class Admin::PagesController < Admin::AdminController
 
     if @page.update_attributes(page_attrs)
       if @page.permalink == 'home'
-        redirect_to(root_url, :notice => 'Page was successfully updated.')
+        redirect_to(root_url, :notice => "#{human_name} was successfully updated.")
       else
-        redirect_to(page_path(@page), :notice => 'Page was successfully updated.')
+        redirect_to(page_path(@page), :notice => "#{human_name} was successfully updated.")
       end
     else
       render :action => "edit"
@@ -47,7 +49,7 @@ class Admin::PagesController < Admin::AdminController
     @admin_page = page_scope.find(params[:id])
     @admin_page.destroy
 
-    redirect_to(admin_pages_url)
+    redirect_to(:action => :index)
   end
 
   # def page_path(page)
@@ -55,6 +57,10 @@ class Admin::PagesController < Admin::AdminController
   # end
   #
   private
+
+  def human_name
+    "Page"
+  end
 
   def location_handling
   end

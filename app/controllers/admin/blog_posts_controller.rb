@@ -10,6 +10,10 @@ class Admin::BlogPostsController < Admin::PagesController
 
   private
 
+  def human_name
+    "Blog Post"
+  end
+
   def location_handling
     # A blog post *should* have exactly one Location associated, but it
     # *could* have multiple. Doesn't hurt to be conservative
