@@ -1,6 +1,10 @@
 class Admin::TopicsController < Admin::LocationsController
   private
 
+  def human_name
+    "Topic"
+  end
+
   def location_scope
     Location.blog_topics
   end

@@ -3,15 +3,6 @@ module TreeHelper
   #This method takes a list of nodes in tree-order and produces a templated
   #tree of elements without making further SQL queries
   #
-  #node_partial: the Rails-style path to a partial for each node in the tree
-  #list_partial: the Rails-style path to a partial for collecting the children
-  #of a node into a list'
-  #nodes: the list of node in tree order
-  def list_tree(node_partial, list_partial, nodes)
-    TreeLister.new(self, nodes, node_partial, list_partial).render
-  end
-
-
   class TreeLister
     #Can we search for the partials once and cache that?
     def initialize(view, nodes, node_partial, list_partial)
@@ -48,27 +39,25 @@ module TreeHelper
     end
   end
 
-  def nav_menu(root_name)
-    location_tree(root_name)
-  end
-
-  def location_tree(root_name, options=nil)
+  def location_tree(root_name, template_name=nil)
     home_location = Location.where(:name => root_name).first
 
     return "" unless home_location
     Rails.logger.debug{ "Location tree being build from #{home_location.inspect}" }
 
-    list_tree("shared/nav_node", "shared/nav_list", home_location.descendants.includes(:page))
+    templates = NAV_TEMPLATE_NAMES.fetch(template_name || :nav)
+    list_tree(templates[:node], templates[:list], home_location)
+  end
+  alias nav_menu location_tree
+
+  #node_partial: the Rails-style path to a partial for each node in the tree
+  #list_partial: the Rails-style path to a partial for collecting the children
+  #of a node into a list'
+  #nodes: the list of node in tree order
+  def list_tree(node_partial, list_partial, nodes)
+    TreeLister.new(self, nodes, node_partial, list_partial).render
   end
 
-  def bottom_nav_menu(root_name)
-    home_location = Location.where(:name => root_name).first
-
-    return "" unless home_location
-    Rails.logger.debug{ "Location tree being build from #{home_location.inspect}" }
-
-    list_tree("shared/bottom_nav_node", "shared/bottom_nav_list", home_location.descendants.includes(:page))
-  end
 
   def nav_menu_link(node)
     if (loc_path(node).include?("http"))
