@@ -29,6 +29,17 @@ steps "Admin manages blog posts", :type => :feature, :js => true do
     click_button "Save Page"
   end
 
+  it "should visit the post" do
+    visit root_path
+    within "#blog" do
+      click_link "A New Blog Post"
+    end
+  end
+
+  it "should have the content" do
+    page.should have_content "Judson is 29"
+  end
+
   it "should visit the blogs section" do
     visit root_path
     within("#blog") do

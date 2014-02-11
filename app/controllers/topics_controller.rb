@@ -1,4 +1,5 @@
 class TopicsController < ApplicationController
+  layout "blog"
   def index
     @topics = Location.blog_topics
     @posts = Page.most_recent.published.blog

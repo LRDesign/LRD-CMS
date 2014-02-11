@@ -8,6 +8,6 @@
 
 %ul.topics
   - @topics.each do |topic|
-    %li= link_to(topic.name, topic_path(topic))
+    %li= link_to(topic.name, topic_path(topic), :class => "full-text")
 
 -#.archives
