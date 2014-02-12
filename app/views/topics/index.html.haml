@@ -3,11 +3,8 @@
     .post
       %h3= post.title
       %h4= post.updated_at
-      %p= post.content
+      .content
+        %p= post.content.html_safe
       = link_to("Full text...", page_path(post))
-
-%ul.topics
-  - @topics.each do |topic|
-    %li= link_to(topic.name, topic_path(topic), :class => "full-text")
 
 -#.archives
