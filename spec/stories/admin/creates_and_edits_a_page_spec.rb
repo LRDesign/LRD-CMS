@@ -1,7 +1,7 @@
 require 'spec_helper'
 include TinyMCETools
 
-steps "Admin creates a page", :type => :feature, :js => true do
+steps "Admin creates a page", :snapshots_into => "creates-and-edits", :type => :feature, :js => true do
 
   it "should load the login page" do
     visit '/login'
