@@ -30,7 +30,7 @@ group :development, :test do
   gem 'selenium-webdriver'
   gem 'poltergeist'
   gem 'database_cleaner'
-  gem 'rspec-steps', ">= 0.0.6"
+  gem 'rspec-steps'
   gem 'byebug'
   gem 'quiet_assets'
   gem 'cadre'
