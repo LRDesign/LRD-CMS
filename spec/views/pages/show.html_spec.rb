@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "/pages/show" do
   before(:each) do
     assign(:page, @page = FactoryGirl.build(:page))
-    view.stub!(:params).and_return( :controller => 'pages', :action => 'show' )
+    view.stub(:params).and_return( :controller => 'pages', :action => 'show' )
   end
 
   it "should succeed, and not have interpolated header information" do
