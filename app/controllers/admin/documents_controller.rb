@@ -1,4 +1,4 @@
-class Admin::Upload::DocumentsController < Admin::AdminController
+class Admin::DocumentsController < Admin::AdminController
   # GET /admin/upload/documents
   def index
     @documents = Document.all
@@ -19,7 +19,7 @@ class Admin::Upload::DocumentsController < Admin::AdminController
     @document = Document.new(params[:document].permit(:document))
 
     if @document.save
-      redirect_to(admin_upload_document_path(@document), :notice => 'Document was successfully created.')
+      redirect_to(admin_document_path(@document), :notice => 'Document was successfully created.')
     else
       render :action => "new"
     end
@@ -27,9 +27,9 @@ class Admin::Upload::DocumentsController < Admin::AdminController
 
   # DELETE /admin/upload/documents/1
   def destroy
-    @admin_upload_document = Document.find(params[:id])
-    @admin_upload_document.destroy
+    @admin_document = Document.find(params[:id])
+    @admin_document.destroy
 
-    redirect_to(admin_upload_documents_url)
+    redirect_to(admin_documents_url)
   end
 end

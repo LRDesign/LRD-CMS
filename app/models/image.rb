@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: admin_upload_images
+# Table name: images
 #
 #  id                 :integer(4)      not null, primary key
 #  image_file_name    :string(255)

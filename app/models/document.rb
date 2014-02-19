@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: admin_upload_documents
+# Table name: documents
 #
 #  id                :integer(4)      not null, primary key
 #  data_file_name    :string(255)
