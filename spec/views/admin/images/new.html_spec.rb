@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "/admin/upload/images/new" do
+describe "/admin/images/new" do
   before(:each) do
     assign(:image, Image.new)
   end
@@ -12,7 +12,7 @@ describe "/admin/upload/images/new" do
 
   it "should render new form" do
     render
-    rendered.should have_selector("form[action='#{admin_upload_images_path}'][method=post]")
+    rendered.should have_selector("form[action='#{admin_images_path}'][method=post]")
   end
 end
 

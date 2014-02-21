@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "/admin/upload/images/index" do
+describe "/admin/images/index" do
   before(:each) do
     assign(:images, [ FactoryGirl.create(:image), FactoryGirl.create(:image) ])
   end

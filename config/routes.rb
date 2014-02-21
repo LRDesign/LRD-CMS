@@ -1,9 +1,7 @@
 LrdCms::Application.routes.draw do
   namespace :admin do
-    namespace :upload do
-      resources :images
-      resources :documents
-    end
+    resources :images
+    resources :documents
     resources :pages
     resources :locations
   end

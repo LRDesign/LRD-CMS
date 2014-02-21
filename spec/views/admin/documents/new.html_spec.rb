@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "/admin/upload/documents/new" do
+describe "/admin/documents/new" do
   before(:each) do
     assign(:document, Document.new())
   end
@@ -12,7 +12,7 @@ describe "/admin/upload/documents/new" do
 
   it "should render new form" do
     render
-    rendered.should have_selector("form[action='#{admin_upload_documents_path}'][method=post]")
+    rendered.should have_selector("form[action='#{admin_documents_path}'][method=post]")
   end
 end
 

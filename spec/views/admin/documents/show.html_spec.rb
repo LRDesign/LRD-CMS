@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "/admin/upload/documents/show" do
+describe "/admin/documents/show" do
   before(:each) do
     assign(:document, @document = FactoryGirl.build(:document))
   end

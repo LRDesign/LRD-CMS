@@ -1,4 +1,4 @@
-class Admin::Upload::ImagesController < Admin::AdminController
+class Admin::ImagesController < Admin::AdminController
   # GET /admin/upload/images
   def index
     @images = Image.all
@@ -19,7 +19,7 @@ class Admin::Upload::ImagesController < Admin::AdminController
     @image = Image.new(params[:image].permit(:image))
 
     if @image.save
-      redirect_to(admin_upload_image_path(@image), :notice => 'Image was successfully created.')
+      redirect_to(admin_image_path(@image), :notice => 'Image was successfully created.')
     else
       render :action => "new"
     end
@@ -30,6 +30,6 @@ class Admin::Upload::ImagesController < Admin::AdminController
     @image = Image.find(params[:id])
     @image.destroy
 
-    redirect_to(admin_upload_images_url)
+    redirect_to(admin_images_url)
   end
 end

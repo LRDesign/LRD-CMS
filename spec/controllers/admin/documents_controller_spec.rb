@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Admin::Upload::DocumentsController do
+describe Admin::DocumentsController do
   include DocumentTestHelper
 
   before(:each) do
@@ -15,7 +15,7 @@ describe Admin::Upload::DocumentsController do
     #                                      GET INDEX
     ########################################################################################
     describe "GET index" do
-      it "should expose all admin_upload_documents as @documents" do
+      it "should expose all admin_documents as @documents" do
         get :index
         assigns[:documents].should == [@document]
       end
@@ -59,7 +59,7 @@ describe Admin::Upload::DocumentsController do
         end
 
         it "should redirect to the created document" do
-          response.should redirect_to(admin_upload_document_url(@doc))
+          response.should redirect_to(admin_document_url(@doc))
         end
       end
 
@@ -75,14 +75,14 @@ describe Admin::Upload::DocumentsController do
         end.should change(Document, :count).by(-1)
       end
 
-      it "should make the admin_upload_documents unfindable in the database" do
+      it "should make the admin_documents unfindable in the database" do
         delete :destroy, :id => @document.id
         lambda{ Document.find(@document.id)}.should raise_error(ActiveRecord::RecordNotFound)
       end
 
-      it "should redirect to the admin_upload_documents list" do
+      it "should redirect to the admin_documents list" do
         delete :destroy, :id => @document.id
-        response.should redirect_to(admin_upload_documents_url)
+        response.should redirect_to(admin_documents_url)
       end
     end
   end

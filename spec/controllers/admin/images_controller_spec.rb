@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Admin::Upload::ImagesController do
+describe Admin::ImagesController do
   include ImageTestHelper
 
   before(:each) do
@@ -15,7 +15,7 @@ describe Admin::Upload::ImagesController do
     #                                      GET INDEX
     ########################################################################################
     describe "GET index" do
-      it "should expose all admin_upload_images as @images" do
+      it "should expose all admin_images as @images" do
         get :index
         assigns[:images].should == [@image]
       end
@@ -59,7 +59,7 @@ describe Admin::Upload::ImagesController do
         end
 
         it "should redirect to the created image" do
-          response.should redirect_to(admin_upload_image_url(@img))
+          response.should redirect_to(admin_image_url(@img))
         end
       end
 
@@ -94,14 +94,14 @@ describe Admin::Upload::ImagesController do
         end.should change(Image, :count).by(-1)
       end
 
-      it "should make the admin_upload_images unfindable in the database" do
+      it "should make the admin_images unfindable in the database" do
         delete :destroy, :id => @image.id
         lambda{ Image.find(@image.id)}.should raise_error(ActiveRecord::RecordNotFound)
       end
 
-      it "should redirect to the admin_upload_images list" do
+      it "should redirect to the admin_images list" do
         delete :destroy, :id => @image.id
-        response.should redirect_to(admin_upload_images_url)
+        response.should redirect_to(admin_images_url)
       end
     end
   end
