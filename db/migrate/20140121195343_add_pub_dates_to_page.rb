@@ -7,7 +7,7 @@ class AddPubDatesToPage < ActiveRecord::Migration
 
     beginning_of_time = Time.at(0)
     Page.all.each do |page|
-      if page.read_attribute[:published]
+      if page.read_attribute(:published)
         page.update_attribute :publish_start, beginning_of_time
       else
         page.update_attribute :publish_end, beginning_of_time
