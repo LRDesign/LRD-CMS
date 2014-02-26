@@ -15,15 +15,10 @@
       }
   });
 
-= form_for([:admin,@location]) do |f|
+= form_for(@location, :url => { :action => action }) do |f|
   = f.error_messages
   = f.labeled_input :name
-  = f.labeled_input :path
-  = f.labeled_input :page_id do
-    = page_selector(f)
-  = f.labeled_input :parent_id do
-    = location_parent_selector(f)
   = f.labeled_input :move_to do
     = sibling_selector(f)
 
-  = f.unlabeled_submit "Save #{@human_name}"
+  = f.unlabeled_submit "Save Topic"

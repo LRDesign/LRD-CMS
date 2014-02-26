@@ -1,6 +1,7 @@
 require 'spec_helper'
+include TinyMCETools
 
-steps "Admin creates a menu", :type => :feature, :js => true, :snapshots_into => "edits-menu" do
+steps "Admin creates a menu", :snapshots_into => "create-menu", :type => :feature, :js => true do
 
   it "should load the login page" do
     visit '/login'
@@ -37,27 +38,10 @@ steps "Admin creates a menu", :type => :feature, :js => true, :snapshots_into =>
     page.should have_css("form#new_location")
   end
 
-  it "admin enters a root menu item" do
-    fill_in "Name", :with => "home"
-    fill_in "Path", :with => "/"
-    click_button "Save Menu Entry"
-  end
-
-  it "should show a menu item was created" do
-    page.should have_content("Menu Entry was successfully created.")
-    page.should have_content("home")
-    page.should have_content("/")
-  end
-
-  it "should open the new menu item form" do
-    click_link "New Menu Entry"
-    page.should have_css("form#new_location")
-  end
-
   it "admin enters a menu item for first page" do
     fill_in "Name", :with => "Coolness"
     select "The Cool Page", :from => "Page"
-    select "home", :from => "Parent"
+    select "Home", :from => "Parent"
     click_button "Save Menu Entry"
   end
 
@@ -75,7 +59,7 @@ steps "Admin creates a menu", :type => :feature, :js => true, :snapshots_into =>
   it "admin enters a menu item for the second page" do
     fill_in "Name", :with => "Just stupid"
     select "The Dumb Page", :from => "Page"
-    select "home", :from => "Parent"
+    select "Home", :from => "Parent"
     click_button "Save Menu Entry"
   end
 
@@ -85,7 +69,7 @@ steps "Admin creates a menu", :type => :feature, :js => true, :snapshots_into =>
     page.should have_content("The Dumb Page")
   end
 
-  it "admin visits the site homepage" do
+  it "admin visits the site Homepage" do
     visit "/"
   end
 

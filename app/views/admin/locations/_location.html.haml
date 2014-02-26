@@ -12,7 +12,6 @@
         = link_to("URL: #{node.path}", node.path)
   %td
     = link_to 'Create Child', new_admin_location_path(:node => {:parent_id => node.id})
-    = link_to 'Show', admin_location_path(node)
     = link_to 'Edit', edit_admin_location_path(node)
     = link_to 'Delete', admin_location_path(node), :data => {:confirm => 'Are you sure?'}, :method => :delete
 - if defined? children

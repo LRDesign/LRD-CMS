@@ -4,7 +4,9 @@ describe "/admin/locations/edit" do
   include LocationsHelper
 
   let!(:location) { FactoryGirl.create(:location)  }
-  before { assign(:location, location) }
+  before {
+    assign(:location_scope, Location.main_menu)
+    assign(:location, location) }
 
   it "should succeed" do
     render
@@ -17,5 +19,3 @@ describe "/admin/locations/edit" do
     rendered.should have_css("form[action='#{action}'][method=post]")
   end
 end
-
-

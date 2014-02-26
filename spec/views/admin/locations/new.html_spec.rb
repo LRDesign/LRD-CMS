@@ -5,6 +5,7 @@ describe "/admin/locations/new" do
 
   before do
     assign(:location, Location.new)
+    assign(:location_scope, Location.main_menu)
   end
 
   it "should succeed" do
@@ -16,5 +17,3 @@ describe "/admin/locations/new" do
     rendered.should have_selector("form")
   end
 end
-
-

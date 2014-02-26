@@ -2,13 +2,13 @@
 #
 # Table name: locations
 #
-#  id         :integer(4)      not null, primary key
+#  id         :integer          not null, primary key
 #  name       :string(255)
 #  path       :string(255)
-#  parent_id  :integer(4)
-#  lft        :integer(4)
-#  rgt        :integer(4)
-#  page_id    :integer(4)
+#  parent_id  :integer
+#  lft        :integer
+#  rgt        :integer
+#  page_id    :integer
 #  created_at :datetime
 #  updated_at :datetime
 #
@@ -41,12 +41,12 @@ describe Location do
        loc = FactoryGirl.build(:location, :path => 'foobar')
        loc.page = page
        loc.save!
-       loc.resolved_path.should == page.permalink
+       loc.resolved_path.should == "/" + page.permalink
      end
 
      it "should return the location's path if there's no page foreign key" do
        loc = FactoryGirl.build(:location, :path => 'foobar')
-       loc.resolved_path.should == 'foobar'
+       loc.resolved_path.should == "/" + 'foobar'
      end
    end
 end
