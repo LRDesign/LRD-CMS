@@ -41,12 +41,12 @@ describe Location do
        loc = FactoryGirl.build(:location, :path => 'foobar')
        loc.page = page
        loc.save!
-       loc.resolved_path.should == page.permalink
+       loc.resolved_path.should == "/" + page.permalink
      end
 
      it "should return the location's path if there's no page foreign key" do
        loc = FactoryGirl.build(:location, :path => 'foobar')
-       loc.resolved_path.should == 'foobar'
+       loc.resolved_path.should == "/" + 'foobar'
      end
    end
 end

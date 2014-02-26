@@ -16,6 +16,8 @@ LrdCms::Application.routes.draw do
     delete "/logout" => "devise/sessions#destroy", :as => :logout
   end
 
+  resources :topics, :only => %w{show index}
+
   root :to => 'static#index'
 
   get '/*permalink', :controller => :pages, :action => 'show'

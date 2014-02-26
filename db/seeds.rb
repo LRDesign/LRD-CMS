@@ -8,7 +8,7 @@
 User.where(:login => 'admin').first_or_create!(:password => 'wxyz', :password_confirmation => 'wxyz')
 
 unless Location.root
-  Location.create!(:name => "Home")
+  Location.create!(:name => "Home", :path => "/")
 end
 
 unless Location.where(:name => "Blog Topics").exists?

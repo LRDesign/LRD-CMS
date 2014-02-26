@@ -15,7 +15,7 @@
       }
   });
 
-= form_for([:admin,@location]) do |f|
+= form_for(@location, :url => { :action => action }) do |f|
   = f.error_messages
   = f.labeled_input :name
   = f.labeled_input :move_to do

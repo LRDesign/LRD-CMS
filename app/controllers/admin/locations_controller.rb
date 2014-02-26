@@ -2,6 +2,8 @@ class Admin::LocationsController < Admin::AdminController
   # GET /locations
   def index
     @locations = location_scope
+    @human_plural_name = human_plural_name
+    @human_name = human_name
   end
 
   # GET /locations/new
@@ -70,6 +72,10 @@ class Admin::LocationsController < Admin::AdminController
   end
 
   private
+
+  def human_plural_name
+    "Menu Entries"
+  end
 
   def human_name
     "Menu Entry"

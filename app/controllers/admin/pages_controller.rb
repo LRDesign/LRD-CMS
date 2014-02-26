@@ -2,6 +2,7 @@ class Admin::PagesController < Admin::AdminController
   # GET /admin/pages
   def index
     @pages = page_scope
+    @human_plural_name
   end
 
   # GET /admin/pages/new
@@ -60,6 +61,10 @@ class Admin::PagesController < Admin::AdminController
 
   def human_name
     "Page"
+  end
+
+  def human_plural_name
+    "Pages"
   end
 
   def location_handling

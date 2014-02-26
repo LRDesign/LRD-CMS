@@ -18,8 +18,8 @@ class Admin::TopicsController < Admin::LocationsController
 
     loc_parms[:parent_id] = Location.topics_root.id
     #loc_parms[:path] = path_for(:controller => "topics", :action => "show",
-    #:name => loc_parms[:name])
+    #:id => ???) - use topics_path(topic) instead
 
-    loc_parms.permit(:name, :path, :parent_id)
+    loc_parms.permit(:name, :parent_id)
   end
 end
