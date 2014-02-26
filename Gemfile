@@ -14,7 +14,7 @@ gem 'mizugumo'
 gem 'lrd_view_tools'
 gem 'dynamic_form'
 gem 'carrierwave'
-gem "mini_magick"
+gem "rmagick"
 
 group :assets do
   gem 'turbo-sprockets-rails3'
@@ -40,5 +40,5 @@ group :development do
   gem "populator"
   gem "faker"
   gem "pivotal-github"
-  gem 'sass-rails-source-maps'
+  gem 'sass-rails-source-maps', :git => "git@github.com:LRDesign/sass-rails-source-maps.git"
 end
