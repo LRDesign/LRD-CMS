@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem 'rails', "~> 4.0"
+gem 'rails', "~> 4.0.5"
 
 # gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'pg'
@@ -14,9 +14,10 @@ gem 'mizugumo'
 gem 'lrd_view_tools'
 gem 'dynamic_form'
 gem 'carrierwave'
-gem "rmagick"
+gem "rmagick", require: false
 
 group :assets do
+  gem 'sprockets', '~> 2.11.0'
   gem 'turbo-sprockets-rails3'
 end
 
