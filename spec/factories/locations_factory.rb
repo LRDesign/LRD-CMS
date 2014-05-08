@@ -43,4 +43,11 @@ FactoryGirl.define do
       end
     end
   end
+
+  factory :blog_topic, :parent => :location do
+    sequence :name do |n|
+      "Blog Topic #{n}"
+    end
+  end
+
 end
