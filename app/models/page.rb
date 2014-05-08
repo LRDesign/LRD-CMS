@@ -45,6 +45,10 @@ class Page < ActiveRecord::Base
     where(:layout => nil)
   end
 
+  scope :not_blog, -> do
+    where("layout != 'blog' OR layout IS NULL")
+  end
+
   scope :blog, -> do
     where(:layout => "blog")
   end

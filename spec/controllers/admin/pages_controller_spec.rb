@@ -3,12 +3,16 @@ require 'spec_helper'
 describe Admin::PagesController do
   include UrlHelper
 
-  before(:each) do
-    @page = FactoryGirl.create(:page)
+  let! :page do
+    FactoryGirl.create(:page)
+  end
+
+  let! :blog_post do
+    FactoryGirl.create(:blog_post)
   end
 
   describe "while logged in" do
-
+    let :admin do FactoryGirl.create(:admin) end
     before(:each) do
       authenticate('admin')
     end
@@ -20,6 +24,8 @@ describe Admin::PagesController do
       it "should expose all pages as @pages" do
         get :index
         assigns[:pages].should == Page.brochure
+        assigns[:pages].should include(page)
+        assigns[:pages].should_not include(blog_post)
       end
     end
 
@@ -39,8 +45,8 @@ describe Admin::PagesController do
     ########################################################################################
     describe "responding to GET edit" do
       it "should expose the requested page as @page" do
-        get :edit, :id => @page.id
-        assigns[:page].should == @page
+        get :edit, :id => page.id
+        assigns[:page].should == page
       end
     end
 
@@ -85,7 +91,7 @@ describe Admin::PagesController do
       describe "with invalid params" do
         before do
           @invalid_create_params = {
-            :title => @page.title,
+            :title => page.title,
             :permalink => nil,    # this is invalid
             :image => Rack::Test::UploadedFile.new(Rails.root + 'spec/fixtures/' + 'test_image.png', 'image/png')
           }
@@ -129,18 +135,18 @@ describe Admin::PagesController do
 
         it "should update the requested page in the database" do
           lambda do
-            put :update, :id => @page.id, :page => @valid_update_params
-          end.should change{ @page.reload.attributes }
+            put :update, :id => page.id, :page => @valid_update_params
+          end.should change{ page.reload.attributes }
         end
 
         it "should expose the requested page as @page" do
-          put :update, :id => @page.id, :page => @valid_update_params
-          assigns(:page).should == @page
+          put :update, :id => page.id, :page => @valid_update_params
+          assigns(:page).should == page
         end
 
         it "should redirect to the page" do
-          put :update, :id => @page.id, :page => @valid_update_params
-          response.should redirect_to(page_path(@page.reload))
+          put :update, :id => page.id, :page => @valid_update_params
+          response.should redirect_to(page_path(page.reload))
         end
       end
 
@@ -153,17 +159,17 @@ describe Admin::PagesController do
 
         it "should not change the page in the database" do
           lambda do
-            put :update, :id => @page.id, :page => @invalid_update_params
-          end.should_not change{ @page.reload }
+            put :update, :id => page.id, :page => @invalid_update_params
+          end.should_not change{ page.reload }
         end
 
         it "should expose the page as @page" do
-          put :update, :id => @page.id, :page => @invalid_update_params
-          assigns(:page).should == @page
+          put :update, :id => page.id, :page => @invalid_update_params
+          assigns(:page).should == page
         end
 
         it "should re-render the 'edit' template" do
-          put :update, :id => @page.id, :page => @invalid_update_params
+          put :update, :id => page.id, :page => @invalid_update_params
           response.should render_template('edit')
         end
       end
@@ -177,17 +183,17 @@ describe Admin::PagesController do
 
       it "should reduce page count by one" do
         lambda do
-          delete :destroy, :id => @page.id
+          delete :destroy, :id => page.id
         end.should change(Page, :count).by(-1)
       end
 
       it "should make the admin_pages unfindable in the database" do
-        delete :destroy, :id => @page.id
-        lambda{ Page.find(@page.id) }.should raise_error(ActiveRecord::RecordNotFound)
+        delete :destroy, :id => page.id
+        lambda{ Page.find(page.id) }.should raise_error(ActiveRecord::RecordNotFound)
       end
 
       it "should redirect to the admin_pages list" do
-        delete :destroy, :id => @page.id
+        delete :destroy, :id => page.id
         response.should redirect_to(admin_pages_url)
       end
     end
