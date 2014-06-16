@@ -7,4 +7,8 @@ class ImageUploader < PaperclipUploader
     process :resize_to_fill => [100, 100]
   end
 
+  version :icon do
+    process :resize_to_fill => [50, 50]
+  end
+
 end
