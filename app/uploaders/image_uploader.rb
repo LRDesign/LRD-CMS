@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class ImageUploader < PaperclipUploader
+class ImageUploader < SystemUploader
   include CarrierWave::RMagick
 
   version :thumb do
@@ -9,6 +9,10 @@ class ImageUploader < PaperclipUploader
 
   version :icon do
     process :resize_to_fill => [50, 50]
+  end
+
+  def extension_white_list
+    %w(jpg jpeg gif png)
   end
 
 end
