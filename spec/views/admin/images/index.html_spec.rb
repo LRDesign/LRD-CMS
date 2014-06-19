@@ -8,5 +8,10 @@ describe "/admin/images/index" do
   it "should succeed" do
     render
   end
+
+  it "should show an image in the list view" do
+    render
+    rendered.should have_selector("td img")
+  end
 end
 
