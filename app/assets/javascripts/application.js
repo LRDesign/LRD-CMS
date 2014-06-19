@@ -3,3 +3,4 @@
 //= require ninja-go
 //= require common/logical_tabs_jquery
 //= require tinymce-jquery
+// = require zeroclipboard

@@ -14,6 +14,7 @@ gem 'mizugumo'
 gem 'lrd_view_tools'
 gem 'dynamic_form'
 gem 'carrierwave'
+gem 'zeroclipboard-rails'
 gem "rmagick", require: false
 
 group :assets do
