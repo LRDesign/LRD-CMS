@@ -1,14 +1,19 @@
+
+function transform_or_load_image(elem) {
+  $image = $(elem);
+  $text = $image.parents("tr").find(".dimensions");
+  console.log('running transform');
+  if ($image.width() == 0) {
+    $image.load(transform_or_load_image)
+  }
+  $text.append($image.width() + " x " + $image.height());
+}
+
 Ninja.behavior({
-  'body.admin.images.show.with_admin tr.uploaded_image': {
-    transform: function(elem) {
-
-      $elem = $(elem);
-      $image = $elem.children("td").children("div").children("img");
-      $text = $elem.children("td.image-style").children("p.dimensions");
-
-      $text.append($image.width() + " x " + $image.height());
-    }
-  },
+  'body.admin.images.show tr.uploaded_image img': {
+    transform: transform_or_load_image,
+    //events: { load: load_image }
+   },
   'body.admin.images.show.with_admin div.arrow-right': {
     click: function(evnt, elem) {
       evnt.preventDefault();
