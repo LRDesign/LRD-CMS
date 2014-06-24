@@ -23,6 +23,7 @@ database.yml
 public/stylesheets/*.css
 !public/stylesheets/reset.css
 public/javascripts/all.js
+public/assets/source_maps/*
 public/system
 uuid.state
 nbproject*
