@@ -1,6 +1,7 @@
 class Admin::LocationsController < Admin::AdminController
   # GET /locations
   def index
+    p flash
     @locations = location_scope
     @human_plural_name = human_plural_name
     @human_name = human_name
