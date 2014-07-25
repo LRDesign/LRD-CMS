@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-steps "Admin manages blog posts", :type => :feature, :js => true do
+steps "Admin manages blog posts", :type => :feature, :js => true, :snapshots_into => "manages_blog_posts" do
   include TinyMCETools
 
   it "should load the login page" do

@@ -84,7 +84,7 @@ class Admin::LocationsController < Admin::AdminController
   def expire_locations_cache(location)
     location.self_and_ancestors.each do |root|
       NAV_TEMPLATE_NAMES.keys.each do |name|
-        expire_fragment(:template_name => name, :root_name => root.name)
+        expire_fragment([:nav_menu, root.name, name] )
       end
     end
   end
