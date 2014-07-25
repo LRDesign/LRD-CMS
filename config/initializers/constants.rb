@@ -13,5 +13,7 @@ PAGE_LAYOUTS = {
 NAV_MENU_CACHE = "nav_menu"
 
 NAV_TEMPLATE_NAMES = {
-  :nav => {:node => "shared/nav_node", :list => "shared/nav_list"}
+  :nav => {:node => "shared/nav_node", :list => "shared/nav_list"},
+  :edit => {:node => "location", :list => "shared/concat_items"},
+  :test => {:node => "shared/test_nav_node", :list => "shared/test_nav_list" }
 }

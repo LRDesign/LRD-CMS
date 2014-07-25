@@ -1,6 +1,7 @@
-%li{ :id => dom_id(node) }
-  - if depth > 0
-    %span
-  = nav_menu_link(node)
-  - if defined? children
-    = children
+- cache([:nav_menu, node.name, template_name], :skip_digest => true) do
+  %li{ :id => dom_id(node) }
+    - if depth > 0
+      %span
+    = nav_menu_link(node)
+    - if defined? children
+      = children
