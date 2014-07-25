@@ -14,6 +14,7 @@ doc/api
 doc/app
 doc/*.doc
 doc/*.zip
+config/initializers/secret_token.rb
 db/schema.sql
 db/schema.rb
 db/*.sqlite3*
