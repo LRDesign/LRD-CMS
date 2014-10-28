@@ -2,6 +2,6 @@
 
 %table.listing
   = render :partial => "list_header"
-  = list_tree('location', 'shared/concat_items', @locations)
+  = list_tree(:edit, @locations)
 
 = link_to "New #{@human_name}", :action => :new

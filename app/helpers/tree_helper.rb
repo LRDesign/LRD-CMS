@@ -5,11 +5,14 @@ module TreeHelper
   #
   class TreeLister
     #Can we search for the partials once and cache that?
-    def initialize(view, nodes, node_partial, list_partial)
+    def initialize(view, nodes, template_name)
+      @template_name = template_name || :nav
+      templates = NAV_TEMPLATE_NAMES.fetch(@template_name)
+      @node_partial = templates[:node]
+      @list_partial = templates[:list]
+
       @view = view
       @nodes = nodes
-      @node_partial = node_partial
-      @list_partial = list_partial
       @stack = [[]]
       @path = []
     end
@@ -17,7 +20,7 @@ module TreeHelper
     def pop_level
       depth = @path.length
       children = (@view.render :partial => @list_partial, :locals => {:items => @stack.pop, :depth => depth })
-      @stack.last << (@view.render :partial => @node_partial, :locals => { :node => @path.pop, :children => children, :depth => depth})
+      @stack.last << (@view.render :partial => @node_partial, :locals => { :template_name => @template_name, :node => @path.pop, :children => children, :depth => depth})
     end
 
     def render
@@ -26,7 +29,7 @@ module TreeHelper
           pop_level
         end
         if after.nil? or !this.is_ancestor_of?(after)
-          @stack.last << (@view.render :partial => @node_partial, :locals => { :node => this, :depth => @path.length })
+          @stack.last << (@view.render :partial => @node_partial, :locals => { :template_name => @template_name, :node => this, :depth => @path.length })
         else
           @path << this
           @stack << []
@@ -39,14 +42,15 @@ module TreeHelper
     end
   end
 
+
+
   def location_tree(root_name, template_name=nil)
     home_location = Location.where(:name => root_name).first
 
     return "" unless home_location
     Rails.logger.debug{ "Location tree being build from #{home_location.inspect}" }
 
-    templates = NAV_TEMPLATE_NAMES.fetch(template_name || :nav)
-    list_tree(templates[:node], templates[:list], home_location.descendants.includes(:page))
+    list_tree(template_name, home_location.descendants.includes(:page))
   end
   alias nav_menu location_tree
 
@@ -54,8 +58,8 @@ module TreeHelper
   #list_partial: the Rails-style path to a partial for collecting the children
   #of a node into a list'
   #nodes: the list of node in tree order
-  def list_tree(node_partial, list_partial, nodes)
-    TreeLister.new(self, nodes, node_partial, list_partial).render
+  def list_tree(template_name, nodes)
+    TreeLister.new(self, nodes, template_name).render
   end
 
 
