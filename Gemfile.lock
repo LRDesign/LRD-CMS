@@ -9,9 +9,9 @@ GIT
 
 GIT
   remote: https://github.com/collectiveidea/awesome_nested_set
-  revision: cb522b5cf9d4824707e670ce75172515649cd90d
+  revision: 3838ceeb1ec2e3e9ac60b6707a981d6b37bb7cab
   specs:
-    awesome_nested_set (3.0.0.rc.5)
+    awesome_nested_set (3.0.2)
       activerecord (>= 4.0.0, < 5)
 
 GEM
@@ -45,7 +45,7 @@ GEM
       activerecord (>= 2.3.0)
       rake (>= 0.8.7)
     arel (4.0.2)
-    bcrypt (3.1.7)
+    bcrypt (3.1.10)
     builder (3.1.4)
     byebug (3.1.2)
       columnize (~> 0.8)
@@ -71,10 +71,11 @@ GEM
     columnize (0.8.9)
     database_cleaner (1.2.0)
     debugger-linecache (1.2.0)
-    devise (3.2.4)
+    devise (3.4.1)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 3.2.6, < 5)
+      responders
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
     diff-lcs (1.2.5)
@@ -149,6 +150,8 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     rake (10.4.2)
+    responders (1.1.2)
+      railties (>= 3.2, < 4.2)
     rmagick (2.13.2)
     rspec (2.14.1)
       rspec-core (~> 2.14.0)
@@ -199,7 +202,7 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.4)
     tilt (1.4.1)
-    tinymce-rails (4.0.19)
+    tinymce-rails (4.1.6)
       railties (>= 3.1.1)
     turbo-sprockets-rails3 (0.2.9)
       railties (>= 3.1.0)
