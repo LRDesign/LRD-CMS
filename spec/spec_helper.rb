@@ -69,3 +69,10 @@ end
 def content_for(name)
   view.instance_variable_get("@content_for_#{name}")
 end
+
+# Monkey-patch referenced in https://github.com/rspec/rspec-rails/issues/1532#issuecomment-174679485
+# Fixes controller spec errors when rendering public templates
+# Better fix would be to update rspec-rails to 3.4.1, but would be too time-consuming at the moment.
+RSpec::Rails::ViewRendering::EmptyTemplatePathSetDecorator.class_eval do
+  alias_method :find_all_anywhere, :find_all
+end
